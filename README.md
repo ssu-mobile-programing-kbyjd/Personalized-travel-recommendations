@@ -2,6 +2,11 @@
 
 숭실대학교 미디어경영학과 모바일프로그래밍 팀 프로젝트
 
+
+## 프로젝트 구조
+
+```csharp
+
 lib/
 │── main.dart
 │── theme/
@@ -12,3 +17,6 @@ lib/
 │── widgets/
 │ ├── custom_button.dart // 공통 버튼 컴포넌트 예시
 │ ├── custom_card.dart // 공통 카드 컴포넌트 예시
+
+
+```
