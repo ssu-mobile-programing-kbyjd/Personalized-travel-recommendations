@@ -16,3 +16,6 @@ dependencies:
 flutter:
   assets:
     - lib/assets/icons/
+
+dev_dependencies:
+  flutter_lints: ^2.0.1
