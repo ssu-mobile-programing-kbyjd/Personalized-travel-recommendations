@@ -9,18 +9,17 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_svg: ^2.0.9
-
-  cupertino_icons: ^1.0.2
+  flutter_svg: ^2.0.10+1
+  cupertino_icons: ^1.0.8
 
 flutter:
   assets:
-    - lib/assets/icons/
+    - assets/icons/Outline/
 
   fonts:
     - family: Pretendard
       fonts:
-        - asset: lib/assets/fonts/PretendardVariable.ttf
+        - asset: assets/fonts/PretendardVariable.ttf
 
 dev_dependencies:
-  flutter_lints: ^2.0.1
+  flutter_lints: ^3.0.1

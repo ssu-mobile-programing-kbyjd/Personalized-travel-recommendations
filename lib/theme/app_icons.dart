@@ -1,15 +1,19 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class AppIcons {
   static Widget icon(String name, {double size = 24, Color? color}) {
-    return SvgPicture.asset(
-      'assets/icons/$name.svg',
-      width: size,
-      height: size,
-      colorFilter:
-          color != null ? ColorFilter.mode(color, BlendMode.srcIn) : null,
-    );
+    try {
+      return SvgPicture.asset(
+        'assets/icons/$name.svg',
+        width: size,
+        height: size,
+        colorFilter:
+            color != null ? ColorFilter.mode(color, BlendMode.srcIn) : null,
+      );
+    } catch (e) {
+      return Icon(Icons.error, size: size, color: color);
+    }
   }
 
 // 사용 예제
