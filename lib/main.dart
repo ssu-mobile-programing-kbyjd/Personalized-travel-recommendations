@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:personalized_travel_recommendations/Screens/add_travel_plan_continent_screen.dart';
+import 'package:personalized_travel_recommendations/Screens/calendar/travel_calendar.dart';
+import 'package:personalized_travel_recommendations/Screens/calendar/add_travel_plan_continent_screen.dart';
+
+import 'Screens/calendar/travel_calendar.dart';
 // import 'Screens/travel_calander.dart';
 
 void main() {
@@ -13,7 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: AddTravelPlanContinentScreen(), // 여기!
+      home: TravelCalendarScreen(), // 여기!
     );
   }
 }

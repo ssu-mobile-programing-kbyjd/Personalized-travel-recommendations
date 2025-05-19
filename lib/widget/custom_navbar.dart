@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:personalized_travel_recommendations/theme/app_text_styles.dart';
 import 'package:personalized_travel_recommendations/theme/app_colors.dart';
-import 'package:personalized_travel_recommendations/theme/app_icons.dart';
+import 'package:personalized_travel_recommendations/theme/app_outline_icons.dart';
 
 // 하단 네비게이션 바 컴포넌트
+// 수정중
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({super.key});
