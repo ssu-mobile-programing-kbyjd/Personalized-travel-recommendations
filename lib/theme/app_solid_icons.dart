@@ -499,6 +499,9 @@ class AppSolidIcons {
   static Widget puzzle({double size = 24, Color? color}) =>
       icon('puzzle', size: size, color: color);
 
+  static Widget profile({double size = 24, Color? color}) =>
+      icon('profile', size: size, color: color);
+
   static Widget qrcode({double size = 24, Color? color}) =>
       icon('qrcode', size: size, color: color);
 

@@ -76,7 +76,7 @@ class _AddTravelPlanCityScreenState extends State<AddTravelPlanCityScreen> {
                         shape: BoxShape.circle,
                       ),
                       child: Center(
-                        child: AppIcons.arrowNarrowLeft(
+                        child: AppOutlineIcons.arrowNarrowLeft(
                             color: Colors.black, size: 20),
                       ),
                     ),

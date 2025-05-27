@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:personalized_travel_recommendations/theme/app_colors.dart';
-import 'package:personalized_travel_recommendations/theme/app_text_styles.dart';
-import 'package:personalized_travel_recommendations/theme/app_outline_icons.dart';
-import 'package:personalized_travel_recommendations/widget/custom_button.dart';
 
 class TravelCalendarScreen extends StatelessWidget {
   const TravelCalendarScreen({super.key});
@@ -10,8 +7,9 @@ class TravelCalendarScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        title: const Text('여행 일정'),
+        title: const Text('나의 여행 캘린더'),
         backgroundColor: AppColors.white,
       ),
     );

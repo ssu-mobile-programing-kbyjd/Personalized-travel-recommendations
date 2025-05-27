@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class AppIcons {
+class AppOutlineIcons {
   static Widget icon(String name, {double size = 24, Color? color}) {
     try {
       return SvgPicture.asset(
@@ -507,6 +507,9 @@ class AppIcons {
 
   static Widget puzzle({double size = 24, Color? color}) =>
       icon('Outline/puzzle', size: size, color: color);
+
+  static Widget profile({double size = 24, Color? color}) =>
+      icon('Outline/profile', size: size, color: color);
 
   static Widget qrcode({double size = 24, Color? color}) =>
       icon('Outline/qrcode', size: size, color: color);
