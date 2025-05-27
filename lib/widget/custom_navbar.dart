@@ -53,7 +53,7 @@ class BottomNavBar extends StatelessWidget {
               icon: selectedIndex == 2
                   ? AppSolidIcons.profile()
                   : AppOutlineIcons.profile(),
-              label: 'My page',
+              label: 'My Page',
               selected: selectedIndex == 2,
               onTap: () => onTap(2),
             ),
