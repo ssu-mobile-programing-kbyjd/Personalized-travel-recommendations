@@ -1,58 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:personalized_travel_recommendations/theme/app_colors.dart';
-import 'package:personalized_travel_recommendations/theme/app_icons.dart';
 import 'package:personalized_travel_recommendations/theme/app_text_styles.dart';
 import 'package:personalized_travel_recommendations/widget/custom_button.dart';
+import 'package:personalized_travel_recommendations/theme/app_outline_icons.dart';
+import 'add_travel_plan_city_screen.dart';
 
-class AddTravelPlanCityScreen extends StatefulWidget {
-  final String country;
-  const AddTravelPlanCityScreen({super.key, required this.country});
+class AddTravelPlanCountryScreen extends StatefulWidget {
+  final String continent;
+  const AddTravelPlanCountryScreen({super.key, required this.continent});
 
-  static final Map<String, List<String>> countryCities = {
-    // 동아시아
-    '국내': ['서울', '부산', '제주', '강릉', '여수', '경주'],
-    '일본': ['도쿄', '후쿠오카', '오사카', '가고시마', '나고야', '삿포로', '오키나와'],
-    '중국': ['상하이', '베이징', '칭다오', '장자제'],
-    '대만': ['타이베이', '지우펀', '단수이', '시먼딩', '예류'],
-    '몽골': ['울란바토르', '테를지'],
-    // 동남아시아
-    '베트남': ['다낭', '하노이', '호치민', '나트랑', '푸꾸옥'],
-    '태국': ['방콕', '푸켓', '치앙마이', '파타야'],
-    '필리핀': ['세부', '보라카이', '마닐라', '팔라완'],
-    // 서아시아
-    '터키 (튀르키예)': ['이스탄불', '카파도키아', '에페소'],
-    // 남아시아
-    '인도': ['델리', '아그라', '자이푸르', '바라나시', '콜카타'],
-    '스리랑카': ['콜롬보', '캔디', '갈', '누와라엘리야', '시기리야'],
-    // 유럽
-    '프랑스': ['파리', '니스', '리옹', '마르세유'],
-    '스웨덴': ['스톡홀름', '예테보리', '말뫼', '우프살라', '시그투나'],
-    '스위스': ['취리히', '루체른', '인터라켄', '제네바', '융프라우요흐'],
-    '노르웨이': ['오슬로', '베르겐', '트롬쇠', '트론헤임'],
-    '영국': ['런던', '맨체스터', '에딘버러', '뉴몰든(코리아타운)'],
-    // 아프리카
-    '남아프리카공화국': ['케이프타운', '요하네스버그', '더반', '스텔렌보스'],
-    '에티오피아': ['아디스아바바', '바하르다르', '곤다르'],
-    '이집트': ['카이로', '룩소르', '아스완'],
-    // 북아메리카
-    '미국': ['뉴욕', '로스앤젤레스', '라스베이거스', '샌프란시스코', '하와이(호놀룰루)', '시카고', '워싱턴 D.C.'],
-    '캐나다': ['밴쿠버', '토론토', '몬트리올', '퀘벡', '나이아가라폴스'],
-    // 남아메리카
-    '브라질': ['리우데자네이루', '상파울루', '이과수'],
-    '아르헨티나': ['부에노스아이레스', '엘칼라파테', '우수아이아'],
+  @override
+  State<AddTravelPlanCountryScreen> createState() =>
+      _AddTravelPlanCountryScreenState();
+}
+
+class _AddTravelPlanCountryScreenState
+    extends State<AddTravelPlanCountryScreen> {
+  int? selectedIndex;
+
+  final Map<String, List<String>> continentCountries = {
+    '동아시아': ['국내', '일본', '중국', '대만', '몽골'],
+    '동남아시아': ['베트남', '태국', '필리핀'],
+    '서아시아': ['터키 (튀르키예)'],
+    '남아시아': ['인도', '스리랑카'],
+    '유럽': ['프랑스', '스웨덴', '스위스', '노르웨이', '영국'],
+    '아프리카': ['남아프리카공화국', '에티오피아', '이집트'],
+    '북아메리카': ['미국', '캐나다'],
+    '남아메리카': ['브라질', '아르헨티나'],
   };
 
   @override
-  State<AddTravelPlanCityScreen> createState() =>
-      _AddTravelPlanCityScreenState();
-}
-
-class _AddTravelPlanCityScreenState extends State<AddTravelPlanCityScreen> {
-  int? selectedIndex;
-
-  @override
   Widget build(BuildContext context) {
-    final cities = AddTravelPlanCityScreen.countryCities[widget.country] ?? [];
+    final countries = continentCountries[widget.continent] ?? [];
 
     return Scaffold(
       backgroundColor: AppColors.white,
@@ -76,7 +55,7 @@ class _AddTravelPlanCityScreenState extends State<AddTravelPlanCityScreen> {
                         shape: BoxShape.circle,
                       ),
                       child: Center(
-                        child: AppIcons.arrowNarrowLeft(
+                        child: AppOutlineIcons.arrowNarrowLeft(
                             color: Colors.black, size: 20),
                       ),
                     ),
@@ -100,7 +79,7 @@ class _AddTravelPlanCityScreenState extends State<AddTravelPlanCityScreen> {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        '여행할 도시를 알려주세요.',
+                        '여행할 나라를 선택하세요.',
                         style: AppTypography.body16Regular,
                       ),
                     ],
@@ -109,6 +88,7 @@ class _AddTravelPlanCityScreenState extends State<AddTravelPlanCityScreen> {
               ],
             ),
             const SizedBox(height: 32),
+            // 나라 선택 그리드
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Align(
@@ -116,7 +96,7 @@ class _AddTravelPlanCityScreenState extends State<AddTravelPlanCityScreen> {
                 child: Wrap(
                   spacing: 8,
                   runSpacing: 8,
-                  children: List.generate(cities.length, (index) {
+                  children: List.generate(countries.length, (index) {
                     final isSelected = selectedIndex == index;
                     return GestureDetector(
                       onTap: () {
@@ -127,7 +107,6 @@ class _AddTravelPlanCityScreenState extends State<AddTravelPlanCityScreen> {
                       child: Container(
                         width: 114,
                         height: 86,
-                        alignment: Alignment.center,
                         decoration: BoxDecoration(
                           color: AppColors.neutral10,
                           borderRadius: BorderRadius.circular(16),
@@ -138,8 +117,9 @@ class _AddTravelPlanCityScreenState extends State<AddTravelPlanCityScreen> {
                                 )
                               : null,
                         ),
+                        alignment: Alignment.center,
                         child: Text(
-                          cities[index],
+                          countries[index],
                           style: AppTypography.body14Medium.copyWith(
                             color: Colors.black,
                           ),
@@ -167,28 +147,24 @@ class _AddTravelPlanCityScreenState extends State<AddTravelPlanCityScreen> {
                 ),
               ),
             ),
-            Center(
-              child: CustomNextButton(
-                text: '다음',
-                onPressed: selectedIndex != null
-                    ? () {
-                        print('다음 버튼 클릭됨');
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //       builder: (context) => AddTravelPlanCityScreen(
-                        //         city: cities[selectedIndex!],
-                        //       ),
-                        //     ));
-                      }
-                    : () {},
-                color: selectedIndex != null
-                    ? AppColors.indigo60
-                    : AppColors.neutral40,
-                textColor: selectedIndex != null
-                    ? AppColors.white
-                    : AppColors.neutral60,
-              ),
+            CustomNextButton(
+              text: '다음',
+              onPressed: selectedIndex != null
+                  ? () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddTravelPlanCityScreen(
+                              country: countries[selectedIndex!],
+                            ),
+                          ));
+                    }
+                  : () {},
+              color: selectedIndex != null
+                  ? AppColors.indigo60
+                  : AppColors.neutral40,
+              textColor:
+                  selectedIndex != null ? AppColors.white : AppColors.neutral60,
             ),
           ],
         ),
