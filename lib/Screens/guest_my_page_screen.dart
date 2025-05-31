@@ -3,7 +3,7 @@ import 'package:personalized_travel_recommendations/theme/app_colors.dart';
 import 'package:personalized_travel_recommendations/widget/mypage_header.dart';
 import 'package:personalized_travel_recommendations/widget/settings_list_item.dart';
 import 'package:personalized_travel_recommendations/widget/custom_divider.dart';
-import 'package:personalized_travel_recommendations/theme/app_icons.dart';
+import 'package:personalized_travel_recommendations/theme/app_solid_icons.dart';
 import 'package:personalized_travel_recommendations/widget/reusable_prompt_card.dart';
 
 class GuestMyPageScreen extends StatelessWidget {
@@ -33,13 +33,13 @@ class GuestMyPageScreen extends StatelessWidget {
             const SizedBox(height: 24),
 
             SettingsListItem(
-              icon: AppIcons.informationCircle(color: AppColors.neutral60),
+              icon: AppSolidIcons.informationCircle(color: AppColors.neutral60),
               label: '공지 사항',
               onTap: () => Navigator.pushNamed(context, '/notice'),
             ),
             const CustomDivider(),
             SettingsListItem(
-              icon: AppIcons.support(color: AppColors.neutral60),
+              icon: AppSolidIcons.support(color: AppColors.neutral60),
               label: '고객센터',
               onTap: () => Navigator.pushNamed(context, '/support'),
             ),

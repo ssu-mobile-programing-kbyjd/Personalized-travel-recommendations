@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:personalized_travel_recommendations/theme/app_colors.dart';
 import 'package:personalized_travel_recommendations/theme/app_text_styles.dart';
-import 'package:personalized_travel_recommendations/theme/app_icons.dart';
+import 'package:personalized_travel_recommendations/theme/app_solid_icons.dart';
+
 
 class SettingsListItem extends StatelessWidget {
   final Widget icon; // <- 아이콘을 위젯으로 받도록 수정됨
@@ -25,7 +26,7 @@ class SettingsListItem extends StatelessWidget {
           color: AppColors.neutral80,
         ),
       ),
-      trailing: AppIcons.chevronRight(size: 20, color: AppColors.neutral40),
+      trailing: AppSolidIcons.chevronRight(size: 20, color: AppColors.neutral40),
       onTap: onTap,
     );
   }

@@ -5,7 +5,7 @@ import 'package:personalized_travel_recommendations/widget/profile_header.dart';
 import 'package:personalized_travel_recommendations/widget/feature_icon_button.dart';
 import 'package:personalized_travel_recommendations/widget/settings_list_item.dart';
 import 'package:personalized_travel_recommendations/widget/custom_divider.dart';
-import 'package:personalized_travel_recommendations/theme/app_icons.dart';
+import 'package:personalized_travel_recommendations/theme/app_solid_icons.dart';
 
 class LoggedInMyPageScreen extends StatelessWidget {
   const LoggedInMyPageScreen({super.key});
@@ -38,26 +38,26 @@ class LoggedInMyPageScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   FeatureIconButton(
-                    icon: AppIcons.shoppingBag(color: AppColors.neutral60),
+                    icon: AppSolidIcons.shoppingBag(color: AppColors.neutral60),
                     label: '구매 상품',
                     count: 4,
                     backgroundColor: AppColors.indigo40,
                   ),
                   FeatureIconButton(
-                    icon: AppIcons.heart(color: AppColors.neutral60),
+                    icon: AppSolidIcons.heart(color: AppColors.neutral60),
                     label: '찜한 목록',
                     count: 4,
                     onTap: () => Navigator.pushNamed(context, '/wishlist'), // 이동 추가
                     backgroundColor: AppColors.indigo60,
                   ),
                   FeatureIconButton(
-                    icon: AppIcons.chatAlt(color: AppColors.neutral60),
+                    icon: AppSolidIcons.chatAlt(color: AppColors.neutral60),
                     label: '게시글',
                     count: 2,
                     backgroundColor: AppColors.indigo40,
                   ),
                   FeatureIconButton(
-                    icon: AppIcons.map(color: AppColors.neutral60),
+                    icon: AppSolidIcons.map(color: AppColors.neutral60),
                     label: '여행 도시',
                     count: 2,
                     backgroundColor: AppColors.indigo60,
@@ -70,28 +70,28 @@ class LoggedInMyPageScreen extends StatelessWidget {
 
             // 🔹 설정 리스트
             SettingsListItem(
-              icon: AppIcons.user(color: AppColors.neutral60),
+              icon: AppSolidIcons.user(color: AppColors.neutral60),
               label: '내 정보 등록 및 관리',
               onTap: () {},
             ),
             const CustomDivider(),
 
             SettingsListItem(
-              icon: AppIcons.shoppingCart(color: AppColors.neutral60),
+              icon: AppSolidIcons.shoppingCart(color: AppColors.neutral60),
               label: '구매 목록',
               onTap: () {},
             ),
             const CustomDivider(),
 
             SettingsListItem(
-              icon: AppIcons.informationCircle(color: AppColors.neutral60),
+              icon: AppSolidIcons.informationCircle(color: AppColors.neutral60),
               label: '공지 사항',
               onTap: () {},
             ),
             const CustomDivider(),
 
             SettingsListItem(
-              icon: AppIcons.informationCircle(color: AppColors.neutral60),
+              icon: AppSolidIcons.informationCircle(color: AppColors.neutral60),
               label: '고객센터',
               onTap: () {},
             ),
@@ -101,7 +101,7 @@ class LoggedInMyPageScreen extends StatelessWidget {
 
             // 🔹 로그아웃
             SettingsListItem(
-              icon: AppIcons.logout(color: AppColors.error60),
+              icon: AppSolidIcons.logout(color: AppColors.error60),
               label: '로그아웃',
               onTap: () {},
             ),
