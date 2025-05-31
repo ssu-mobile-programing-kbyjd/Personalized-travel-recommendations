@@ -15,6 +15,7 @@ dependencies:
 flutter:
   assets:
     - assets/icons/Outline/
+    - assets/images/
 
   fonts:
     - family: Pretendard
