@@ -29,7 +29,6 @@ class FavoriteCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isPackage) {
-      // 패키지 카드
       return Container(
         margin: const EdgeInsets.only(bottom: 16),
         padding: const EdgeInsets.all(12),
@@ -43,38 +42,48 @@ class FavoriteCard extends StatelessWidget {
             ),
           ],
         ),
-        child: Row(
+        child: Column(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: isAssetImage
-                  ? Image.asset(imageUrl, width: 80, height: 80, fit: BoxFit.cover)
-                  : Image.network(imageUrl, width: 80, height: 80, fit: BoxFit.cover),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 4),
-                  Text(subtitle, style: const TextStyle(color: AppColors.neutral60)),
-                  const SizedBox(height: 6),
-                  Wrap(
-                    spacing: 6,
-                    runSpacing: 4,
-                    alignment: WrapAlignment.center,
-                    children: tags.map((tag) => TagChip(label: tag)).toList(),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: isAssetImage
+                      ? Image.asset(imageUrl, width: 80, height: 80, fit: BoxFit.cover)
+                      : Image.network(imageUrl, width: 80, height: 80, fit: BoxFit.cover),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 4),
+                      Text(subtitle, style: const TextStyle(color: AppColors.neutral60)),
+                    ],
                   ),
-                ],
+                ),
+                const SizedBox(width: 8),
+                Icon(Icons.favorite, color: AppColors.error60),
+              ],
+            ),
+            const SizedBox(height: 8),
+            // 이미지 하단 태그 - 가운데 정렬
+            Align(
+              alignment: Alignment.center,
+              child: Wrap(
+                spacing: 6,
+                runSpacing: 4,
+                alignment: WrapAlignment.center,
+                children: tags.map((tag) => TagChip(label: tag)).toList(),
               ),
             ),
-            const SizedBox(width: 8),
-            Icon(Icons.favorite, color: AppColors.error60),
           ],
         ),
       );
     }
+
 
     // 🔹 컨텐츠 카드 (텍스트 먼저)
     if (isContent) {

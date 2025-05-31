@@ -22,11 +22,14 @@ class LoggedInMyPageScreen extends StatelessWidget {
             const SizedBox(height: 8),
 
             // 🔹 사용자 프로필 카드
-            ProfileHeader(
-              nickname: '재성구리',
-              daysTogether: 125,
-              travelCount: 5,
-              profileImage: 'assets/images/JaeseongGuri.png', // 임시 이미지
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: ProfileHeader(
+                nickname: '재성구리',
+                daysTogether: 125,
+                travelCount: 5,
+                profileImage: 'assets/images/JaeseongGuri.png',
+              ),
             ),
 
             const SizedBox(height: 16),
@@ -103,7 +106,9 @@ class LoggedInMyPageScreen extends StatelessWidget {
             SettingsListItem(
               icon: AppSolidIcons.logout(color: AppColors.error60),
               label: '로그아웃',
-              onTap: () {},
+              onTap: () {
+                Navigator.pushReplacementNamed(context, '/guest');
+              },
             ),
             Padding(
               padding: const EdgeInsets.only(left: 72),

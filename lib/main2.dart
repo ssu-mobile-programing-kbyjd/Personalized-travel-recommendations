@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(fontFamily: 'Pretendard'),
       initialRoute: '/mypage',
       routes: {
-        '/mypage': (context) => const GuestMyPageScreen(),
+        '/guest': (context) => const GuestMyPageScreen(),
         '/mypage/loggedin': (context) => const LoggedInMyPageScreen(), // 로그인 후 이동될 화면
         '/wishlist': (context) => const WishlistScreen(), // 추가
         '/login': (context) => const Placeholder(), // 로그인 화면 (미구현 시 임시)
