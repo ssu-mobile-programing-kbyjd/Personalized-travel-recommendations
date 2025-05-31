@@ -1,55 +1,109 @@
 import 'package:flutter/material.dart';
+import 'package:personalized_travel_recommendations/theme/app_outline_icons.dart';
 import 'package:personalized_travel_recommendations/theme/app_text_styles.dart';
+import 'package:personalized_travel_recommendations/theme/app_solid_icons.dart';
 import 'package:personalized_travel_recommendations/theme/app_colors.dart';
-import 'package:personalized_travel_recommendations/theme/app_icons.dart';
-
-// 하단 네비게이션 바 컴포넌트
 
 class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({super.key});
+  final int selectedIndex;
+  final Function(int) onTap;
+
+  const BottomNavBar({
+    super.key,
+    this.selectedIndex = 0,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 90,
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: Colors.white, // 배경색 추가
         boxShadow: [
           BoxShadow(
-            color: Colors.black12,
-            blurRadius: 30,
-            offset: Offset(0, -5),
+            color: AppColors.neutral10, // 더 연한 그림자
+            offset: Offset(0, -4), // 위쪽으로 그림자
+            blurRadius: 16, // 더 부드러운 블러 효과
+            spreadRadius: 0, // 그림자 확산 정도
           ),
         ],
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          const Icon(Icons.home_outlined, size: 28, color: AppColors.neutral40),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-            decoration: BoxDecoration(
-              color: AppColors.neutral10,
-              borderRadius: BorderRadius.circular(20),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 24, bottom: 34),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _NavItem(
+              icon: selectedIndex == 0
+                  ? AppSolidIcons.home()
+                  : AppOutlineIcons.home(),
+              label: 'Home',
+              selected: selectedIndex == 0,
+              onTap: () => onTap(0),
             ),
-            child: const Row(
-              children: [
-                Icon(Icons.calendar_month, color: AppColors.indigo60, size: 24),
-                SizedBox(width: 4),
-                Text(
-                  'Schedule',
-                  style: TextStyle(
-                    color: AppColors.indigo60,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12,
-                  ),
+            _NavItem(
+              icon: selectedIndex == 1
+                  ? AppSolidIcons.calendar()
+                  : AppOutlineIcons.calendar(),
+              label: 'Calendar',
+              selected: selectedIndex == 1,
+              onTap: () => onTap(1),
+            ),
+            _NavItem(
+              icon: selectedIndex == 2
+                  ? AppSolidIcons.profile()
+                  : AppOutlineIcons.profile(),
+              label: 'My Page',
+              selected: selectedIndex == 2,
+              onTap: () => onTap(2),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _NavItem extends StatelessWidget {
+  final Widget icon;
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _NavItem({
+    required this.icon,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: selected
+            ? BoxDecoration(
+                color: AppColors.neutral10,
+                borderRadius: BorderRadius.circular(20),
+              )
+            : null,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            icon,
+            if (selected) ...[
+              const SizedBox(width: 8),
+              Text(
+                label,
+                style: AppTypography.caption12Medium.copyWith(
+                  color: AppColors.indigo60,
                 ),
-              ],
-            ),
-          ),
-          //const AppIcons(Icons.public, size: 28, color: AppColors.neutral40),
-          //const AppIcons(Icons.menu, size: 28, color: AppColors.neutral40),
-        ],
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }
