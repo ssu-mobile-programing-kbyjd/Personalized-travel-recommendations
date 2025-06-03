@@ -17,6 +17,7 @@ flutter:
     - assets/icons/
     - assets/icons/Solid/
     - assets/icons/Outline/
+    - assets/images/
 
   fonts:
     - family: Pretendard
