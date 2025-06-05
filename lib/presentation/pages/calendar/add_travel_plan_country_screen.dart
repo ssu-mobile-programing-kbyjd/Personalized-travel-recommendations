@@ -1,34 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:personalized_travel_recommendations/theme/app_colors.dart';
-import 'package:personalized_travel_recommendations/theme/app_text_styles.dart';
-import 'package:personalized_travel_recommendations/widget/custom_button.dart';
-import 'package:personalized_travel_recommendations/theme/app_outline_png_icons.dart';
-import 'add_travel_plan_country_screen.dart';
+import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
+import 'package:personalized_travel_recommendations/core/theme/app_text_styles.dart';
+import 'package:personalized_travel_recommendations/presentation/widgets/custom_button.dart';
+import 'package:personalized_travel_recommendations/core/theme/app_outline_png_icons.dart';
+import 'add_travel_plan_city_screen.dart';
 
-class AddTravelPlanContinentScreen extends StatefulWidget {
-  const AddTravelPlanContinentScreen({super.key});
+class AddTravelPlanCountryScreen extends StatefulWidget {
+  final String continent;
+  const AddTravelPlanCountryScreen({super.key, required this.continent});
 
   @override
-  State<AddTravelPlanContinentScreen> createState() =>
-      _AddTravelPlanContinentScreenState();
+  State<AddTravelPlanCountryScreen> createState() =>
+      _AddTravelPlanCountryScreenState();
 }
 
-class _AddTravelPlanContinentScreenState
-    extends State<AddTravelPlanContinentScreen> {
-  final List<String> continents = [
-    '동아시아',
-    '동남아시아',
-    '서아시아',
-    '남아시아',
-    '유럽',
-    '아프리카',
-    '북아메리카',
-    '남아메리카',
-  ];
+class _AddTravelPlanCountryScreenState
+    extends State<AddTravelPlanCountryScreen> {
   int? selectedIndex;
+
+  final Map<String, List<String>> continentCountries = {
+    '동아시아': ['국내', '일본', '중국', '대만', '몽골'],
+    '동남아시아': ['베트남', '태국', '필리핀'],
+    '서아시아': ['터키 (튀르키예)'],
+    '남아시아': ['인도', '스리랑카'],
+    '유럽': ['프랑스', '스웨덴', '스위스', '노르웨이', '영국'],
+    '아프리카': ['남아프리카공화국', '에티오피아', '이집트'],
+    '북아메리카': ['미국', '캐나다'],
+    '남아메리카': ['브라질', '아르헨티나'],
+  };
 
   @override
   Widget build(BuildContext context) {
+    final countries = continentCountries[widget.continent] ?? [];
+
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
@@ -60,6 +64,7 @@ class _AddTravelPlanContinentScreenState
               ],
             ),
             const SizedBox(height: 42),
+            // 타이틀
             const Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -74,7 +79,7 @@ class _AddTravelPlanContinentScreenState
                       ),
                       SizedBox(height: 8),
                       Text(
-                        '여행할 대륙을 알려주세요.',
+                        '여행할 나라를 선택하세요.',
                         style: AppTypography.body16Regular,
                       ),
                     ],
@@ -83,14 +88,15 @@ class _AddTravelPlanContinentScreenState
               ],
             ),
             const SizedBox(height: 32),
-            // 대륙 선택 그리드
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
+            // 나라 선택 그리드
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Align(
+                alignment: Alignment.centerLeft,
                 child: Wrap(
                   spacing: 8,
                   runSpacing: 8,
-                  children: List.generate(continents.length, (index) {
+                  children: List.generate(countries.length, (index) {
                     final isSelected = selectedIndex == index;
                     return GestureDetector(
                       onTap: () {
@@ -113,7 +119,7 @@ class _AddTravelPlanContinentScreenState
                         ),
                         alignment: Alignment.center,
                         child: Text(
-                          continents[index],
+                          countries[index],
                           style: AppTypography.body14Medium.copyWith(
                             color: Colors.black,
                           ),
@@ -146,13 +152,12 @@ class _AddTravelPlanContinentScreenState
               onPressed: selectedIndex != null
                   ? () {
                       Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AddTravelPlanCountryScreen(
-                            continent: continents[selectedIndex!],
-                          ),
-                        ),
-                      );
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddTravelPlanCityScreen(
+                              country: countries[selectedIndex!],
+                            ),
+                          ));
                     }
                   : () {},
               color: selectedIndex != null

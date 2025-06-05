@@ -15,10 +15,16 @@ dependencies:
 flutter:
   assets:
     - assets/logos/
-    - assets/icons/Outline/
     - assets/icons/Outline/png/
     - assets/icons/Outline/svg 1x/
-    - assets/icons/Solid/
     - assets/icons/Solid/png/
     - assets/icons/Solid/svg 1x/
     - assets/images/
+
+  fonts:
+    - family: Pretendard
+      fonts:
+        - asset: assets/fonts/PretendardVariable.ttf
+
+dev_dependencies:
+  flutter_lints: ^3.0.1

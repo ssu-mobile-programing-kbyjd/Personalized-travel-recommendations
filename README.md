@@ -1,25 +1,58 @@
-# Personalized-travel-recommendations
+# TripBlock (Personalized Travel Recommendations)
 
 숭실대학교 미디어경영학과 모바일프로그래밍 팀 프로젝트
 
-## 프로젝트 구조
+## 📱 프로젝트 소개
 
-```csharp
+이 프로젝트는 Flutter 기반의 여행 추천 앱입니다.
 
-📂lib
-├── 📂assets/                # 앱에서 사용하는 리소스(아이콘, 로고 등) 저장
-│   ├── 📂icons/             # 아이콘 관련 폴더
-│   │   ├── 📂Outline/       # 테마별 아웃라인 아이콘
-│   │   └── 📂Solid/         # 테마별 솔리드 아이콘
-│   └── 📂logos/             # 앱에서 사용하는 로고 이미지 저장
-├── 📂theme/                 # 디자인 시스템 관련 파일
-│   ├── 📄 app_colors.dart    # 앱의 색상 테마 정의
-│   ├── 📄 app_icons.dart     # 아이콘 데이터 관리
-│   ├── 📄 app_shadows.dart   # 그림자 스타일 관리 (DropShadow)
-│   └── 📄 app_text_styles.dart # 텍스트 스타일 정의
-├── 📂widget/                # 재사용 가능한 UI 컴포넌트
-│   ├── 📄 custom_button.dart # 커스텀 버튼 컴포넌트
-│   └── 📄 custom_card.dart   # 커스텀 카드 UI 컴포넌트
-└── 📄 main.dart              # 앱의 진입점 (홈 화면)
+---
 
+## 📂 폴더 구조
+
+```plaintext
+lib/
+├── core/                # 앱 전역에서 사용하는 공통 코드 (유틸, 테마, 상수 등)
+│   ├── constants/
+│   ├── exceptions/
+│   ├── network/
+│   ├── theme/
+│   └── utils/
+├── data/                # 데이터 계층 (API, DB, 모델 등)
+│   ├── datasources/
+│   ├── models/
+│   ├── repositories/
+│   └── services/
+├── domain/              # 비즈니스 로직 계층 (엔티티, 유즈케이스 등)
+│   ├── entities/
+│   ├── repositories/
+│   └── usecases/
+├── presentation/        # UI 계층 (화면, 위젯, 라우팅 등)
+│   ├── pages/
+│   │   ├── calendar/
+│   │   ├── home/
+│   │   ├── mypage/
+│   │   └── main_screen.dart
+│   ├── widgets/
+│   └── routes/
+├── l10n/                # 다국어 지원 리소스
+├── main.dart            # 앱 진입점 (앱 실행만 담당)
+└── app.dart             # 앱 설정(MaterialApp, 라우팅 등)
 ```
+
+---
+
+## 🏗️ 구조 변경 및 설계 이유
+
+- **클린 아키텍처 적용**: core/data/domain/presentation으로 계층 분리하여 유지보수와 확장성 강화
+- **공통 코드(core)**: 테마, 유틸, 상수 등 앱 전체에서 재사용되는 코드 분리
+- **데이터 계층(data)**: 외부 데이터 소스와의 통신, 모델 정의 등 데이터 관련 코드 집중
+- **비즈니스 로직(domain)**: 엔티티, 유즈케이스 등 핵심 로직 분리
+- **UI 계층(presentation)**: 화면, 위젯, 라우팅 등 UI 관련 코드 집중
+- **main.dart와 app.dart 분리**: main.dart는 앱 실행만, app.dart는 앱 설정 및 라우팅 담당
+
+---
+
+## ✨ 기여 및 문의
+
+- 구조, 코드, 기능 관련 사항은 반드시 이슈 또는 PR로 남겨주세요.
