@@ -1,4 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.kbyjd.tripblock">
     <application
         android:label="kbyjd"
         android:name="${applicationName}"
