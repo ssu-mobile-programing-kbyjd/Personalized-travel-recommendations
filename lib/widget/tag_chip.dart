@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:personalized_travel_recommendations/theme/app_colors.dart';
+import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
 
 class TagChip extends StatelessWidget {
   final String label;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:personalized_travel_recommendations/theme/app_colors.dart';
+import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
 import 'tag_chip.dart';
 
 class FavoriteCard extends StatelessWidget {
@@ -50,22 +50,26 @@ class FavoriteCard extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: isAssetImage
-                      ? Image.asset(imageUrl, width: 80, height: 80, fit: BoxFit.cover)
-                      : Image.network(imageUrl, width: 80, height: 80, fit: BoxFit.cover),
+                      ? Image.asset(imageUrl,
+                          width: 80, height: 80, fit: BoxFit.cover)
+                      : Image.network(imageUrl,
+                          width: 80, height: 80, fit: BoxFit.cover),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+                      Text(title,
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
                       const SizedBox(height: 4),
-                      Text(subtitle, style: const TextStyle(color: AppColors.neutral60)),
+                      Text(subtitle,
+                          style: const TextStyle(color: AppColors.neutral60)),
                     ],
                   ),
                 ),
                 const SizedBox(width: 8),
-                Icon(Icons.favorite, color: AppColors.error60),
+                const Icon(Icons.favorite, color: AppColors.error60),
               ],
             ),
             const SizedBox(height: 8),
@@ -83,7 +87,6 @@ class FavoriteCard extends StatelessWidget {
         ),
       );
     }
-
 
     // 🔹 컨텐츠 카드 (텍스트 먼저)
     if (isContent) {
@@ -106,17 +109,17 @@ class FavoriteCard extends StatelessWidget {
               // 🔹 배경 이미지
               isAssetImage
                   ? Image.asset(
-                imageUrl,
-                height: 160,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              )
+                      imageUrl,
+                      height: 160,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    )
                   : Image.network(
-                imageUrl,
-                height: 160,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
+                      imageUrl,
+                      height: 160,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
 
               // 🔹 왼쪽 정렬 + 수직 가운데 정렬 텍스트 묶음
               const Positioned.fill(
@@ -159,7 +162,7 @@ class FavoriteCard extends StatelessWidget {
               ),
 
               // 🔹 오른쪽 상단 하트
-              Positioned(
+              const Positioned(
                 top: 8,
                 right: 12,
                 child: Icon(Icons.favorite, color: AppColors.error60),
@@ -169,7 +172,6 @@ class FavoriteCard extends StatelessWidget {
         ),
       );
     }
-
 
     // 🔹 기본 카드 (여행지 등)
     return Container(
@@ -189,8 +191,10 @@ class FavoriteCard extends StatelessWidget {
           ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
             child: isAssetImage
-                ? Image.asset(imageUrl, height: 160, width: double.infinity, fit: BoxFit.cover)
-                : Image.network(imageUrl, height: 160, width: double.infinity, fit: BoxFit.cover),
+                ? Image.asset(imageUrl,
+                    height: 160, width: double.infinity, fit: BoxFit.cover)
+                : Image.network(imageUrl,
+                    height: 160, width: double.infinity, fit: BoxFit.cover),
           ),
           ListTile(
             title: Text(title),

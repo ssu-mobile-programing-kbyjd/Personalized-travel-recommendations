@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:personalized_travel_recommendations/theme/app_colors.dart';
+import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
 import 'package:personalized_travel_recommendations/widget/mypage_header.dart';
 import 'package:personalized_travel_recommendations/widget/settings_list_item.dart';
 import 'package:personalized_travel_recommendations/widget/custom_divider.dart';
-import 'package:personalized_travel_recommendations/theme/app_solid_icons.dart';
+import 'package:personalized_travel_recommendations/core/theme/app_solid_png_icons.dart';
 import 'package:personalized_travel_recommendations/widget/reusable_prompt_card.dart';
 
 class GuestMyPageScreen extends StatelessWidget {
@@ -26,20 +26,22 @@ class GuestMyPageScreen extends StatelessWidget {
               subtitle: '계정이 없다면? 가입하기',
               buttonText: '로그인하기',
               onTap: () {
-                Navigator.pushNamed(context, '/mypage/loggedin'); //loggen_in_my_page로 이동
+                Navigator.pushNamed(
+                    context, '/mypage/loggedin'); //loggen_in_my_page로 이동
               },
             ),
 
             const SizedBox(height: 24),
 
             SettingsListItem(
-              icon: AppSolidIcons.informationCircle(color: AppColors.neutral60),
+              icon: AppSolidPngIcons.informationCircle(
+                  color: AppColors.neutral60),
               label: '공지 사항',
               onTap: () => Navigator.pushNamed(context, '/notice'),
             ),
             const CustomDivider(),
             SettingsListItem(
-              icon: AppSolidIcons.support(color: AppColors.neutral60),
+              icon: AppSolidPngIcons.support(color: AppColors.neutral60),
               label: '고객센터',
               onTap: () => Navigator.pushNamed(context, '/support'),
             ),

@@ -9,14 +9,16 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_svg: ^2.0.10+1
+  flutter_svg: ^2.0.9
   cupertino_icons: ^1.0.8
 
 flutter:
   assets:
-    - assets/icons/
-    - assets/icons/Solid/
-    - assets/icons/Outline/
+    - assets/logos/
+    - assets/icons/Outline/png/
+    - assets/icons/Outline/svg 1x/
+    - assets/icons/Solid/png/
+    - assets/icons/Solid/svg 1x/
     - assets/images/
 
   fonts:

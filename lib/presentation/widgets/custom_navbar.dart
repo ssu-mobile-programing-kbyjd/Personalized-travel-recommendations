@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:personalized_travel_recommendations/theme/app_outline_icons.dart';
-import 'package:personalized_travel_recommendations/theme/app_text_styles.dart';
-import 'package:personalized_travel_recommendations/theme/app_solid_icons.dart';
-import 'package:personalized_travel_recommendations/theme/app_colors.dart';
+import 'package:personalized_travel_recommendations/core/theme/app_text_styles.dart';
+import 'package:personalized_travel_recommendations/core/theme/app_outline_png_icons.dart';
+import 'package:personalized_travel_recommendations/core/theme/app_solid_png_icons.dart';
+import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
 
 class BottomNavBar extends StatelessWidget {
   final int selectedIndex;
@@ -35,24 +35,24 @@ class BottomNavBar extends StatelessWidget {
           children: [
             _NavItem(
               icon: selectedIndex == 0
-                  ? AppSolidIcons.home()
-                  : AppOutlineIcons.home(),
+                  ? AppSolidPngIcons.home()
+                  : AppOutlinePngIcons.navhome(),
               label: 'Home',
               selected: selectedIndex == 0,
               onTap: () => onTap(0),
             ),
             _NavItem(
               icon: selectedIndex == 1
-                  ? AppSolidIcons.calendar()
-                  : AppOutlineIcons.calendar(),
+                  ? AppSolidPngIcons.calendar()
+                  : AppOutlinePngIcons.navcalendar(),
               label: 'Calendar',
               selected: selectedIndex == 1,
               onTap: () => onTap(1),
             ),
             _NavItem(
               icon: selectedIndex == 2
-                  ? AppSolidIcons.profile()
-                  : AppOutlineIcons.profile(),
+                  ? AppSolidPngIcons.profile()
+                  : AppOutlinePngIcons.profile(),
               label: 'My Page',
               selected: selectedIndex == 2,
               onTap: () => onTap(2),

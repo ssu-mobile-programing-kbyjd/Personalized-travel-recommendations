@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:personalized_travel_recommendations/theme/app_colors.dart';
-import 'package:personalized_travel_recommendations/theme/app_text_styles.dart';
+import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
+import 'package:personalized_travel_recommendations/core/theme/app_text_styles.dart';
 
 class MyPageHeader extends StatelessWidget {
   final String title;

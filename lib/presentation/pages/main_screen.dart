@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:personalized_travel_recommendations/widget/custom_navbar.dart';
-import 'package:personalized_travel_recommendations/screens/home/home_screen.dart';
-import 'package:personalized_travel_recommendations/screens/calendar/calendar_screen.dart';
-import 'package:personalized_travel_recommendations/screens/mypage/mypage_screen.dart';
+import 'package:personalized_travel_recommendations/presentation/widgets/custom_navbar.dart';
+import 'package:personalized_travel_recommendations/presentation/pages/home/home_screen.dart';
+import 'package:personalized_travel_recommendations/presentation/pages/calendar/calendar_screen.dart';
+import 'package:personalized_travel_recommendations/presentation/pages/mypage/mypage_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});

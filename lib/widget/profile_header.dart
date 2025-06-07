@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:personalized_travel_recommendations/theme/app_colors.dart';
-import 'package:personalized_travel_recommendations/theme/app_text_styles.dart';
-
+import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
+import 'package:personalized_travel_recommendations/core/theme/app_text_styles.dart';
 
 class ProfileHeader extends StatelessWidget {
   final String nickname;
@@ -47,7 +46,7 @@ class ProfileHeader extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '맛상추와 함께한지 ${daysTogether}일째\n그동안 총 ${travelCount}번의 여행을 떠났어요 :)',
+                  '맛상추와 함께한지 $daysTogether일째\n그동안 총 $travelCount번의 여행을 떠났어요 :)',
                   style: AppTypography.body14Regular.copyWith(
                     color: AppColors.neutral50,
                     height: 1.4,

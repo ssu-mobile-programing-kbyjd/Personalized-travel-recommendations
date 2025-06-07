@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:personalized_travel_recommendations/theme/app_colors.dart';
-import 'package:personalized_travel_recommendations/theme/app_text_styles.dart';
-import 'package:personalized_travel_recommendations/widget/custom_button.dart';
-import 'package:personalized_travel_recommendations/theme/app_outline_icons.dart';
+import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
+import 'package:personalized_travel_recommendations/core/theme/app_text_styles.dart';
+import 'package:personalized_travel_recommendations/presentation/widgets/custom_button.dart';
+import 'package:personalized_travel_recommendations/core/theme/app_outline_png_icons.dart';
 import 'add_travel_plan_city_screen.dart';
 
 class AddTravelPlanCountryScreen extends StatefulWidget {
@@ -55,7 +55,7 @@ class _AddTravelPlanCountryScreenState
                         shape: BoxShape.circle,
                       ),
                       child: Center(
-                        child: AppOutlineIcons.arrowNarrowLeft(
+                        child: AppOutlinePngIcons.arrowNarrowLeft(
                             color: Colors.black, size: 20),
                       ),
                     ),

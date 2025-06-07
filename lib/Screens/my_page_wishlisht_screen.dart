@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:personalized_travel_recommendations/theme/app_colors.dart';
-import 'package:personalized_travel_recommendations/theme/app_text_styles.dart';
+import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
+import 'package:personalized_travel_recommendations/core/theme/app_text_styles.dart';
 import 'package:personalized_travel_recommendations/widget/favorite_card.dart';
 import 'package:personalized_travel_recommendations/widget/tab_bar_selector.dart';
 
@@ -37,7 +37,7 @@ class _WishlistScreenState extends State<WishlistScreen>
         backgroundColor: AppColors.white,
         elevation: 0,
         centerTitle: true,
-        title: Text('찜한 목록', style: AppTypography.subtitle20Bold),
+        title: const Text('찜한 목록', style: AppTypography.subtitle20Bold),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(48),
           child: TabBarSelector(
