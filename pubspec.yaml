@@ -22,6 +22,7 @@ flutter:
     - assets/icons/Solid/png/
     - assets/icons/Solid/svg 1x/
     - assets/images/
+    - assets/sample_firestore_data.json
 
   fonts:
     - family: Pretendard
