@@ -11,6 +11,8 @@ dependencies:
     sdk: flutter
   flutter_svg: ^2.0.9
   cupertino_icons: ^1.0.8
+  firebase_core: ^2.0.0
+  cloud_firestore: ^4.0.0
 
 flutter:
   assets:
