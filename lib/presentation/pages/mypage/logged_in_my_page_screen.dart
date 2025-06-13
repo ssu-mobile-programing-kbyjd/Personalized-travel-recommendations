@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
-import 'package:personalized_travel_recommendations/widget/mypage_header.dart';
-import 'package:personalized_travel_recommendations/widget/profile_header.dart';
-import 'package:personalized_travel_recommendations/widget/feature_icon_button.dart';
-import 'package:personalized_travel_recommendations/widget/settings_list_item.dart';
-import 'package:personalized_travel_recommendations/widget/custom_divider.dart';
-import 'package:personalized_travel_recommendations/core/theme/app_solid_png_icons.dart';
+import 'package:personalized_travel_recommendations/presentation/widgets/mypage_header.dart';
+import 'package:personalized_travel_recommendations/presentation/widgets/profile_header.dart';
+import 'package:personalized_travel_recommendations/presentation/widgets/feature_icon_button.dart';
+import 'package:personalized_travel_recommendations/presentation/widgets/settings_list_item.dart';
+import 'package:personalized_travel_recommendations/presentation/widgets/custom_divider.dart';
+import 'package:personalized_travel_recommendations/presentation/pages/mypage/my_page_wishlist_screen.dart';
+import 'package:personalized_travel_recommendations/presentation/pages/mypage/guest_my_page_screen.dart';
 
 class LoggedInMyPageScreen extends StatelessWidget {
   const LoggedInMyPageScreen({super.key});
@@ -41,28 +42,53 @@ class LoggedInMyPageScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   FeatureIconButton(
-                    icon: AppSolidPngIcons.shoppingBag(
-                        color: AppColors.neutral60),
+                    icon: Image.asset(
+                      'assets/icons/Solid/png/shopping-bag.png',
+                      width: 24,
+                      height: 24,
+                      color: AppColors.white,
+                    ),
                     label: '구매 상품',
                     count: 4,
                     backgroundColor: AppColors.indigo40,
                   ),
                   FeatureIconButton(
-                    icon: AppSolidPngIcons.heart(color: AppColors.neutral60),
+                    icon: Image.asset(
+                      'assets/icons/Solid/png/heart.png',
+                      width: 24,
+                      height: 24,
+                      color: AppColors.white,
+                    ),
                     label: '찜한 목록',
                     count: 4,
-                    onTap: () =>
-                        Navigator.pushNamed(context, '/wishlist'), // 이동 추가
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const WishlistScreen(),
+                        ),
+                      );
+                    },
                     backgroundColor: AppColors.indigo60,
                   ),
                   FeatureIconButton(
-                    icon: AppSolidPngIcons.chatAlt(color: AppColors.neutral60),
+                    icon: Image.asset(
+                      'assets/icons/Solid/png/chat-alt.png',
+                      width: 24,
+                      height: 24,
+                      color: AppColors.white,
+                    ),
                     label: '게시글',
                     count: 2,
                     backgroundColor: AppColors.indigo40,
                   ),
                   FeatureIconButton(
-                    icon: AppSolidPngIcons.map(color: AppColors.neutral60),
+                    icon: Image.asset(
+                      'assets/icons/Solid/png/map.png',
+                      width: 24,
+                      height: 24,
+                      color: AppColors.white,
+                    ),
                     label: '여행 도시',
                     count: 2,
                     backgroundColor: AppColors.indigo60,
@@ -75,30 +101,48 @@ class LoggedInMyPageScreen extends StatelessWidget {
 
             // 🔹 설정 리스트
             SettingsListItem(
-              icon: AppSolidPngIcons.user(color: AppColors.neutral60),
+              leadingIcon: Image.asset(
+                'assets/icons/Solid/png/account_circle.png',
+                width: 24,
+                height: 24,
+                color: AppColors.neutral60,
+              ),
               label: '내 정보 등록 및 관리',
               onTap: () {},
             ),
             const CustomDivider(),
 
             SettingsListItem(
-              icon: AppSolidPngIcons.shoppingCart(color: AppColors.neutral60),
+              leadingIcon: Image.asset(
+                'assets/icons/Solid/png/shopping-bag.png',
+                width: 24,
+                height: 24,
+                color: AppColors.neutral60,
+              ),
               label: '구매 목록',
               onTap: () {},
             ),
             const CustomDivider(),
 
             SettingsListItem(
-              icon: AppSolidPngIcons.informationCircle(
-                  color: AppColors.neutral60),
+              leadingIcon: Image.asset(
+                'assets/icons/Solid/png/clipboard-check.png',
+                width: 24,
+                height: 24,
+                color: AppColors.neutral60,
+              ),
               label: '공지 사항',
               onTap: () {},
             ),
             const CustomDivider(),
 
             SettingsListItem(
-              icon: AppSolidPngIcons.informationCircle(
-                  color: AppColors.neutral60),
+              leadingIcon: Image.asset(
+                'assets/icons/Outline/png/alert-circle.png',
+                width: 24,
+                height: 24,
+                color: AppColors.neutral60,
+              ),
               label: '고객센터',
               onTap: () {},
             ),
@@ -108,10 +152,20 @@ class LoggedInMyPageScreen extends StatelessWidget {
 
             // 🔹 로그아웃
             SettingsListItem(
-              icon: AppSolidPngIcons.logout(color: AppColors.error60),
+              leadingIcon: Image.asset(
+                'assets/icons/Solid/png/logout-1.png',
+                width: 24,
+                height: 24,
+                color: AppColors.error60,
+              ),
               label: '로그아웃',
               onTap: () {
-                Navigator.pushReplacementNamed(context, '/guest');
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const GuestMyPageScreen(),
+                  ),
+                );
               },
             ),
             const Padding(

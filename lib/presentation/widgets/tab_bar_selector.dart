@@ -27,15 +27,15 @@ class TabBarSelector extends StatelessWidget {
                 tabs[index],
                 style: TextStyle(
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                  color: isSelected ? AppColors.purple80 : AppColors.neutral50,
+                  color: isSelected ? AppColors.indigo60 : AppColors.neutral50,
                 ),
               ),
               if (isSelected)
                 Container(
                   margin: const EdgeInsets.only(top: 4),
                   height: 3,
-                  width: 24,
-                  color: AppColors.purple60,
+                  width: 80,
+                  color: AppColors.indigo60,
                 ),
             ],
           ),

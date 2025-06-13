@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_text_styles.dart';
-import 'package:personalized_travel_recommendations/widget/favorite_card.dart';
-import 'package:personalized_travel_recommendations/widget/tab_bar_selector.dart';
+import 'package:personalized_travel_recommendations/presentation/widgets/favorite_card.dart';
+import 'package:personalized_travel_recommendations/presentation/widgets/tab_bar_selector.dart';
 
 class WishlistScreen extends StatefulWidget {
   const WishlistScreen({super.key});
@@ -37,6 +37,18 @@ class _WishlistScreenState extends State<WishlistScreen>
         backgroundColor: AppColors.white,
         elevation: 0,
         centerTitle: true,
+        automaticallyImplyLeading: false, // ← 자동 아이콘 제거
+        leading: IconButton(
+          icon: Image.asset(
+            'assets/icons/Solid/png/cheveron-left.png',
+            width: 24,
+            height: 24,
+            color: AppColors.neutral60, // 원하는 색상 지정
+          ),
+          onPressed: () {
+            Navigator.pop(context); // 또는 다른 기능 원하시면 수정 가능
+          },
+        ),
         title: const Text('찜한 목록', style: AppTypography.subtitle20Bold),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(48),
@@ -51,6 +63,7 @@ class _WishlistScreenState extends State<WishlistScreen>
           ),
         ),
       ),
+
       body: TabBarView(
         controller: _tabController,
         children: [
@@ -94,7 +107,7 @@ class _WishlistScreenState extends State<WishlistScreen>
         {
           'imageUrl': 'assets/images/TokyoRestaurants.png',
           'title': '스페인 도시 뿌수기',
-          'subtitle': '7박 9일',
+          'subtitle': '스페인\n7박 9일',
           'rating': 0.0,
           'tags': <String>['#친구와', '#3개 도시', '#디저트 투어'],
         },
