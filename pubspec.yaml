@@ -11,6 +11,8 @@ dependencies:
     sdk: flutter
   flutter_svg: ^2.0.9
   cupertino_icons: ^1.0.8
+  table_calendar: ^3.2.0
+  intl: ^0.20.2
 
 flutter:
   assets:
