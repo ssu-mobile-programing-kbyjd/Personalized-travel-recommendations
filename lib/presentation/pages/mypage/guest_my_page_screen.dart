@@ -5,6 +5,7 @@ import 'package:personalized_travel_recommendations/presentation/widgets/setting
 import 'package:personalized_travel_recommendations/presentation/widgets/custom_divider.dart';
 import 'package:personalized_travel_recommendations/presentation/widgets/reusable_prompt_card.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/mypage/logged_in_my_page_screen.dart';
+import 'package:personalized_travel_recommendations/presentation/pages/mypage/my_page_notice_screen.dart';
 
 class GuestMyPageScreen extends StatelessWidget {
   const GuestMyPageScreen({super.key});
@@ -40,15 +41,23 @@ class GuestMyPageScreen extends StatelessWidget {
             // 🔹 설정 항목
             SettingsListItem(
               leadingIcon: Image.asset(
-                'assets/icons/Outline/png/clipboard-check.png',
+                'assets/icons/Solid/png/clipboard-check.png',
                 width: 24,
                 height: 24,
                 color: AppColors.neutral60,
               ),
               label: '공지 사항',
-              onTap: () => Navigator.pushNamed(context, '/notice'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MyPageNoticeScreen(),
+                  ),
+                );
+              },
             ),
             const CustomDivider(),
+
 
             SettingsListItem(
               leadingIcon: Image.asset(
