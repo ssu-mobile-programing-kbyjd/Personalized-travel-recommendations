@@ -16,7 +16,7 @@ class _MainScreenState extends State<MainScreen> {
 
   // 화면 리스트 정의
   final List<Widget> _screens = [
-    const HomeScreen(),
+    const MainHomeScreen(),
     const TravelCalendarScreen(),
     const GuestMyPageScreen(),
   ];
