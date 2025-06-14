@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:personalized_travel_recommendations/presentation/widgets/custom_navbar.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/home/home_screen.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/calendar/calendar_screen.dart';
-import 'package:personalized_travel_recommendations/presentation/pages/mypage/mypage_screen.dart';
+import 'package:personalized_travel_recommendations/presentation/pages/mypage/guest_my_page_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -18,7 +18,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = [
     const MainHomeScreen(),
     const TravelCalendarScreen(),
-    const MyPageScreen(),
+    const GuestMyPageScreen(),
   ];
 
   // 페이지 전환 메소드

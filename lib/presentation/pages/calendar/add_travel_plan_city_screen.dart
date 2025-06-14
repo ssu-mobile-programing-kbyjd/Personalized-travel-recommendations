@@ -3,6 +3,7 @@ import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_outline_png_icons.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_text_styles.dart';
 import 'package:personalized_travel_recommendations/presentation/widgets/custom_button.dart';
+import 'package:personalized_travel_recommendations/presentation/pages/calendar/add_travel_plan_schedule_screen.dart';
 
 class AddTravelPlanCityScreen extends StatefulWidget {
   final String country;
@@ -48,6 +49,7 @@ class AddTravelPlanCityScreen extends StatefulWidget {
 }
 
 class _AddTravelPlanCityScreenState extends State<AddTravelPlanCityScreen> {
+  late String country = widget.country;
   int? selectedIndex;
 
   @override
@@ -172,14 +174,14 @@ class _AddTravelPlanCityScreenState extends State<AddTravelPlanCityScreen> {
                 text: '다음',
                 onPressed: selectedIndex != null
                     ? () {
-                        print('다음 버튼 클릭됨');
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //       builder: (context) => AddTravelPlanCityScreen(
-                        //         city: cities[selectedIndex!],
-                        //       ),
-                        //     ));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AddTravelPlanScheduleScreen(
+                                country: country,
+                                city: cities[selectedIndex!],
+                              ),
+                            ));
                       }
                     : () {},
                 color: selectedIndex != null
