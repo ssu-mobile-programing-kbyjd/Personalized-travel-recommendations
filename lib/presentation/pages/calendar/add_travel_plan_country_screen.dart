@@ -89,44 +89,53 @@ class _AddTravelPlanCountryScreenState
             ),
             const SizedBox(height: 32),
             // 나라 선택 그리드
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: List.generate(countries.length, (index) {
-                    final isSelected = selectedIndex == index;
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedIndex = isSelected ? null : index;
-                        });
-                      },
-                      child: Container(
-                        width: 114,
-                        height: 86,
-                        decoration: BoxDecoration(
-                          color: AppColors.neutral10,
-                          borderRadius: BorderRadius.circular(16),
-                          border: isSelected
-                              ? Border.all(
-                                  color: AppColors.indigo60,
-                                  width: 2,
-                                )
-                              : null,
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          countries[index],
-                          style: AppTypography.body14Medium.copyWith(
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    );
-                  }),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      // 3개 버튼 + 2*spacing(8) = 3열
+                      double itemWidth = (constraints.maxWidth - 16) / 3;
+                      double itemHeight = itemWidth * 0.75; // 비율 조정(원하면 변경)
+                      return Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: List.generate(countries.length, (index) {
+                          final isSelected = selectedIndex == index;
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                selectedIndex = isSelected ? null : index;
+                              });
+                            },
+                            child: Container(
+                              width: itemWidth,
+                              height: itemHeight,
+                              decoration: BoxDecoration(
+                                color: AppColors.neutral10,
+                                borderRadius: BorderRadius.circular(16),
+                                border: isSelected
+                                    ? Border.all(
+                                        color: AppColors.indigo60,
+                                        width: 2,
+                                      )
+                                    : null,
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                countries[index],
+                                style: AppTypography.body14Medium.copyWith(
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
+                      );
+                    },
+                  ),
                 ),
               ),
             ),

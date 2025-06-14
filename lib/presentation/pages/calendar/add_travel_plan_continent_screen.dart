@@ -87,40 +87,47 @@ class _AddTravelPlanContinentScreenState
             Center(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: List.generate(continents.length, (index) {
-                    final isSelected = selectedIndex == index;
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedIndex = isSelected ? null : index;
-                        });
-                      },
-                      child: Container(
-                        width: 114,
-                        height: 86,
-                        decoration: BoxDecoration(
-                          color: AppColors.neutral10,
-                          borderRadius: BorderRadius.circular(16),
-                          border: isSelected
-                              ? Border.all(
-                                  color: AppColors.indigo60,
-                                  width: 2,
-                                )
-                              : null,
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          continents[index],
-                          style: AppTypography.body14Medium.copyWith(
-                            color: Colors.black,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    double itemWidth = (constraints.maxWidth - 16) / 3;
+                    double itemHeight = itemWidth * 0.75;
+                    return Wrap(
+                      alignment: WrapAlignment.start,
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: List.generate(continents.length, (index) {
+                        final isSelected = selectedIndex == index;
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedIndex = isSelected ? null : index;
+                            });
+                          },
+                          child: Container(
+                            width: itemWidth,
+                            height: itemHeight,
+                            decoration: BoxDecoration(
+                              color: AppColors.neutral10,
+                              borderRadius: BorderRadius.circular(16),
+                              border: isSelected
+                                  ? Border.all(
+                                      color: AppColors.indigo60,
+                                      width: 2,
+                                    )
+                                  : null,
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              continents[index],
+                              style: AppTypography.body14Medium.copyWith(
+                                color: Colors.black,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
+                        );
+                      }),
                     );
-                  }),
+                  },
                 ),
               ),
             ),

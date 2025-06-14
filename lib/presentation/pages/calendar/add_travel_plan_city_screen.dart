@@ -109,44 +109,52 @@ class _AddTravelPlanCityScreenState extends State<AddTravelPlanCityScreen> {
               ],
             ),
             const SizedBox(height: 32),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: List.generate(cities.length, (index) {
-                    final isSelected = selectedIndex == index;
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedIndex = isSelected ? null : index;
-                        });
-                      },
-                      child: Container(
-                        width: 114,
-                        height: 86,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: AppColors.neutral10,
-                          borderRadius: BorderRadius.circular(16),
-                          border: isSelected
-                              ? Border.all(
-                                  color: AppColors.indigo60,
-                                  width: 2,
-                                )
-                              : null,
-                        ),
-                        child: Text(
-                          cities[index],
-                          style: AppTypography.body14Medium.copyWith(
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    );
-                  }),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      double itemWidth = (constraints.maxWidth - 16) / 3;
+                      double itemHeight = itemWidth * 0.75;
+                      return Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: List.generate(cities.length, (index) {
+                          final isSelected = selectedIndex == index;
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                selectedIndex = isSelected ? null : index;
+                              });
+                            },
+                            child: Container(
+                              width: itemWidth,
+                              height: itemHeight,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: AppColors.neutral10,
+                                borderRadius: BorderRadius.circular(16),
+                                border: isSelected
+                                    ? Border.all(
+                                        color: AppColors.indigo60,
+                                        width: 2,
+                                      )
+                                    : null,
+                              ),
+                              child: Text(
+                                cities[index],
+                                style: AppTypography.body14Medium.copyWith(
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
