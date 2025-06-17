@@ -7,6 +7,7 @@ import 'package:personalized_travel_recommendations/presentation/widgets/setting
 import 'package:personalized_travel_recommendations/presentation/widgets/custom_divider.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/mypage/my_page_wishlist_screen.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/mypage/guest_my_page_screen.dart';
+import 'package:personalized_travel_recommendations/presentation/pages/mypage/my_page_notice_screen.dart';
 
 class LoggedInMyPageScreen extends StatelessWidget {
   const LoggedInMyPageScreen({super.key});
@@ -132,7 +133,14 @@ class LoggedInMyPageScreen extends StatelessWidget {
                 color: AppColors.neutral60,
               ),
               label: '공지 사항',
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MyPageNoticeScreen(),
+                  ),
+                );
+              },
             ),
             const CustomDivider(),
 
@@ -144,7 +152,9 @@ class LoggedInMyPageScreen extends StatelessWidget {
                 color: AppColors.neutral60,
               ),
               label: '고객센터',
-              onTap: () {},
+              onTap: () {
+
+              },
             ),
             const CustomDivider(),
 
