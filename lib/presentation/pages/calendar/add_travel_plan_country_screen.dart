@@ -3,7 +3,7 @@ import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_text_styles.dart';
 import 'package:personalized_travel_recommendations/presentation/widgets/custom_button.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_outline_png_icons.dart';
-import 'package:personalized_travel_recommendations/data/travel_data.dart';
+import 'package:personalized_travel_recommendations/data/datasources/travel_data.dart';
 import 'add_travel_plan_city_screen.dart';
 import 'add_travel_plan_schedule_screen.dart';
 
