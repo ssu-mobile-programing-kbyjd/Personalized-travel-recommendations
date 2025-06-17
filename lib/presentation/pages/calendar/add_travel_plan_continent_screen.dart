@@ -3,7 +3,9 @@ import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_text_styles.dart';
 import 'package:personalized_travel_recommendations/presentation/widgets/custom_button.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_outline_png_icons.dart';
+import 'package:personalized_travel_recommendations/data/travel_data.dart';
 import 'add_travel_plan_country_screen.dart';
+import 'add_travel_plan_schedule_screen.dart';
 
 class AddTravelPlanContinentScreen extends StatefulWidget {
   const AddTravelPlanContinentScreen({super.key});
@@ -15,16 +17,6 @@ class AddTravelPlanContinentScreen extends StatefulWidget {
 
 class _AddTravelPlanContinentScreenState
     extends State<AddTravelPlanContinentScreen> {
-  final List<String> continents = [
-    '동아시아',
-    '동남아시아',
-    '서아시아',
-    '남아시아',
-    '유럽',
-    '아프리카',
-    '북아메리카',
-    '남아메리카',
-  ];
   int? selectedIndex;
 
   @override
@@ -95,7 +87,8 @@ class _AddTravelPlanContinentScreenState
                       alignment: WrapAlignment.start,
                       spacing: 8,
                       runSpacing: 8,
-                      children: List.generate(continents.length, (index) {
+                      children:
+                          List.generate(TravelData.continents.length, (index) {
                         final isSelected = selectedIndex == index;
                         return GestureDetector(
                           onTap: () {
@@ -118,7 +111,7 @@ class _AddTravelPlanContinentScreenState
                             ),
                             alignment: Alignment.center,
                             child: Text(
-                              continents[index],
+                              TravelData.continents[index],
                               style: AppTypography.body14Medium.copyWith(
                                 color: Colors.black,
                               ),
@@ -134,8 +127,15 @@ class _AddTravelPlanContinentScreenState
             const Spacer(),
             GestureDetector(
               onTap: () {
-                print('아직 안정했어요');
-                // Handle the action for "아직 안정했어요" button
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AddTravelPlanScheduleScreen(
+                      country: '자유 여행',
+                      city: '자유',
+                    ),
+                  ),
+                );
               },
               child: Container(
                 alignment: Alignment.center,
@@ -156,7 +156,7 @@ class _AddTravelPlanContinentScreenState
                         context,
                         MaterialPageRoute(
                           builder: (context) => AddTravelPlanCountryScreen(
-                            continent: continents[selectedIndex!],
+                            continent: TravelData.continents[selectedIndex!],
                           ),
                         ),
                       );
