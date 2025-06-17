@@ -3,6 +3,7 @@ import 'package:personalized_travel_recommendations/presentation/widgets/custom_
 import 'package:personalized_travel_recommendations/presentation/pages/home/home_screen.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/calendar/calendar_screen.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/mypage/guest_my_page_screen.dart';
+import 'package:personalized_travel_recommendations/presentation/pages/dev_page.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -31,14 +32,21 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _screens,
+      appBar: AppBar(
+        title: const Text('메인 화면'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.bug_report),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const DevPage()),
+              );
+            },
+          ),
+        ],
       ),
-      bottomNavigationBar: BottomNavBar(
-        selectedIndex: _selectedIndex,
-        onTap: _onItemTapped,
-      ),
+      body: const Center(child: Text('여기에 메인 서비스 UI')),
     );
   }
 }

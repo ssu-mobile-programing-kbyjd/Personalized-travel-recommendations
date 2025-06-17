@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "292662482064",
+    "project_id": "trip-block",
+    "storage_bucket": "trip-block.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:292662482064:android:562f341db3ab0841f87415",
+        "android_client_info": {
+          "package_name": "com.kbyjd.tripblock"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATJqVXkcTIOZqT_nfWXLsoxJxK6ULgbcY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
