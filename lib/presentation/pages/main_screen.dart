@@ -7,7 +7,9 @@ import 'package:personalized_travel_recommendations/presentation/pages/dev_page.
 
 class MainScreen extends StatefulWidget {
   final int initialIndex; // 추가_dy
-  const MainScreen({super.key, this.initialIndex = 0});  // 기본값 추가_dy // const MainScreen({super.key});
+  const MainScreen(
+      {super.key,
+        this.initialIndex = 0}); // 기본값 추가_dy // const MainScreen({super.key});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -22,7 +24,6 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
     _selectedIndex = widget.initialIndex; //초기 index 설정
   }
-
 
   // 화면 리스트 정의
   final List<Widget> _screens = [
@@ -41,21 +42,14 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('메인 화면'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.bug_report),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const DevPage()),
-              );
-            },
-          ),
-        ],
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: _screens,
       ),
-      body: const Center(child: Text('여기에 메인 서비스 UI')),
+      bottomNavigationBar: BottomNavBar(
+        selectedIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
     );
   }
 }
