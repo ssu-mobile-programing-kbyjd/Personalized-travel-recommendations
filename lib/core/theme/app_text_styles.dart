@@ -142,6 +142,12 @@ class AppTypography {
     fontWeight: FontWeight.w500, // Medium
     fontFamily: 'Pretendard-Medium',
   );
+  static const TextStyle link12 = TextStyle(
+    fontSize: 12,
+    height: 16 / 12,
+    fontWeight: FontWeight.w600, // Medium
+    fontFamily: 'Pretendard-SemiBold',
+  );
 }
 
 // 사용 예제

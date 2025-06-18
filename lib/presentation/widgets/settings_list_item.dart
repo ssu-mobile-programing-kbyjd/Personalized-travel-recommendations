@@ -20,7 +20,7 @@ class SettingsListItem extends StatelessWidget {
       leading: leadingIcon,
       title: Text(
         label,
-        style: AppTypography.body16Regular.copyWith(
+        style: AppTypography.body14SemiBold.copyWith(
           color: AppColors.neutral80,
         ),
       ),

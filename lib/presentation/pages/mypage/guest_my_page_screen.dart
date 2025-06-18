@@ -7,6 +7,7 @@ import 'package:personalized_travel_recommendations/presentation/widgets/reusabl
 import 'package:personalized_travel_recommendations/presentation/pages/mypage/logged_in_my_page_screen.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/mypage/my_page_notice_screen.dart';
 
+
 class GuestMyPageScreen extends StatelessWidget {
   const GuestMyPageScreen({super.key});
 
@@ -19,7 +20,7 @@ class GuestMyPageScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const MyPageHeader(),
-            const SizedBox(height: 8),
+            const SizedBox(height: 20), // 로그인 카드 위 여백
 
             // 🔹 로그인 유도 카드
             ReusablePromptCard(
@@ -36,12 +37,12 @@ class GuestMyPageScreen extends StatelessWidget {
               },
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: 0), // 로그인 ↔ 공지사항
 
             // 🔹 설정 항목
             SettingsListItem(
               leadingIcon: Image.asset(
-                'assets/icons/Solid/png/clipboard-check.png',
+                'assets/icons/Outline/png/clipboard-check.png',
                 width: 24,
                 height: 24,
                 color: AppColors.neutral60,
@@ -66,7 +67,7 @@ class GuestMyPageScreen extends StatelessWidget {
                 height: 24,
                 color: AppColors.neutral60,
               ),
-              label: '고객센터',
+              label: '고객 센터',
               onTap: () => Navigator.pushNamed(context, '/support'),
             ),
             const CustomDivider(),

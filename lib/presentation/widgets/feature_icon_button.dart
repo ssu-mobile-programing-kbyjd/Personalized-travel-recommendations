@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
+import 'package:personalized_travel_recommendations/core/theme/app_text_styles.dart';
 
 class FeatureIconButton extends StatelessWidget {
-  final Widget icon; // IconData → Widget 변경
+  final Widget icon;
   final String label;
   final int count;
   final VoidCallback? onTap;
@@ -24,7 +25,7 @@ class FeatureIconButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 80,
+        width: 72,  //height 넣으니까 오류 나서 피그마 디자인과 다르게 진행
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
           color: backgroundColor,
@@ -33,22 +34,19 @@ class FeatureIconButton extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(
-              height: 28,
-              width: 28,
+              height: 24,
+              width: 24,
               child: icon,
             ),
             const SizedBox(height: 4),
             Text(
               label,
-              style: TextStyle(
-                color: textColor,
-                fontSize: 14,
-              ),
+              style: AppTypography.caption12Medium.copyWith(color: textColor),
             ),
             const SizedBox(height: 4),
             Text(
               count.toString(),
-              style: TextStyle(
+              style: AppTypography.caption12Medium.copyWith(
                 color: textColor,
                 fontWeight: FontWeight.bold,
               ),
