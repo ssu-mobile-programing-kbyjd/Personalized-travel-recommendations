@@ -4,8 +4,11 @@ import 'package:personalized_travel_recommendations/core/theme/app_text_styles.d
 import 'package:personalized_travel_recommendations/presentation/widgets/favorite_card.dart';
 import 'package:personalized_travel_recommendations/presentation/widgets/tab_bar_selector.dart';
 
+
 class WishlistScreen extends StatefulWidget {
-  const WishlistScreen({super.key});
+  final ScrollController? scrollController;
+
+  const WishlistScreen({super.key, this.scrollController});
 
   @override
   State<WishlistScreen> createState() => _WishlistScreenState();
@@ -31,45 +34,56 @@ class _WishlistScreenState extends State<WishlistScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: AppBar(
-        backgroundColor: AppColors.white,
-        elevation: 0,
-        centerTitle: true,
-        automaticallyImplyLeading: false, // ← 자동 아이콘 제거
-        leading: IconButton(
-          icon: Image.asset(
-            'assets/icons/Solid/png/cheveron-left.png',
-            width: 24,
-            height: 24,
-            color: AppColors.neutral60, // 원하는 색상 지정
-          ),
-          onPressed: () {
-            Navigator.pop(context); // 또는 다른 기능 원하시면 수정 가능
-          },
-        ),
-        title: const Text('찜한 목록', style: AppTypography.subtitle20Bold),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(48),
-          child: TabBarSelector(
-            tabs: _tabs,
-            selectedIndex: _tabController.index,
-            onTap: (index) {
-              setState(() {
-                _tabController.index = index;
-              });
-            },
-          ),
-        ),
-      ),
-
-      body: TabBarView(
-        controller: _tabController,
+    return SafeArea(
+      child: Column(
         children: [
-          _buildListView('여행지'),
-          _buildListView('패키지'),
-          _buildListView('컨텐츠'),
+          const SizedBox(height: 8),
+          // 🔹 드래그 인디케이터
+          Container(
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: AppColors.neutral40,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // 🔹 제목
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text('찜한 목록', style: AppTypography.title24Bold),
+            ),
+          ),
+
+
+          // 🔹 탭바
+          Padding(
+            padding: const EdgeInsets.only(top: 12),
+            child: TabBarSelector(
+              tabs: _tabs,
+              selectedIndex: _tabController.index,
+              onTap: (index) {
+                setState(() {
+                  _tabController.index = index;
+                });
+              },
+            ),
+          ),
+
+          // 🔹 콘텐츠
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                _buildListView('여행지'),
+                _buildListView('패키지'),
+                _buildListView('컨텐츠'),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -115,14 +129,14 @@ class _WishlistScreenState extends State<WishlistScreen>
     } else {
       items = [
         {
-          'imageUrl': 'assets/images/contents.png',
+          'imageUrl': 'assets/images/SagradaFamilia.png',
           'title': '도시 및 국가별 여행 가이드',
           'subtitle': '여행 정보',
           'rating': 0.0,
           'tags': <String>[],
         },
         {
-          'imageUrl': 'assets/images/contents.png',
+          'imageUrl': 'assets/images/SagradaFamilia.png',
           'title': '도시 및 국가별 여행 가이드',
           'subtitle': '여행 정보',
           'rating': 0.0,
@@ -132,6 +146,7 @@ class _WishlistScreenState extends State<WishlistScreen>
     }
 
     return ListView.separated(
+      controller: widget.scrollController,
       padding: const EdgeInsets.all(16),
       itemCount: items.length,
       separatorBuilder: (_, __) => const SizedBox(height: 12),

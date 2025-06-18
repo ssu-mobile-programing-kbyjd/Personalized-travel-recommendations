@@ -5,9 +5,9 @@ import 'package:personalized_travel_recommendations/presentation/widgets/profile
 import 'package:personalized_travel_recommendations/presentation/widgets/feature_icon_button.dart';
 import 'package:personalized_travel_recommendations/presentation/widgets/settings_list_item.dart';
 import 'package:personalized_travel_recommendations/presentation/widgets/custom_divider.dart';
-import 'package:personalized_travel_recommendations/presentation/pages/mypage/my_page_wishlist_screen.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/mypage/guest_my_page_screen.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/mypage/my_page_notice_screen.dart';
+import 'package:personalized_travel_recommendations/presentation/pages/mypage/my_page_wishlist_modal_wrapper.dart';
 
 class LoggedInMyPageScreen extends StatelessWidget {
   const LoggedInMyPageScreen({super.key});
@@ -25,7 +25,7 @@ class LoggedInMyPageScreen extends StatelessWidget {
 
             // 🔹 사용자 프로필 카드
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.symmetric(horizontal: 20),
               child: ProfileHeader(
                 nickname: '재성구리',
                 daysTogether: 125,
@@ -38,7 +38,7 @@ class LoggedInMyPageScreen extends StatelessWidget {
 
             // 🔹 기능 아이콘 4개
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -63,11 +63,11 @@ class LoggedInMyPageScreen extends StatelessWidget {
                     label: '찜한 목록',
                     count: 4,
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const WishlistScreen(),
-                        ),
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => const WishlistModalWrapper(),
                       );
                     },
                     backgroundColor: AppColors.indigo60,
@@ -115,7 +115,7 @@ class LoggedInMyPageScreen extends StatelessWidget {
 
             SettingsListItem(
               leadingIcon: Image.asset(
-                'assets/icons/Solid/png/shopping-bag.png',
+                'assets/icons/Outline/png/shopping-bag.png',
                 width: 24,
                 height: 24,
                 color: AppColors.neutral60,
@@ -127,7 +127,7 @@ class LoggedInMyPageScreen extends StatelessWidget {
 
             SettingsListItem(
               leadingIcon: Image.asset(
-                'assets/icons/Solid/png/clipboard-check.png',
+                'assets/icons/Outline/png/clipboard-check.png',
                 width: 24,
                 height: 24,
                 color: AppColors.neutral60,
@@ -178,13 +178,13 @@ class LoggedInMyPageScreen extends StatelessWidget {
                 );
               },
             ),
-            const Padding(
-              padding: EdgeInsets.only(left: 72),
-              child: Text(
-                'Log out the account',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: AppColors.neutral40,
+            Transform.translate( //
+              offset: const Offset(0, -8), // 위로 8px 당겨 붙이기
+              child: const Padding(
+                padding: EdgeInsets.only(left: 52),
+                child: Text(
+                  'Log out the account',
+                  style: TextStyle(fontSize: 12, color: AppColors.neutral40),
                 ),
               ),
             ),
