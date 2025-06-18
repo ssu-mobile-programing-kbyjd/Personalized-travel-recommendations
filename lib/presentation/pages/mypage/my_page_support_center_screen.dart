@@ -69,7 +69,7 @@ class SupportCenterScreen extends StatelessWidget {
               children: [
                 Text(
                   '공지 ',
-                  style: AppTypography.caption12SemiBold.copyWith(
+                  style: AppTypography.caption12Regular.copyWith(
                     color: AppColors.indigo80,
                   ),
                 ),

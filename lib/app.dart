@@ -12,7 +12,7 @@ class App extends StatelessWidget {
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: const MainScreen(),
+      home: const MainScreen(initialIndex: 0),
     );
   }
 }
