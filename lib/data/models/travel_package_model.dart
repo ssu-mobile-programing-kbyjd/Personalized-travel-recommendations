@@ -44,4 +44,4 @@ class TravelPackageModel {
       'category': category,
     };
   }
-} 
+}
