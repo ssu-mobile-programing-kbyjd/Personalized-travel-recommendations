@@ -5,6 +5,9 @@ import 'package:personalized_travel_recommendations/presentation/widgets/favorit
 import 'package:personalized_travel_recommendations/presentation/widgets/tab_bar_selector.dart';
 import 'package:personalized_travel_recommendations/presentation/widgets/custom_navbar.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/main_screen.dart';
+import 'package:personalized_travel_recommendations/data/datasources/travel_packages_data_source.dart';
+import 'package:personalized_travel_recommendations/data/datasources/location_data_source.dart';
+import 'package:personalized_travel_recommendations/data/datasources/destinations_dummy_data.dart';
 
 class WishlistScreen extends StatefulWidget {
   final ScrollController? scrollController;
@@ -20,10 +23,27 @@ class _WishlistScreenState extends State<WishlistScreen>
   late TabController _tabController;
   final List<String> _tabs = ['여행지', '패키지', '컨텐츠'];
 
+  late List<Map<String, dynamic>> destinationState;
+  late List<Map<String, dynamic>> packageState;
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: _tabs.length, vsync: this);
+
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging == false) {
+        setState(() {}); // 상단 탭 상태 갱신
+      }
+    });
+
+    destinationState = destinationsDummyData
+        .map((item) => Map<String, dynamic>.from(item))
+        .toList();
+
+    packageState = TravelPackagesDataSource.getAllPackages()
+        .map((item) => Map<String, dynamic>.from(item))
+        .toList();
   }
 
   @override
@@ -56,7 +76,6 @@ class _WishlistScreenState extends State<WishlistScreen>
               ),
             ),
             const SizedBox(height: 16),
-
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Align(
@@ -64,7 +83,6 @@ class _WishlistScreenState extends State<WishlistScreen>
                 child: Text('찜한 목록', style: AppTypography.title24Bold),
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.only(top: 12),
               child: TabBarSelector(
@@ -73,11 +91,17 @@ class _WishlistScreenState extends State<WishlistScreen>
                 onTap: (index) {
                   setState(() {
                     _tabController.index = index;
+
+                    // 필터링: 찜이 아닌 항목 제거
+                    if (_tabs[index] == '여행지') {
+                      destinationState = destinationState.where((item) => item['isLiked'] == true).toList();
+                    } else if (_tabs[index] == '패키지') {
+                      packageState = packageState.where((item) => item['isLiked'] == true).toList();
+                    }
                   });
                 },
               ),
             ),
-
             Expanded(
               child: TabBarView(
                 controller: _tabController,
@@ -92,83 +116,109 @@ class _WishlistScreenState extends State<WishlistScreen>
         ),
       ),
       bottomNavigationBar: BottomNavBar(
-        selectedIndex: 2, // MyPage 탭 강조
+        selectedIndex: 2,
         onTap: _onNavTap,
       ),
     );
   }
 
   Widget _buildListView(String type) {
-    final List<Map<String, dynamic>> items;
-
     if (type == '여행지') {
-      items = [
-        {
-          'imageUrl': 'assets/images/SagradaFamilia.png',
-          'title': '사그라다 파밀리아',
-          'subtitle': '바르셀로나 어쩌구',
-          'rating': 5.0,
-          'tags': <String>[],
+      return ListView.separated(
+        controller: widget.scrollController,
+        padding: const EdgeInsets.all(16),
+        itemCount: destinationState.length,
+        separatorBuilder: (_, __) => const SizedBox(height: 12),
+        itemBuilder: (context, index) {
+          final destination = destinationState[index];
+          //if (destination['isLiked'] != true) return const SizedBox.shrink();
+          return FavoriteCard(
+            imageUrl: destination['image'],
+            title: destination['name'],
+            subtitle: destination['location'],
+            rating: destination['rating'] ?? 0.0,
+            tags: const [],
+            isAssetImage: false,
+            isPackage: false,
+            isContent: false,
+            onHeartTap: () {
+              setState(() {
+                destination['isLiked'] = false;
+              });
+            },
+            isLiked: destination['isLiked'] ?? true,
+          );
         },
-        {
-          'imageUrl': 'assets/images/CasaMila.png',
-          'title': '카사 밀라',
-          'subtitle': 'Northern Territory 0872, Australia',
-          'rating': 5.0,
-          'tags': <String>[],
-        },
-      ];
+      );
     } else if (type == '패키지') {
-      items = [
-        {
-          'imageUrl': 'assets/images/TokyoRestaurants.png',
-          'title': '도쿄 10대 맛집 뿌수기',
-          'subtitle': '일본\n2박 3일',
-          'rating': 0.0,
-          'tags': <String>['#친구와', '#힐링 여행', '#맛집 투어'],
+      return ListView.separated(
+        controller: widget.scrollController,
+        padding: const EdgeInsets.all(16),
+        itemCount: packageState.length,
+        separatorBuilder: (_, __) => const SizedBox(height: 12),
+        itemBuilder: (context, index) {
+          final item = packageState[index];
+          //if (item['isLiked'] != true) return const SizedBox.shrink();
+          return FavoriteCard(
+            imageUrl: 'assets/images/TokyoRestaurants.png',
+            title: item['name'],
+            subtitle: '${item['location']}\n${item['duration']}',
+            rating: double.tryParse(item['rating']) ?? 0.0,
+            tags: List<String>.from(item['tags'] ?? []),
+            isAssetImage: true,
+            isPackage: true,
+            isContent: false,
+            isLiked: item['isLiked'] ?? false,
+            onHeartTap: () {
+              setState(() {
+                item['isLiked'] = false;
+              });
+            },
+          );
         },
-        {
-          'imageUrl': 'assets/images/TokyoRestaurants.png',
-          'title': '스페인 도시 뿌수기',
-          'subtitle': '스페인\n7박 9일',
-          'rating': 0.0,
-          'tags': <String>['#친구와', '#3개 도시', '#디저트 투어'],
-        },
-      ];
+      );
     } else {
-      items = [
-        {
-          'imageUrl': 'assets/images/SagradaFamilia.png',
-          'title': '도시 및 국가별 여행 가이드',
-          'subtitle': '여행 정보',
-          'rating': 0.0,
-          'tags': <String>[],
-        },
-        {
-          'imageUrl': 'assets/images/SagradaFamilia.png',
-          'title': '도시 및 국가별 여행 가이드',
-          'subtitle': '여행 정보',
-          'rating': 0.0,
-          'tags': <String>[],
-        },
-      ];
-    }
+      final allCountries = LocationDataSource.locationData.values
+          .expand((countryMap) => countryMap.keys)
+          .toSet()
+          .toList();
 
-    return ListView.separated(
-      controller: widget.scrollController,
-      padding: const EdgeInsets.all(16),
-      itemCount: items.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 12),
-      itemBuilder: (context, index) => FavoriteCard(
-        imageUrl: items[index]['imageUrl'],
-        title: items[index]['title'],
-        subtitle: items[index]['subtitle'],
-        rating: items[index]['rating'],
-        tags: List<String>.from(items[index]['tags'] ?? []),
-        isAssetImage: true,
-        isPackage: type == '패키지',
-        isContent: type == '컨텐츠',
-      ),
-    );
+      final items = allCountries.map((country) =>
+      {
+        'imageUrl': 'assets/images/SagradaFamilia.png',
+        'title': '$country 여행 가이드',
+        'subtitle': '$country 여행 가이드',
+        'rating': 0.0,
+        'tags': <String>[]
+      }).toList();
+
+      return ListView.separated(
+        controller: widget.scrollController,
+        padding: const EdgeInsets.all(16),
+        itemCount: items.length,
+        separatorBuilder: (_, __) => const SizedBox(height: 12),
+        itemBuilder: (context, index) {
+          final item = items[index];
+          final bool isLiked = item['isLiked'] == true;
+
+          return FavoriteCard(
+            imageUrl: item['imageUrl']?.toString() ?? '',
+            title: item['title']?.toString() ?? '',
+            subtitle: item['subtitle']?.toString() ?? '',
+            rating: double.tryParse(item['rating']?.toString() ?? '0.0') ?? 0.0,
+            tags: (item['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
+            isAssetImage: true,
+            isPackage: type == '패키지',
+            isContent: type == '컨텐츠',
+            isLiked: isLiked,
+            onHeartTap: () {
+              setState(() {
+                item['isLiked'] = !isLiked;
+              });
+            },
+          );
+        },
+      );
+    }
   }
 }

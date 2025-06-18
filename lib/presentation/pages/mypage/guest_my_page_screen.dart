@@ -4,9 +4,9 @@ import 'package:personalized_travel_recommendations/presentation/widgets/mypage_
 import 'package:personalized_travel_recommendations/presentation/widgets/settings_list_item.dart';
 import 'package:personalized_travel_recommendations/presentation/widgets/custom_divider.dart';
 import 'package:personalized_travel_recommendations/presentation/widgets/reusable_prompt_card.dart';
-import 'package:personalized_travel_recommendations/presentation/pages/mypage/logged_in_my_page_screen.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/mypage/my_page_notice_screen.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/mypage/my_page_support_center_screen.dart';
+import 'package:personalized_travel_recommendations/presentation/pages/main_screen.dart';
 
 class GuestMyPageScreen extends StatelessWidget {
   const GuestMyPageScreen({super.key});
@@ -20,7 +20,7 @@ class GuestMyPageScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const MyPageHeader(),
-            const SizedBox(height: 20), // 로그인 카드 위 여백
+            const SizedBox(height: 12), // 로그인 카드 위 여백
 
             // 🔹 로그인 유도 카드
             ReusablePromptCard(
@@ -28,10 +28,10 @@ class GuestMyPageScreen extends StatelessWidget {
               subtitle: '계정이 없다면? 가입하기',
               buttonText: '로그인하기',
               onTap: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const LoggedInMyPageScreen(),
+                    builder: (_) => const MainScreen(initialIndex: 2, isLoggedIn: true),
                   ),
                 );
               },

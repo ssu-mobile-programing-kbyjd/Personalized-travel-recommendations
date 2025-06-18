@@ -19,7 +19,7 @@ class ReusablePromptCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(20, 0, 20, 40),
+      margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppColors.indigo100,
