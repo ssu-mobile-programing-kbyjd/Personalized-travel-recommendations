@@ -138,7 +138,7 @@ class _AddTravelPlanCountryScreenState
                   MaterialPageRoute(
                     builder: (context) => AddTravelPlanScheduleScreen(
                       country: widget.continent,
-                      city: '${widget.continent}',
+                      city: widget.continent, // 대륙 정보를 city로 전달
                     ),
                   ),
                 );
