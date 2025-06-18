@@ -10,3 +10,4 @@ export 'attraction_model.dart';
 export 'flight_model.dart';
 export 'restaurant_model.dart';
 export 'travel_package_model.dart';
+export 'add_travel_model.dart';

@@ -13,13 +13,13 @@ class TagChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: AppColors.indigo60, //태그 배경색
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
         label,
         style: const TextStyle(
           color: AppColors.white, //태그 글자색
-          fontSize: 12,
+          fontSize: 14,
         ),
       ),
     );

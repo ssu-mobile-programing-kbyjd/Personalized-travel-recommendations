@@ -19,8 +19,8 @@ class ReusablePromptCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.fromLTRB(20, 0, 20, 40),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppColors.indigo100,
         borderRadius: BorderRadius.circular(16),
@@ -33,14 +33,14 @@ class ReusablePromptCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: AppTypography.subtitle18Bold.copyWith(
+                  style: AppTypography.subtitle16SemiBold.copyWith(
                     color: AppColors.white,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   subtitle,
-                  style: AppTypography.body14Regular.copyWith(
+                  style: AppTypography.caption12Regular.copyWith(
                     color: AppColors.white,
                   ),
                 ),
@@ -51,12 +51,12 @@ class ReusablePromptCard extends StatelessWidget {
             onPressed: onTap,
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.white,
-              foregroundColor: AppColors.purple80,
+              foregroundColor: AppColors.neutral90,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-              textStyle: AppTypography.button14,
+              textStyle: AppTypography.link12,
             ),
             child: Text(buttonText),
           ),

@@ -40,15 +40,15 @@ class ProfileHeader extends StatelessWidget {
               children: [
                 Text(
                   nickname,
-                  style: AppTypography.subtitle18Bold.copyWith(
+                  style: AppTypography.subtitle16SemiBold.copyWith(
                     color: AppColors.white,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   '맛상추와 함께한지 $daysTogether일째\n그동안 총 $travelCount번의 여행을 떠났어요 :)',
-                  style: AppTypography.body14Regular.copyWith(
-                    color: AppColors.neutral50,
+                  style: AppTypography.caption12Regular.copyWith(
+                    color: AppColors.white,
                     height: 1.4,
                   ),
                 ),

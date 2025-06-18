@@ -15,19 +15,19 @@ class MyPageHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+      padding: const EdgeInsets.fromLTRB(25, 66, 16, 8),
       child: Row(
         children: [
           Text(
             title,
-            style: AppTypography.subtitle20Bold.copyWith(
+            style: AppTypography.title24Bold.copyWith(
               color: AppColors.neutral90,
             ),
           ),
           const SizedBox(width: 8),
           Text(
             '| $brandName',
-            style: AppTypography.subtitle18Regular.copyWith(
+            style: AppTypography.title24Bold.copyWith(
               color: AppColors.neutral40,
             ),
           ),
