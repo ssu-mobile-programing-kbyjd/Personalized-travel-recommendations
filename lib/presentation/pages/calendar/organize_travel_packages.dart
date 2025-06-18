@@ -57,15 +57,15 @@ class _OrganizeTravelPackagesScreenState
   }
 
   // 통합된 여행 패키지 데이터 가져오기
-  List<TravelPackageModel> get currentTravelPackages {
-    List<TravelPackageModel> packages = [];
+  List<AddTravelModel> get currentTravelPackages {
+    List<AddTravelModel> packages = [];
     String cityKey = widget.selectedCity ?? '제주';
 
     switch (selectedCategory) {
       case 0: // 항공편
         final flights = _getFlights(cityKey);
         packages = flights
-            .map((flight) => TravelPackageModel.fromFlight(
+            .map((flight) => AddTravelModel.fromFlight(
                   packageId: DateTime.now().millisecondsSinceEpoch.toString(),
                   tripId: 'temp_trip_id',
                   flight: flight,
@@ -81,7 +81,7 @@ class _OrganizeTravelPackagesScreenState
       case 1: // 관광명소
         final attractions = _getAttractions(cityKey);
         packages = attractions
-            .map((attraction) => TravelPackageModel.fromAttraction(
+            .map((attraction) => AddTravelModel.fromAttraction(
                   packageId: DateTime.now().millisecondsSinceEpoch.toString(),
                   tripId: 'temp_trip_id',
                   attraction: attraction,
@@ -94,7 +94,7 @@ class _OrganizeTravelPackagesScreenState
       case 2: // 맛집
         final restaurants = _getRestaurants(cityKey);
         packages = restaurants
-            .map((restaurant) => TravelPackageModel.fromRestaurant(
+            .map((restaurant) => AddTravelModel.fromRestaurant(
                   packageId: DateTime.now().millisecondsSinceEpoch.toString(),
                   tripId: 'temp_trip_id',
                   restaurant: restaurant,
@@ -107,7 +107,7 @@ class _OrganizeTravelPackagesScreenState
       case 3: // 숙소
         final accommodations = _getAccommodations(cityKey);
         packages = accommodations
-            .map((accommodation) => TravelPackageModel.fromAccommodation(
+            .map((accommodation) => AddTravelModel.fromAccommodation(
                   packageId: DateTime.now().millisecondsSinceEpoch.toString(),
                   tripId: 'temp_trip_id',
                   accommodation: accommodation,
@@ -354,7 +354,7 @@ class _OrganizeTravelPackagesScreenState
                   final package = currentTravelPackages[index];
                   return GestureDetector(
                     onTap: () {
-                      // TravelPackageModel을 직접 반환
+                      // AddTravelModel을 직접 반환
                       final selectedScheduleData = {
                         'place': package.title,
                         'address': package.address,
@@ -504,7 +504,7 @@ class _OrganizeTravelPackagesScreenState
     );
   }
 
-  Widget _buildTravelPackageCard(TravelPackageModel package) {
+  Widget _buildTravelPackageCard(AddTravelModel package) {
     final bool showImage = selectedCategory != 0;
 
     return Container(
