@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_text_styles.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_solid_png_icons.dart';
@@ -320,8 +319,8 @@ class _OrganizeTravelPackagesScreenState
             ),
           ),
         ),
-        title: SvgPicture.asset(
-          'assets/logos/WordMark.svg',
+        title: Image.asset(
+          'assets/logos/wordmark.png',
           width: 108,
           height: 22,
         ),
