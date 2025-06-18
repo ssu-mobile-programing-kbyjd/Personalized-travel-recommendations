@@ -12,6 +12,10 @@ class CommaFormatter extends TextInputFormatter {
     }
 
     final numberStr = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+    if (numberStr.isEmpty) {
+      return newValue.copyWith(text: '');
+    }
+
     final int parsedInt = int.parse(numberStr);
     final formatter = NumberFormat.currency(locale: 'ko', symbol: '');
     String newText = formatter.format(parsedInt);
