@@ -22,7 +22,7 @@ class AppColors {
   static const Color neutral70 = Color(0xFF4E5968);
   static const Color neutral80 = Color(0xFF333D4B);
   static const Color neutral90 = Color(0xFF191F28);
-  static const Color neutral100 = Color(0xFF0D1117);
+  static const Color neutral100 = Color(0xFF0F1A2A);
 
   // Success Colors
   static const Color success10 = Color(0xFFE6F9EB);
@@ -64,19 +64,19 @@ class AppColors {
   static const Color pink80 = Color(0xFFB03060);
   static const Color pink100 = Color(0xFF7A1F40);
 
-  static const Color purple10 = Color(0xFFF2E6FF);
-  static const Color purple20 = Color(0xFFDAB3FF);
-  static const Color purple40 = Color(0xFFB266FF);
-  static const Color purple60 = Color(0xFF8C33FF);
-  static const Color purple80 = Color(0xFF661ACC);
-  static const Color purple100 = Color(0xFF440D99);
+  static const Color purple10 = Color(0xFFF5E8FF);
+  static const Color purple20 = Color(0xFFD8AAFD);
+  static const Color purple40 = Color(0xFFAC54F0);
+  static const Color purple60 = Color(0xFF8219D4);
+  static const Color purple80 = Color(0xFF530094);
+  static const Color purple100 = Color(0xFF320059);
 
-  static const Color indigo10 = Color(0xFFE6E9FF);
+  static const Color indigo10 = Color(0xFFEDECFF);
   static const Color indigo20 = Color(0xFFB3B8FF);
   static const Color indigo40 = Color(0xFF666DFF);
   static const Color indigo60 = Color(0xFF4032DC);
-  static const Color indigo80 = Color(0xFF0021CC);
-  static const Color indigo100 = Color(0xFF001199);
+  static const Color indigo80 = Color(0xFF0E00AB);
+  static const Color indigo100 = Color(0xFF0A0075);
 
   static const Color cyan10 = Color(0xFFE6F9FF);
   static const Color cyan20 = Color(0xFFB3EDFF);
