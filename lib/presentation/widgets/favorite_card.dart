@@ -38,8 +38,9 @@ class FavoriteCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: AppColors.neutral20.withOpacity(0.4),
-              blurRadius: 4,
+              color: AppColors.neutral40.withAlpha((0.4*255).toInt()),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -94,11 +95,16 @@ class FavoriteCard extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              Image.asset(
-                                'assets/icons/Solid/png/heart.png',
-                                width: 20,
-                                height: 20,
-                                color: AppColors.error60,
+
+                              Padding(
+                                padding: const EdgeInsets.only(right: 15), // ← 왼쪽으로 이동
+                                child: Image.asset(
+                                  'assets/icons/Solid/png/heart.png',
+                                  width: 26,
+                                  height: 26,
+                                  fit: BoxFit.cover,
+                                  color: AppColors.error60,
+                                ),
                               ),
                             ],
                           ),
@@ -142,13 +148,14 @@ class FavoriteCard extends StatelessWidget {
     if (isContent) {
       return Container(
         margin: const EdgeInsets.only(bottom: 16),
+        width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: AppColors.neutral20.withOpacity(0.3),
-              blurRadius: 6,
-              offset: const Offset(0, 2),
+              color: AppColors.neutral100.withAlpha((0.1*255).toInt()),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -156,84 +163,77 @@ class FavoriteCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           child: Stack(
             children: [
-              /// ✅ 배경 이미지
+              // ✅ 배경 이미지
               SizedBox(
                 width: double.infinity,
-                height: 160,
+                height: 125,
                 child: isAssetImage
-                    ? Image.asset(
-                  imageUrl,
-                  fit: BoxFit.cover,
-                )
-                    : Image.network(
-                  imageUrl,
-                  fit: BoxFit.cover,
-                ),
+                    ? Image.asset(imageUrl, fit: BoxFit.cover)
+                    : Image.network(imageUrl, fit: BoxFit.cover),
               ),
 
-              /// ✅ 상단 하트
+              // ✅ 상단 하트 아이콘
               Positioned(
                 top: 8,
                 right: 12,
                 child: Image.asset(
                   'assets/icons/Solid/png/heart.png',
-                  width: 20,
-                  height: 20,
+                  width: 26,
+                  height: 26,
+                  fit: BoxFit.cover,
                   color: AppColors.error60,
                 ),
               ),
 
-              /// ✅ 텍스트 & ➤ 같은 줄
+              // ✅ 텍스트 및 > 아이콘
               Positioned.fill(
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          '여행 정보',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                          ),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(28, 31, 28, 28),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        '여행 정보',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
                         ),
-                        const SizedBox(height: 4),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Expanded(
-                              child: Text(
-                                '도시 및 국가별 여행 가이드',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  overflow: TextOverflow.ellipsis,
-                                  shadows: [
-                                    Shadow(
-                                      blurRadius: 4,
-                                      color: Colors.black54,
-                                      offset: Offset(1, 1),
-                                    ),
-                                  ],
-                                ),
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Expanded(
+                            child: Text(
+                              '도시 및 국가별 여행 가이드',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                overflow: TextOverflow.ellipsis,
+                                shadows: [
+                                  Shadow(
+                                    blurRadius: 4,
+                                    color: Colors.black54,
+                                    offset: Offset(1, 1),
+                                  ),
+                                ],
                               ),
                             ),
-                            const SizedBox(width: 8),
-                            Image.asset(
-                              'assets/icons/Outline/png/cheveron-right.png',
-                              width: 18,
-                              height: 18,
-                              color: Colors.white,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                          const SizedBox(width: 8),
+                          Image.asset(
+                            'assets/icons/Outline/png/cheveron-right.png',
+                            width: 24,
+                            height: 24,
+                            fit: BoxFit.cover,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -253,9 +253,9 @@ class FavoriteCard extends StatelessWidget {
         color: AppColors.white,
         boxShadow: [
           BoxShadow(
-            color: AppColors.neutral20.withOpacity(0.4),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
+            color: AppColors.neutral40.withAlpha((0.4*255).toInt()),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -275,8 +275,9 @@ class FavoriteCard extends StatelessWidget {
                 right: 8,
                 child: Image.asset(
                   'assets/icons/Solid/png/heart.png',
-                  width: 22,
-                  height: 22,
+                  width: 26,
+                  height: 26,
+                  fit: BoxFit.cover,
                   color: AppColors.error60,
                 ),
               ),
@@ -314,8 +315,9 @@ class FavoriteCard extends StatelessWidget {
                   children: [
                     Image.asset(
                       'assets/icons/Solid/png/star.png',
-                      width: 20,
-                      height: 20,
+                      width: 26,
+                      height: 26,
+                      fit: BoxFit.cover,
                       color: AppColors.warning40,
                     ),
                     const SizedBox(width: 4),
@@ -333,7 +335,7 @@ class FavoriteCard extends StatelessWidget {
             ),
           ),
         ],
-      ),
+      )
     );
   }
 }

@@ -14,7 +14,7 @@ class AppColors {
   // Neutral Colors
   static const Color white = Color(0xFFFFFFFF);
   static const Color neutral10 = Color(0xFFF2F4F6);
-  static const Color neutral20 = Color(0xFFE5E8EB);
+  static const Color neutral20 = Color(0xFFF1F4F9);
   static const Color neutral30 = Color(0xFFD1D6DB);
   static const Color neutral40 = Color(0xFFB0B8C1);
   static const Color neutral50 = Color(0xFF8B95A1);
