@@ -32,6 +32,7 @@ class FavoriteCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 📦 패키지 카드
     if (isPackage) {
       return Container(
         margin: const EdgeInsets.only(bottom: 16),
@@ -142,6 +143,7 @@ class FavoriteCard extends StatelessWidget {
       );
     }
 
+    // 📘 컨텐츠 카드
     if (isContent) {
       return Container(
         margin: const EdgeInsets.only(bottom: 16),
@@ -190,9 +192,9 @@ class FavoriteCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        '여행 정보',
-                        style: TextStyle(
+                      Text(
+                        '$subtitle 여행 정보',
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -202,10 +204,10 @@ class FavoriteCard extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Expanded(
+                          Expanded(
                             child: Text(
-                              '도시 및 국가별 여행 가이드',
-                              style: TextStyle(
+                              title,
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 22,
                                 fontWeight: FontWeight.bold,
@@ -240,6 +242,7 @@ class FavoriteCard extends StatelessWidget {
       );
     }
 
+    // 🏝 일반 여행지 카드
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
