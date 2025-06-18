@@ -49,7 +49,7 @@ class AddTravelModel {
     return AddTravelModel(
       packageId: packageId,
       tripId: tripId,
-      title: '${flight.departure} → ${flight.arrival}',
+      title: '${flight.airline}',
       description: '${flight.departureTime} → ${flight.arrivalTime}',
       date: date,
       time: time,
