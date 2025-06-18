@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_text_styles.dart';
+import 'package:personalized_travel_recommendations/presentation/widgets/custom_navbar.dart';
+import 'package:personalized_travel_recommendations/presentation/pages/main_screen.dart'; // MainScreen 경로에 맞게 수정
 
 class MyPageNoticeScreen extends StatelessWidget {
   const MyPageNoticeScreen({super.key});
 
   final List<Map<String, String>> _notices = const [
     {
-      "title": "[공지] 여름 인기 여행지 추천 기능이 업데이트되었습니다. ",
+      "title": "[공지] 여름 인기 여행지 추천 기능이 업데이트되었습니다.",
       "date": "2025.06.12"
     },
     {
@@ -32,6 +34,13 @@ class MyPageNoticeScreen extends StatelessWidget {
     },
   ];
 
+  void _onNavTap(BuildContext context, int index) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => MainScreen(initialIndex: index)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,11 +63,11 @@ class MyPageNoticeScreen extends StatelessWidget {
           style: AppTypography.subtitle20Bold,
         ),
       ),
-
       body: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         itemCount: _notices.length,
-        separatorBuilder: (_, __) => const Divider(color: AppColors.neutral20),
+        separatorBuilder: (_, __) =>
+        const Divider(color: AppColors.neutral20),
         itemBuilder: (context, index) {
           final notice = _notices[index];
           return Column(
@@ -66,16 +75,22 @@ class MyPageNoticeScreen extends StatelessWidget {
             children: [
               Text(
                 notice['title'] ?? '',
-                style: AppTypography.body16Regular.copyWith(color: AppColors.neutral90),
+                style: AppTypography.body16Regular
+                    .copyWith(color: AppColors.neutral90),
               ),
               const SizedBox(height: 6),
               Text(
                 notice['date'] ?? '',
-                style: AppTypography.caption12Regular.copyWith(color: AppColors.neutral40),
+                style: AppTypography.caption12Regular
+                    .copyWith(color: AppColors.neutral40),
               ),
             ],
           );
         },
+      ),
+      bottomNavigationBar: BottomNavBar(
+        selectedIndex: 2, // 디자인상 My Page가 강조됨
+        onTap: (index) => _onNavTap(context, index),
       ),
     );
   }

@@ -3,7 +3,8 @@ import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_text_styles.dart';
 import 'package:personalized_travel_recommendations/presentation/widgets/favorite_card.dart';
 import 'package:personalized_travel_recommendations/presentation/widgets/tab_bar_selector.dart';
-
+import 'package:personalized_travel_recommendations/presentation/widgets/custom_navbar.dart';
+import 'package:personalized_travel_recommendations/presentation/pages/main_screen.dart';
 
 class WishlistScreen extends StatefulWidget {
   final ScrollController? scrollController;
@@ -17,7 +18,6 @@ class WishlistScreen extends StatefulWidget {
 class _WishlistScreenState extends State<WishlistScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-
   final List<String> _tabs = ['여행지', '패키지', '컨텐츠'];
 
   @override
@@ -32,59 +32,68 @@ class _WishlistScreenState extends State<WishlistScreen>
     super.dispose();
   }
 
+  void _onNavTap(int index) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => MainScreen(initialIndex: index)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        children: [
-          const SizedBox(height: 8),
-          // 🔹 드래그 인디케이터
-          Container(
-            width: 40,
-            height: 4,
-            decoration: BoxDecoration(
-              color: AppColors.neutral40,
-              borderRadius: BorderRadius.circular(2),
+    return Scaffold(
+      backgroundColor: AppColors.white,
+      body: SafeArea(
+        child: Column(
+          children: [
+            const SizedBox(height: 8),
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: AppColors.neutral40,
+                borderRadius: BorderRadius.circular(2),
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
+            const SizedBox(height: 16),
 
-          // 🔹 제목
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text('찜한 목록', style: AppTypography.title24Bold),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text('찜한 목록', style: AppTypography.title24Bold),
+              ),
             ),
-          ),
 
-
-          // 🔹 탭바
-          Padding(
-            padding: const EdgeInsets.only(top: 12),
-            child: TabBarSelector(
-              tabs: _tabs,
-              selectedIndex: _tabController.index,
-              onTap: (index) {
-                setState(() {
-                  _tabController.index = index;
-                });
-              },
+            Padding(
+              padding: const EdgeInsets.only(top: 12),
+              child: TabBarSelector(
+                tabs: _tabs,
+                selectedIndex: _tabController.index,
+                onTap: (index) {
+                  setState(() {
+                    _tabController.index = index;
+                  });
+                },
+              ),
             ),
-          ),
 
-          // 🔹 콘텐츠
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                _buildListView('여행지'),
-                _buildListView('패키지'),
-                _buildListView('컨텐츠'),
-              ],
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  _buildListView('여행지'),
+                  _buildListView('패키지'),
+                  _buildListView('컨텐츠'),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
+      ),
+      bottomNavigationBar: BottomNavBar(
+        selectedIndex: 2, // MyPage 탭 강조
+        onTap: _onNavTap,
       ),
     );
   }

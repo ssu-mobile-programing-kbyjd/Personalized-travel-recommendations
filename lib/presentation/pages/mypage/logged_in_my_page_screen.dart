@@ -5,12 +5,21 @@ import 'package:personalized_travel_recommendations/presentation/widgets/profile
 import 'package:personalized_travel_recommendations/presentation/widgets/feature_icon_button.dart';
 import 'package:personalized_travel_recommendations/presentation/widgets/settings_list_item.dart';
 import 'package:personalized_travel_recommendations/presentation/widgets/custom_divider.dart';
-import 'package:personalized_travel_recommendations/presentation/pages/mypage/guest_my_page_screen.dart';
+import 'package:personalized_travel_recommendations/presentation/widgets/custom_navbar.dart';
+import 'package:personalized_travel_recommendations/presentation/pages/main_screen.dart'; // 반드시 올바른 경로
 import 'package:personalized_travel_recommendations/presentation/pages/mypage/my_page_notice_screen.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/mypage/my_page_wishlist_modal_wrapper.dart';
+import 'package:personalized_travel_recommendations/presentation/pages/mypage/guest_my_page_screen.dart';
 
 class LoggedInMyPageScreen extends StatelessWidget {
   const LoggedInMyPageScreen({super.key});
+
+  void _onNavTap(BuildContext context, int index) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => MainScreen(initialIndex: index)),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +32,6 @@ class LoggedInMyPageScreen extends StatelessWidget {
             const MyPageHeader(),
             const SizedBox(height: 8),
 
-            // 🔹 사용자 프로필 카드
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: ProfileHeader(
@@ -33,10 +41,8 @@ class LoggedInMyPageScreen extends StatelessWidget {
                 profileImage: 'assets/images/JaeseongGuri.png',
               ),
             ),
-
             const SizedBox(height: 16),
 
-            // 🔹 기능 아이콘 4개
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
@@ -100,7 +106,6 @@ class LoggedInMyPageScreen extends StatelessWidget {
 
             const SizedBox(height: 24),
 
-            // 🔹 설정 리스트
             SettingsListItem(
               leadingIcon: Image.asset(
                 'assets/icons/Solid/png/account_circle.png',
@@ -152,15 +157,12 @@ class LoggedInMyPageScreen extends StatelessWidget {
                 color: AppColors.neutral60,
               ),
               label: '고객센터',
-              onTap: () {
-
-              },
+              onTap: () {},
             ),
             const CustomDivider(),
 
             const SizedBox(height: 12),
 
-            // 🔹 로그아웃
             SettingsListItem(
               leadingIcon: Image.asset(
                 'assets/icons/Solid/png/logout-1.png',
@@ -178,8 +180,8 @@ class LoggedInMyPageScreen extends StatelessWidget {
                 );
               },
             ),
-            Transform.translate( //
-              offset: const Offset(0, -8), // 위로 8px 당겨 붙이기
+            Transform.translate(
+              offset: const Offset(0, -8),
               child: const Padding(
                 padding: EdgeInsets.only(left: 52),
                 child: Text(
@@ -190,6 +192,10 @@ class LoggedInMyPageScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavBar(
+        selectedIndex: 2, // 현재 탭: 마이페이지
+        onTap: (index) => _onNavTap(context, index),
       ),
     );
   }
