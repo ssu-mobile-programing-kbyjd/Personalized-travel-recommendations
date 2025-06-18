@@ -31,6 +31,68 @@ class _DevPageState extends State<DevPage> {
     }
   }
 
+  Future<void> _showEditAndInsertDialog(String collection) async {
+    final data = await _loadSampleJson();
+    final List<dynamic> items = data[collection] ?? [];
+    if (items.isEmpty) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('$collection 샘플 데이터가 없습니다.')),
+        );
+      }
+      return;
+    }
+    Map<String, dynamic> editableItem = Map<String, dynamic>.from(items.first);
+    final controllers = <String, TextEditingController>{};
+    editableItem.forEach((key, value) {
+      controllers[key] = TextEditingController(text: value?.toString() ?? '');
+    });
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('$collection 데이터 수정 후 업로드'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: controllers.entries.map((entry) =>
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: TextField(
+                    controller: entry.value,
+                    decoration: InputDecoration(labelText: entry.key),
+                  ),
+                )
+              ).toList(),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('취소'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                final newItem = <String, dynamic>{};
+                controllers.forEach((key, controller) {
+                  newItem[key] = controller.text;
+                });
+                await FirebaseFirestore.instance.collection(collection).add(newItem);
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('$collection 데이터 업로드 완료!')),
+                  );
+                }
+                Navigator.of(context).pop();
+              },
+              child: const Text('업로드'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final collections = [
@@ -49,7 +111,7 @@ class _DevPageState extends State<DevPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4.0),
                   child: ElevatedButton(
-                    onPressed: () => _insertCollection(col),
+                    onPressed: () => _showEditAndInsertDialog(col),
                     child: Text(col),
                   ),
                 )
