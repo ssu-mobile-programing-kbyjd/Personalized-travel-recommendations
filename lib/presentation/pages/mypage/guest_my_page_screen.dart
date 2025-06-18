@@ -6,7 +6,7 @@ import 'package:personalized_travel_recommendations/presentation/widgets/custom_
 import 'package:personalized_travel_recommendations/presentation/widgets/reusable_prompt_card.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/mypage/logged_in_my_page_screen.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/mypage/my_page_notice_screen.dart';
-
+import 'package:personalized_travel_recommendations/presentation/pages/mypage/my_page_support_center_screen.dart';
 
 class GuestMyPageScreen extends StatelessWidget {
   const GuestMyPageScreen({super.key});
@@ -68,7 +68,14 @@ class GuestMyPageScreen extends StatelessWidget {
                 color: AppColors.neutral60,
               ),
               label: '고객 센터',
-              onTap: () => Navigator.pushNamed(context, '/support'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SupportCenterScreen(),
+                  ),
+                );
+              },
             ),
             const CustomDivider(),
           ],
