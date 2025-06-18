@@ -6,10 +6,11 @@ import 'package:personalized_travel_recommendations/presentation/widgets/feature
 import 'package:personalized_travel_recommendations/presentation/widgets/settings_list_item.dart';
 import 'package:personalized_travel_recommendations/presentation/widgets/custom_divider.dart';
 import 'package:personalized_travel_recommendations/presentation/widgets/custom_navbar.dart';
-import 'package:personalized_travel_recommendations/presentation/pages/main_screen.dart'; // 반드시 올바른 경로
+import 'package:personalized_travel_recommendations/presentation/pages/main_screen.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/mypage/my_page_notice_screen.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/mypage/my_page_wishlist_modal_wrapper.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/mypage/guest_my_page_screen.dart';
+import 'package:personalized_travel_recommendations/presentation/pages/mypage/my_page_support_center_screen.dart';
 
 class LoggedInMyPageScreen extends StatelessWidget {
   const LoggedInMyPageScreen({super.key});
@@ -157,7 +158,14 @@ class LoggedInMyPageScreen extends StatelessWidget {
                 color: AppColors.neutral60,
               ),
               label: '고객센터',
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SupportCenterScreen(),
+                  ),
+                );
+              },
             ),
             const CustomDivider(),
 
