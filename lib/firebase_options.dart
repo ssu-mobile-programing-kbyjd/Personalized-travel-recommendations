@@ -59,4 +59,5 @@ class DefaultFirebaseOptions {
     projectId: 'trip-block',
     storageBucket: 'trip-block.firebasestorage.app',
   );
+
 }

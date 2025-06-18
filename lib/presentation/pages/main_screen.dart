@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:personalized_travel_recommendations/presentation/pages/dev_page.dart';
 import 'package:personalized_travel_recommendations/presentation/widgets/custom_navbar.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/home/home_screen.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/calendar/calendar_screen.dart';
@@ -6,6 +7,7 @@ import 'package:personalized_travel_recommendations/presentation/pages/mypage/gu
 import 'package:personalized_travel_recommendations/presentation/pages/mypage/logged_in_my_page_screen.dart';
 
 class MainScreen extends StatefulWidget {
+
   final int initialIndex;
   final bool isLoggedIn;
 
@@ -14,6 +16,7 @@ class MainScreen extends StatefulWidget {
     this.initialIndex = 0,
     this.isLoggedIn = false,
   });
+
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -26,8 +29,10 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+
     _selectedIndex = widget.initialIndex;
     isLoggedIn = widget.isLoggedIn;
+
   }
 
   @override
@@ -50,6 +55,7 @@ class _MainScreenState extends State<MainScreen> {
             _selectedIndex = index;
           });
         },
+
       ),
     );
   }
