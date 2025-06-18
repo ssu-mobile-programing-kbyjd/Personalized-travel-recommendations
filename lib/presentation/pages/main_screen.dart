@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:personalized_travel_recommendations/presentation/pages/dev_page.dart';
 import 'package:personalized_travel_recommendations/presentation/widgets/custom_navbar.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/home/home_screen.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/calendar/calendar_screen.dart';
