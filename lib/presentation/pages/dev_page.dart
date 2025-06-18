@@ -93,13 +93,84 @@ class _DevPageState extends State<DevPage> {
     );
   }
 
+  // 새 컬렉션 생성 다이얼로그
+  void _showCreateCollectionDialog() {
+    final collectionController = TextEditingController();
+    final fieldController = TextEditingController();
+    final valueController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('새 Collection 생성'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: collectionController,
+                decoration: const InputDecoration(labelText: 'Collection 이름'),
+              ),
+              TextField(
+                controller: fieldController,
+                decoration: const InputDecoration(labelText: '필드명 (예: title)'),
+              ),
+              TextField(
+                controller: valueController,
+                decoration: const InputDecoration(labelText: '필드 값'),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('취소'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                final col = collectionController.text.trim();
+                final field = fieldController.text.trim();
+                final value = valueController.text.trim();
+                if (col.isNotEmpty && field.isNotEmpty) {
+                  await FirebaseFirestore.instance
+                      .collection(col)
+                      .add({field: value});
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('$col 컬렉션이 생성되었습니다!')),
+                    );
+                  }
+                  setState(() {
+                    // 선택된 컬렉션을 새로 만든 것으로 변경
+                    selectedCollection = col;
+                  });
+                  Navigator.of(context).pop();
+                }
+              },
+              child: const Text('생성'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final collections = [
       'users', 'trips', 'packages', 'recommendations', 'likes', 'posts', 'schedules'
     ];
     return Scaffold(
-      appBar: AppBar(title: const Text('개발용 샘플 데이터 등록/조회')),
+      appBar: AppBar(
+        title: const Text('개발용 샘플 데이터 등록/조회'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            tooltip: '새 Collection 생성',
+            onPressed: _showCreateCollectionDialog,
+          ),
+        ],
+      ),
       body: Column(
         children: [
           // 샘플 데이터 등록 버튼
