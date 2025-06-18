@@ -15,12 +15,13 @@ class ProfileHeader extends StatelessWidget {
     required this.daysTogether,
     required this.travelCount,
     required this.profileImage,
-    this.backgroundColor = AppColors.indigo100, // 기본 배경색을 indigo100으로 설정
+    this.backgroundColor = AppColors.indigo100,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 115,
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(12),
@@ -28,33 +29,44 @@ class ProfileHeader extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
-          CircleAvatar(
-            radius: 28,
-            backgroundImage: AssetImage(profileImage),
-            backgroundColor: AppColors.neutral20,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.asset(
+              profileImage,
+              width: 75,
+              height: 75,
+              fit: BoxFit.cover,
+            ),
           ),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Text(
+                  nickname,
+                  style: AppTypography.subtitle18SemiBold.copyWith(
+                    color: AppColors.white,
+                  ),
+                ),
+                const SizedBox(height: 4),
                 Text.rich(
                   TextSpan(
-                    style: AppTypography.caption12Regular.copyWith(
+                    style: AppTypography.body14Regular.copyWith(
                       color: AppColors.white,
                       height: 1.4,
                     ),
                     children: [
-                      const TextSpan(text: '맛상추와 함께한지 '),
+                      const TextSpan(text: '트립블록과 함께한지 '),
                       TextSpan(
                         text: '$daysTogether일',
-                        style: AppTypography.button14.copyWith(color: AppColors.white),
+                        style: AppTypography.subtitle16SemiBold.copyWith(color: AppColors.white),
                       ),
-                      const TextSpan(text: ' 째'),
-                      const TextSpan(text: '\n그동안 총 '),
+                      const TextSpan(text: ' 째\n그동안 총 '),
                       TextSpan(
                         text: '$travelCount번',
-                        style: AppTypography.button14.copyWith(color: AppColors.white),
+                        style: AppTypography.subtitle16SemiBold.copyWith(color: AppColors.white),
                       ),
                       const TextSpan(text: '의 여행을 떠났어요 :)'),
                     ],

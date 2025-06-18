@@ -9,15 +9,16 @@ class SupportCenterScreen extends StatelessWidget {
   const SupportCenterScreen({super.key});
 
   final List<Map<String, String>> inquiryItems = const [
-    {'emoji': '💰', 'label': '항공권 변경/취소 수수료 규정이 궁금해요.'},
-    {'emoji': '✈️', 'label': '항공권 일정을 변경하고 싶어요.'},
-    {'emoji': '❌', 'label': '항공권을 취소하고 싶어요.'},
-    {'emoji': '⏳', 'label': '항공권 취소 신청이 잘 되었는지 궁금해요.'},
-    {'emoji': '📝', 'label': '항공권 탑승자 정보를 변경하고 싶어요.'},
-    {'emoji': '🎫', 'label': '투어/티켓을 취소하고 싶어요.'},
-    {'emoji': '🚗', 'label': '투어의 픽업/샌딩 관련 문의가 있어요.'},
-    {'emoji': '🏨', 'label': '예약한 숙소에 요청할 것이 있어요.'},
-  ];
+    {'emoji': '💰', 'label': '변경 및 취소 시 수수료가 궁금해요.'},
+    {'emoji': '✈️', 'label': '여행 일정을 변경하고 싶어요.'},
+    {'emoji': '❌', 'label': '예약한 일정을 취소하고 싶어요.'},
+    {'emoji': '⏳', 'label': '취소 요청이 잘 접수되었는지 확인하고 싶어요.'},
+    {'emoji': '📝', 'label': '여행자 정보를 수정하고 싶어요.'},
+    {'emoji': '🎫', 'label': '투어나 티켓 예약을 취소하고 싶어요.'},
+    {'emoji': '🚗', 'label': '픽업/샌딩 관련해서 문의하고 싶어요.'},
+    {'emoji': '🏨', 'label': '예약한 숙소에 요청사항이 있어요.'},
+  ]
+  ;
 
   final List<Map<String, String>> supportOptions = const [
     {
@@ -86,14 +87,15 @@ class SupportCenterScreen extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 0),
 
           // 🔹 전체 리스트
           Expanded(
             child: ListView(
+              padding: EdgeInsets.zero,
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                  padding: const EdgeInsets.fromLTRB(25, 20, 25, 8),
                   child: Text(
                     '무엇을 도와드릴까요?',
                     style: AppTypography.subtitle18Bold.copyWith(color: AppColors.neutral90),

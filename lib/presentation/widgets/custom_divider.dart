@@ -22,7 +22,7 @@ class CustomDivider extends StatelessWidget {
       indent: indent,
       endIndent: endIndent,
       color: color,
-      height: thickness + 16, // 기본 여백 포함
+      height: 1, // 기본 여백 포함
     );
   }
 }

@@ -17,6 +17,7 @@ class SettingsListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
       leading: leadingIcon,
       title: Text(
         label,
