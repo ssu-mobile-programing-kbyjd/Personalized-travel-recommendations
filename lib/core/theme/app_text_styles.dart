@@ -104,6 +104,12 @@ class AppTypography {
   );
 
   // Captions
+  static const TextStyle caption12SemiBold = TextStyle(
+    fontSize: 12,
+    height: 20 / 12,
+    fontWeight: FontWeight.w600, // SemiBold
+    fontFamily: 'Pretendard-Medium',
+  );
   static const TextStyle caption12Medium = TextStyle(
     fontSize: 12,
     height: 20 / 12,
