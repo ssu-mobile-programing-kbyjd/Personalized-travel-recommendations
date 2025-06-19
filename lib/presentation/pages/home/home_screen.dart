@@ -948,19 +948,28 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
   Widget _buildMainContentBanner() {
     final List<Map<String, String>> _bannerData = [
       {
-        'image': 'assets/images/SagradaFamilia.png',
-        'title': '스페인 여행 특가',
-        'description': '사그라다 파밀리아와 함께하는 바르셀로나 투어',
+        'title': '✅ 공항 입국 절차 총정리 5가지',
+        'description': '여행 전 꼭 알아야 할 입국 절차 꿀팁!',
+        'url': 'https://blog.naver.com/tripblock/223904840422',
+        'image': 'https://www.airport.kr/sites/co_ko/images/sub/constr-step1-img3.jpg',
       },
       {
-        'image': 'assets/images/TokyoRestaurants.png',
-        'title': '도쿄 맛집 투어',
-        'description': '현지 맛집 추천 및 가이드 투어',
+        'title': '✨파리 3박 4일 알짜 일정표',
+        'description': '자유여행자 추천! ',
+        'url': 'https://blog.naver.com/tripblock/223904837267',
+        'image': 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=600&q=80',
       },
       {
-        'image': 'assets/images/CasaMila.png',
-        'title': '가우디 건축 투어',
-        'description': '카사밀라와 함께하는 건축 여행',
+        'title': ' 🌍 여행지 와이파이·유심 추천 가이드',
+        'description': '해외에서 데이터 걱정 끝! ',
+        'url': 'https://blog.naver.com/tripblock/223904834339',
+        'image': 'https://img.hankyung.com/photo/202009/99.14567735.1.jpg',
+      },
+      {
+        'title': '여행 가이드 TOP 5 🏆',
+        'description': '도시/국가별 여행 꿀팁 총정리',
+        'url': 'https://blog.naver.com/tripblock/223904821676',
+        'image': 'https://image.fnnews.com/resource/media/image/2020/07/14/202007140905305099_l.jpg',
       },
     ];
 
@@ -968,73 +977,59 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
       children: [
         SizedBox(
           height: 200,
-          child: GestureDetector(
-            onTap: () async {
-              await uploadDummyData();
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('더미 데이터가 업로드되었습니다.')),
-                );
-              }
+          child: PageView.builder(
+            controller: _bannerPageController,
+            onPageChanged: (index) {
+              setState(() {
+                _currentBannerPage = index;
+              });
             },
-            child: PageView.builder(
-              controller: _bannerPageController,
-              onPageChanged: (index) {
-                setState(() {
-                  _currentBannerPage = index;
-                });
-              },
-              itemCount: _bannerData.length,
-              itemBuilder: (context, index) {
-                final banner = _bannerData[index];
-                return Container(
+            itemCount: _bannerData.length,
+            itemBuilder: (context, index) {
+              final banner = _bannerData[index];
+              return GestureDetector(
+                onTap: () async {
+                  final url = banner['url'];
+                  if (url != null && await canLaunchUrl(Uri.parse(url))) {
+                    await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+                  }
+                },
+                child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    image: DecorationImage(
-                      image: AssetImage(banner['image']!),
-                      fit: BoxFit.cover,
-                    ),
+                    image: DecorationImage(image: NetworkImage(banner['image']!), fit: BoxFit.cover),
                   ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.transparent,
-                          Colors.black.withOpacity(0.7),
-                        ],
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        banner['title']!,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          banner['title']!,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      const SizedBox(height: 8),
+                      Text(
+                        banner['description']!,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
                         ),
-                        const SizedBox(height: 8),
-                        Text(
-                          banner['description']!,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ],
-                    ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
         ),
         const SizedBox(height: 16),
