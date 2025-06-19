@@ -6,7 +6,7 @@ import 'package:personalized_travel_recommendations/presentation/widgets/favorit
 import 'package:personalized_travel_recommendations/presentation/widgets/tab_bar_selector.dart';
 import 'package:personalized_travel_recommendations/presentation/widgets/custom_navbar.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/main_screen.dart';
-import 'package:personalized_travel_recommendations/data/datasources/travel_packages_data_source.dart';
+//import 'package:personalized_travel_recommendations/data/datasources/travel_packages_data_source.dart';
 import 'package:personalized_travel_recommendations/data/datasources/destinations_dummy_data.dart';
 import 'package:personalized_travel_recommendations/data/datasources/travel_content_data_source.dart';
 
@@ -39,9 +39,9 @@ class _WishlistScreenState extends State<WishlistScreen>
     destinationMaster = destinationsDummyData
         .map((e) => Map<String, dynamic>.from(e))
         .toList();
-    packageMaster = TravelPackagesDataSource.getAllPackages()
+    /*packageMaster = TravelPackagesDataSource.getAllPackages()
         .map((e) => Map<String, dynamic>.from(e))
-        .toList();
+        .toList();*/
     contentMaster = TravelContentDataSource.getAllContents()
         .map((e) => Map<String, dynamic>.from(e))
         .toList();
