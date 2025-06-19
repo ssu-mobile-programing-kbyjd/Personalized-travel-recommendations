@@ -137,10 +137,13 @@ class _TravelPackagesScreenState extends State<TravelPackagesScreen> {
               });
             },
             child: Container(
-              margin: EdgeInsets.only(right: index < categories.length - 1 ? 16 : 0),
+              margin: EdgeInsets.only(
+                  right: index < categories.length - 1 ? 16 : 0),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: isSelected ? const Color(0xFF4032DC) : const Color(0xFFF1F4F9),
+                color: isSelected
+                    ? const Color(0xFF4032DC)
+                    : const Color(0xFFF1F4F9),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
@@ -157,7 +160,8 @@ class _TravelPackagesScreenState extends State<TravelPackagesScreen> {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
-                      color: isSelected ? Colors.white : const Color(0xFF64748B),
+                      color:
+                          isSelected ? Colors.white : const Color(0xFF64748B),
                     ),
                   ),
                 ],
@@ -171,9 +175,10 @@ class _TravelPackagesScreenState extends State<TravelPackagesScreen> {
 
   Widget _buildPackageList() {
     final categories = _cityList;
-    final selectedCategory = categories.isNotEmpty && _selectedCategoryIndex < categories.length
-        ? categories[_selectedCategoryIndex]
-        : null;
+    final selectedCategory =
+        categories.isNotEmpty && _selectedCategoryIndex < categories.length
+            ? categories[_selectedCategoryIndex]
+            : null;
     return Container(
       margin: const EdgeInsets.all(16),
       child: Column(
@@ -207,7 +212,8 @@ class _TravelPackagesScreenState extends State<TravelPackagesScreen> {
                       return ListView.builder(
                         itemCount: docs.length,
                         itemBuilder: (context, index) {
-                          final data = docs[index].data() as Map<String, dynamic>;
+                          final data =
+                              docs[index].data() as Map<String, dynamic>;
                           return _buildPackageCardFromFirestore(data);
                         },
                       );
@@ -240,54 +246,65 @@ class _TravelPackagesScreenState extends State<TravelPackagesScreen> {
         children: [
           SizedBox(
             height: 134,
-                  width: double.infinity,
-            child: (data['image'] != null && data['image'].toString().isNotEmpty)
+            width: double.infinity,
+            child: (data['image'] != null &&
+                    data['image'].toString().isNotEmpty)
                 ? ClipRRect(
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(12)),
                     child: Image.network(
                       data['image'],
                       fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) => Container(color: Colors.grey[200]),
+                      errorBuilder: (context, error, stackTrace) =>
+                          Container(color: Colors.grey[200]),
                     ),
                   )
                 : Container(
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
-                      borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                      borderRadius:
+                          const BorderRadius.vertical(top: Radius.circular(12)),
                     ),
                   ),
-                ),
+          ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            data['name'] ?? '',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xFF0F1A2A),
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                    Expanded(
+                      child: Text(
+                        data['name'] ?? '',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF0F1A2A),
                         ),
-                        if (data['rating'] != null) ...[
-                          Row(
-                            children: [
-                              Image.asset('assets/icons/Solid/png/star.png', width: 18, height: 18, color: const Color(0xFFFFC107)),
-                              SizedBox(width: 4),
-                              Text('${data['rating']}', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Color(0xFF0F1A2A))),
-                            ],
-                          ),
-                        ],
-                      ],
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
+                    if (data['rating'] != null) ...[
+                      Row(
+                        children: [
+                          Image.asset('assets/icons/Solid/png/star.png',
+                              width: 18,
+                              height: 18,
+                              color: const Color(0xFFFFC107)),
+                          SizedBox(width: 4),
+                          Text('${data['rating']}',
+                              style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xFF0F1A2A))),
+                        ],
+                      ),
+                    ],
+                  ],
+                ),
                 const SizedBox(height: 4),
                 Text(
                   data['location'] ?? '',
@@ -382,4 +399,4 @@ class _TravelPackagesScreenState extends State<TravelPackagesScreen> {
       ),
     );
   }
-} 
+}

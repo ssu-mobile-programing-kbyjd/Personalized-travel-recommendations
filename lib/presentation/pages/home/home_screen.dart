@@ -4,7 +4,6 @@ import 'trending_destinations_screen.dart';
 import 'travel_packages_screen.dart';
 import '/presentation/pages/home/influencers_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../create_dummy_data.dart';
 import 'package:personalized_travel_recommendations/data/datasources/travel_data.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
@@ -124,7 +123,9 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: _selectedCountry != null ? Color(0xFF0F1A2A) : Color(0xFF94A3B8),
+              color: _selectedCountry != null
+                  ? Color(0xFF0F1A2A)
+                  : Color(0xFF94A3B8),
             ),
           ),
           const SizedBox(width: 4),
@@ -233,13 +234,16 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
               });
             },
             child: Container(
-              margin: EdgeInsets.only(right: index < cities.length - 1 ? 16 : 0),
+              margin:
+                  EdgeInsets.only(right: index < cities.length - 1 ? 16 : 0),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
                 color: isSelected ? const Color(0xFF4032DC) : Colors.white,
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
-                  color: isSelected ? const Color(0xFF4032DC) : const Color(0xFFE2E8F0),
+                  color: isSelected
+                      ? const Color(0xFF4032DC)
+                      : const Color(0xFFE2E8F0),
                 ),
               ),
               child: Row(
@@ -256,7 +260,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
-                      color: isSelected ? Colors.white : const Color(0xFF64748B),
+                      color:
+                          isSelected ? Colors.white : const Color(0xFF64748B),
                     ),
                   ),
                 ],
@@ -270,9 +275,10 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
 
   Widget _buildTrendingDestinations() {
     final cities = countryCities[_selectedCountry] ?? [];
-    final selectedCategory = (cities.isNotEmpty && _selectedCategoryIndex < cities.length)
-        ? cities[_selectedCategoryIndex]
-        : null;
+    final selectedCategory =
+        (cities.isNotEmpty && _selectedCategoryIndex < cities.length)
+            ? cities[_selectedCategoryIndex]
+            : null;
     return Container(
       margin: const EdgeInsets.all(16),
       child: Column(
@@ -336,18 +342,20 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                         itemBuilder: (context, index) {
                           final doc = docs[index];
                           final data = doc.data() as Map<String, dynamic>;
-                          return _buildDestinationCardFromFirestore(data, doc.id);
+                          return _buildDestinationCardFromFirestore(
+                              data, doc.id);
                         },
                       );
                     },
-            ),
+                  ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildDestinationCardFromFirestore(Map<String, dynamic> data, String docId) {
+  Widget _buildDestinationCardFromFirestore(
+      Map<String, dynamic> data, String docId) {
     final isLiked = data['isLiked'] == true;
     return Stack(
       children: [
@@ -372,24 +380,29 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
               SizedBox(
                 height: 182,
                 width: double.infinity,
-                child: (data['image'] != null && data['image'].toString().isNotEmpty)
+                child: (data['image'] != null &&
+                        data['image'].toString().isNotEmpty)
                     ? ClipRRect(
-                        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                        borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(12)),
                         child: Image.network(
                           data['image'],
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => Container(color: Colors.grey[200]),
+                          errorBuilder: (context, error, stackTrace) =>
+                              Container(color: Colors.grey[200]),
                         ),
                       )
                     : Container(
                         decoration: BoxDecoration(
                           color: Colors.grey[200],
-                          borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                          borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(12)),
                         ),
                       ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -411,9 +424,16 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                         if (data['rating'] != null) ...[
                           Row(
                             children: [
-                              Image.asset('assets/icons/Solid/png/star.png', width: 18, height: 18, color: const Color(0xFFFFC107)),
+                              Image.asset('assets/icons/Solid/png/star.png',
+                                  width: 18,
+                                  height: 18,
+                                  color: const Color(0xFFFFC107)),
                               SizedBox(width: 4),
-                              Text('${data['rating']}', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Color(0xFF0F1A2A))),
+                              Text('${data['rating']}',
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600,
+                                      color: Color(0xFF0F1A2A))),
                             ],
                           ),
                         ],
@@ -479,9 +499,10 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
 
   Widget _buildRecentPackages() {
     final cities = countryCities[_selectedCountry] ?? [];
-    final selectedCategory = (cities.isNotEmpty && _selectedCategoryIndex < cities.length)
-        ? cities[_selectedCategoryIndex]
-        : null;
+    final selectedCategory =
+        (cities.isNotEmpty && _selectedCategoryIndex < cities.length)
+            ? cities[_selectedCategoryIndex]
+            : null;
     return Container(
       margin: const EdgeInsets.all(16),
       child: Column(
@@ -549,14 +570,15 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                         },
                       );
                     },
-            ),
+                  ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildPackageCardFromFirestore(Map<String, dynamic> data, String docId) {
+  Widget _buildPackageCardFromFirestore(
+      Map<String, dynamic> data, String docId) {
     final isLiked = data['isLiked'] == true;
     return Stack(
       children: [
@@ -581,24 +603,29 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
               SizedBox(
                 height: 182,
                 width: double.infinity,
-                child: (data['image'] != null && data['image'].toString().isNotEmpty)
+                child: (data['image'] != null &&
+                        data['image'].toString().isNotEmpty)
                     ? ClipRRect(
-                        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                        borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(12)),
                         child: Image.network(
                           data['image'],
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => Container(color: Colors.grey[200]),
+                          errorBuilder: (context, error, stackTrace) =>
+                              Container(color: Colors.grey[200]),
                         ),
                       )
                     : Container(
                         decoration: BoxDecoration(
                           color: Colors.grey[200],
-                          borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                          borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(12)),
                         ),
                       ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -620,9 +647,16 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                         if (data['rating'] != null) ...[
                           Row(
                             children: [
-                              Image.asset('assets/icons/Solid/png/star.png', width: 18, height: 18, color: const Color(0xFFFFC107)),
+                              Image.asset('assets/icons/Solid/png/star.png',
+                                  width: 18,
+                                  height: 18,
+                                  color: const Color(0xFFFFC107)),
                               SizedBox(width: 4),
-                              Text('${data['rating']}', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Color(0xFF0F1A2A))),
+                              Text('${data['rating']}',
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600,
+                                      color: Color(0xFF0F1A2A))),
                             ],
                           ),
                         ],
@@ -688,9 +722,10 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
 
   Widget _buildCustomInfluencers() {
     final cities = countryCities[_selectedCountry] ?? [];
-    final selectedCategory = (cities.isNotEmpty && _selectedCategoryIndex < cities.length)
-        ? cities[_selectedCategoryIndex]
-        : null;
+    final selectedCategory =
+        (cities.isNotEmpty && _selectedCategoryIndex < cities.length)
+            ? cities[_selectedCategoryIndex]
+            : null;
     return Container(
       margin: const EdgeInsets.all(16),
       child: Column(
@@ -754,18 +789,20 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                         itemBuilder: (context, index) {
                           final doc = docs[index];
                           final data = doc.data() as Map<String, dynamic>;
-                          return _buildInfluencerCardFromFirestore(data, doc.id);
+                          return _buildInfluencerCardFromFirestore(
+                              data, doc.id);
                         },
                       );
                     },
-            ),
+                  ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildInfluencerCardFromFirestore(Map<String, dynamic> data, String docId) {
+  Widget _buildInfluencerCardFromFirestore(
+      Map<String, dynamic> data, String docId) {
     final isLiked = data['isLiked'] == true;
     return Stack(
       children: [
@@ -790,24 +827,29 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
               SizedBox(
                 height: 182,
                 width: double.infinity,
-                child: (data['image'] != null && data['image'].toString().isNotEmpty)
+                child: (data['image'] != null &&
+                        data['image'].toString().isNotEmpty)
                     ? ClipRRect(
-                        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                        borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(12)),
                         child: Image.network(
                           data['image'],
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => Container(color: Colors.grey[200]),
+                          errorBuilder: (context, error, stackTrace) =>
+                              Container(color: Colors.grey[200]),
                         ),
                       )
                     : Container(
                         decoration: BoxDecoration(
                           color: Colors.grey[200],
-                          borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                          borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(12)),
                         ),
                       ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -829,9 +871,16 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                         if (data['rating'] != null) ...[
                           Row(
                             children: [
-                              Image.asset('assets/icons/Solid/png/star.png', width: 18, height: 18, color: const Color(0xFFFFC107)),
+                              Image.asset('assets/icons/Solid/png/star.png',
+                                  width: 18,
+                                  height: 18,
+                                  color: const Color(0xFFFFC107)),
                               SizedBox(width: 4),
-                              Text('${data['rating']}', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Color(0xFF0F1A2A))),
+                              Text('${data['rating']}',
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600,
+                                      color: Color(0xFF0F1A2A))),
                             ],
                           ),
                         ],
