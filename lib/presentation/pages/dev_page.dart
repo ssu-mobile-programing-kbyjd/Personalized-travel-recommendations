@@ -2,6 +2,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../data/datasources/user_data.dart';
+import '../../data/datasources/trips_data.dart';
+import '../../data/datasources/restaurants_data.dart';
+import '../../data/datasources/attractions_data.dart';
+import '../../data/datasources/flight_data.dart';
+import '../../data/datasources/Accommodations_data.dart';
 
 class DevPage extends StatefulWidget {
   const DevPage({super.key});
@@ -13,14 +19,23 @@ class DevPage extends StatefulWidget {
 class _DevPageState extends State<DevPage> {
   String selectedCollection = 'users';
 
-  Future<Map<String, dynamic>> _loadSampleJson() async {
-    final jsonString = await rootBundle.loadString('assets/sample_firestore_data.json');
-    return json.decode(jsonString) as Map<String, dynamic>;
-  }
+  final Map<String, List<Map<String, dynamic>>> sampleDataSets = {
+    'users': users,
+    'trips': trips,
+    'restaurants': jejuRestaurants,
+    'attractions': jejuAttractions,
+    'flights': jejuFlights,
+    'accommodations': jejuAccommodations,
+  };
 
   void _insertCollection(String collection) async {
-    final data = await _loadSampleJson();
-    final List<dynamic> items = data[collection] ?? [];
+    final items = sampleDataSets[collection];
+    if (items == null || items.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('$collection 샘플 데이터가 없습니다.')),
+      );
+      return;
+    }
     for (final item in items) {
       await FirebaseFirestore.instance.collection(collection).add(item);
     }
@@ -32,8 +47,7 @@ class _DevPageState extends State<DevPage> {
   }
 
   Future<void> _showEditAndInsertDialog(String collection) async {
-    final data = await _loadSampleJson();
-    final List<dynamic> items = data[collection] ?? [];
+    final items = sampleDataSets[collection] ?? [];
     if (items.isEmpty) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -204,7 +218,19 @@ class _DevPageState extends State<DevPage> {
   @override
   Widget build(BuildContext context) {
     final collections = [
-      'users', 'trips', 'packages', 'recommendations', 'likes', 'posts', 'schedules'
+      'users',
+      'trips',
+      'packages',
+      'recommendations',
+      'likes',
+      'posts',
+      'schedules',
+      'accommodations',
+      'attractions',
+      'flights',
+      'restaurants',
+      'travel_packages',
+      'add_travels',
     ];
     return Scaffold(
       appBar: AppBar(
