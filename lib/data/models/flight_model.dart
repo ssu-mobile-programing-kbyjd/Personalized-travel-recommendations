@@ -17,6 +17,14 @@ class Flight {
     this.longitude = 0.0,
   });
 
+  // 안전한 double 변환을 위한 헬퍼 메서드
+  static double _toDouble(dynamic value) {
+    if (value is double) return value;
+    if (value is int) return value.toDouble();
+    if (value is String) return double.tryParse(value) ?? 0.0;
+    return 0.0;
+  }
+
   factory Flight.fromMap(Map<String, dynamic> map) {
     return Flight(
       airline: map['airline'] ?? '',
@@ -24,8 +32,8 @@ class Flight {
       arrivalTime: map['arrival_time'] ?? '',
       departure: map['departure'] ?? '',
       arrival: map['arrival'] ?? '',
-      latitude: 0.0,
-      longitude: 0.0,
+      latitude: _toDouble(map['latitude']),
+      longitude: _toDouble(map['longitude']),
     );
   }
 
@@ -48,8 +56,8 @@ class Flight {
       arrivalTime: json['arrival_time'] ?? '',
       departure: json['departure'] ?? '',
       arrival: json['arrival'] ?? '',
-      latitude: 0.0,
-      longitude: 0.0,
+      latitude: _toDouble(json['latitude']),
+      longitude: _toDouble(json['longitude']),
     );
   }
 
