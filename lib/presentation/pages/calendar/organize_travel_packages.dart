@@ -42,18 +42,10 @@ class _OrganizeTravelPackagesScreenState
   }
 
   // 통합된 여행 패키지 데이터 가져오기
-  // Firestore에서 데이터를 가져오도록 변경했으므로, 아래 getter는 더 이상 사용하지 않음
-
   // 항공편 데이터 가져오기
   Future<List<Map<String, dynamic>>> fetchFlights(String cityKey) async {
-    CollectionReference ref = FirebaseFirestore.instance.collection('flights');
-    Query query;
-    if (cityKey.isEmpty || cityKey == '전체') {
-      query = ref;
-    } else {
-      query = ref.where('city', isEqualTo: cityKey);
-    }
-    final snapshot = await query.get();
+    final snapshot =
+        await FirebaseFirestore.instance.collection('flights').get();
     return snapshot.docs
         .map((doc) => doc.data() as Map<String, dynamic>)
         .toList();
@@ -63,48 +55,66 @@ class _OrganizeTravelPackagesScreenState
   Future<List<Map<String, dynamic>>> fetchAttractions(String cityKey) async {
     CollectionReference ref =
         FirebaseFirestore.instance.collection('attractions');
-    Query query;
+    final snapshot = await ref.get();
+    final allDocs =
+        snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
     if (cityKey.isEmpty || cityKey == '전체') {
-      query = ref;
-    } else {
-      query = ref.where('city', isEqualTo: cityKey);
+      return allDocs;
     }
-    final snapshot = await query.get();
-    return snapshot.docs
-        .map((doc) => doc.data() as Map<String, dynamic>)
-        .toList();
+    return allDocs.where((doc) {
+      final city = (doc['city'] ?? '').toString();
+      final title = (doc['title'] ?? '').toString();
+      final description = (doc['description'] ?? '').toString();
+      final address = (doc['address'] ?? '').toString();
+      return city.contains(cityKey) ||
+          title.contains(cityKey) ||
+          description.contains(cityKey) ||
+          address.contains(cityKey);
+    }).toList();
   }
 
   // 맛집 데이터 가져오기
   Future<List<Map<String, dynamic>>> fetchRestaurants(String cityKey) async {
     CollectionReference ref =
         FirebaseFirestore.instance.collection('restaurants');
-    Query query;
+    final snapshot = await ref.get();
+    final allDocs =
+        snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
     if (cityKey.isEmpty || cityKey == '전체') {
-      query = ref;
-    } else {
-      query = ref.where('city', isEqualTo: cityKey);
+      return allDocs;
     }
-    final snapshot = await query.get();
-    return snapshot.docs
-        .map((doc) => doc.data() as Map<String, dynamic>)
-        .toList();
+    return allDocs.where((doc) {
+      final city = (doc['city'] ?? '').toString();
+      final title = (doc['title'] ?? '').toString();
+      final description = (doc['description'] ?? '').toString();
+      final address = (doc['address'] ?? '').toString();
+      return city.contains(cityKey) ||
+          title.contains(cityKey) ||
+          description.contains(cityKey) ||
+          address.contains(cityKey);
+    }).toList();
   }
 
   // 숙소 데이터 가져오기
   Future<List<Map<String, dynamic>>> fetchAccommodations(String cityKey) async {
     CollectionReference ref =
         FirebaseFirestore.instance.collection('accommodations');
-    Query query;
+    final snapshot = await ref.get();
+    final allDocs =
+        snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
     if (cityKey.isEmpty || cityKey == '전체') {
-      query = ref;
-    } else {
-      query = ref.where('city', isEqualTo: cityKey);
+      return allDocs;
     }
-    final snapshot = await query.get();
-    return snapshot.docs
-        .map((doc) => doc.data() as Map<String, dynamic>)
-        .toList();
+    return allDocs.where((doc) {
+      final city = (doc['city'] ?? '').toString();
+      final title = (doc['title'] ?? '').toString();
+      final description = (doc['description'] ?? '').toString();
+      final address = (doc['address'] ?? '').toString();
+      return city.contains(cityKey) ||
+          title.contains(cityKey) ||
+          description.contains(cityKey) ||
+          address.contains(cityKey);
+    }).toList();
   }
 
   @override
