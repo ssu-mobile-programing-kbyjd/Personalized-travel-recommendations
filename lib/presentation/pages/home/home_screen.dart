@@ -8,9 +8,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../create_dummy_data.dart';
 import 'package:personalized_travel_recommendations/data/datasources/travel_data.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
+import 'package:personalized_travel_recommendations/presentation/pages/mypage/guest_my_page_screen.dart';
+import 'package:personalized_travel_recommendations/presentation/pages/main_screen.dart';
 
 class MainHomeScreen extends StatefulWidget {
-  const MainHomeScreen({super.key});
+  final bool isLoggedIn;
+  const MainHomeScreen({super.key, this.isLoggedIn = false});
 
   @override
   State<MainHomeScreen> createState() => _MainHomeScreenState();
@@ -473,6 +476,35 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
           right: 27,
           child: GestureDetector(
             onTap: () async {
+              if (!widget.isLoggedIn) {
+                final result = await showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('로그인이 필요합니다'),
+                    content: const Text('로그인 후 이용해 주세요.'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(false),
+                        child: const Text('취소'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () => Navigator.of(context).pop(true),
+                        child: const Text('확인'),
+                      ),
+                    ],
+                  ),
+                );
+                if (result == true) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          MainScreen(initialIndex: 2, isLoggedIn: false),
+                    ),
+                  );
+                }
+                return;
+              }
               await FirebaseFirestore.instance
                   .collection('destinations')
                   .doc(docId)
@@ -696,6 +728,35 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
           right: 27,
           child: GestureDetector(
             onTap: () async {
+              if (!widget.isLoggedIn) {
+                final result = await showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('로그인이 필요합니다'),
+                    content: const Text('로그인 후 이용해 주세요.'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(false),
+                        child: const Text('취소'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () => Navigator.of(context).pop(true),
+                        child: const Text('확인'),
+                      ),
+                    ],
+                  ),
+                );
+                if (result == true) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          MainScreen(initialIndex: 2, isLoggedIn: false),
+                    ),
+                  );
+                }
+                return;
+              }
               await FirebaseFirestore.instance
                   .collection('packages')
                   .doc(docId)
@@ -920,6 +981,35 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
           right: 27,
           child: GestureDetector(
             onTap: () async {
+              if (!widget.isLoggedIn) {
+                final result = await showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('로그인이 필요합니다'),
+                    content: const Text('로그인 후 이용해 주세요.'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(false),
+                        child: const Text('취소'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () => Navigator.of(context).pop(true),
+                        child: const Text('확인'),
+                      ),
+                    ],
+                  ),
+                );
+                if (result == true) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          MainScreen(initialIndex: 2, isLoggedIn: false),
+                    ),
+                  );
+                }
+                return;
+              }
               await FirebaseFirestore.instance
                   .collection('influencers')
                   .doc(docId)
@@ -951,13 +1041,15 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
         'title': '✅ 공항 입국 절차 총정리 5가지',
         'description': '여행 전 꼭 알아야 할 입국 절차 꿀팁!',
         'url': 'https://blog.naver.com/tripblock/223904840422',
-        'image': 'https://www.airport.kr/sites/co_ko/images/sub/constr-step1-img3.jpg',
+        'image':
+            'https://www.airport.kr/sites/co_ko/images/sub/constr-step1-img3.jpg',
       },
       {
         'title': '✨파리 3박 4일 알짜 일정표',
         'description': '자유여행자 추천! ',
         'url': 'https://blog.naver.com/tripblock/223904837267',
-        'image': 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=600&q=80',
+        'image':
+            'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=600&q=80',
       },
       {
         'title': ' 🌍 여행지 와이파이·유심 추천 가이드',
@@ -969,7 +1061,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
         'title': '여행 가이드 TOP 5 🏆',
         'description': '도시/국가별 여행 꿀팁 총정리',
         'url': 'https://blog.naver.com/tripblock/223904821676',
-        'image': 'https://image.fnnews.com/resource/media/image/2020/07/14/202007140905305099_l.jpg',
+        'image':
+            'https://image.fnnews.com/resource/media/image/2020/07/14/202007140905305099_l.jpg',
       },
     ];
 
@@ -991,14 +1084,17 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                 onTap: () async {
                   final url = banner['url'];
                   if (url != null && await canLaunchUrl(Uri.parse(url))) {
-                    await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+                    await launchUrl(Uri.parse(url),
+                        mode: LaunchMode.externalApplication);
                   }
                 },
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    image: DecorationImage(image: NetworkImage(banner['image']!), fit: BoxFit.cover),
+                    image: DecorationImage(
+                        image: NetworkImage(banner['image']!),
+                        fit: BoxFit.cover),
                   ),
                   padding: const EdgeInsets.all(16),
                   child: Column(
