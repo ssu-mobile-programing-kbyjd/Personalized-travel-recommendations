@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:widget_to_marker/widget_to_marker.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_outline_png_icons.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_text_styles.dart';
+import 'package:personalized_travel_recommendations/core/utils/utils/text_formatters.dart' as formatters;
+import 'package:personalized_travel_recommendations/data/datasources/travel_data.dart';
+import 'package:personalized_travel_recommendations/presentation/widgets/map_marker.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/calendar/calendar_screen.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/calendar/package_screen.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/calendar/organize_travel_packages.dart';
-import 'package:personalized_travel_recommendations/core/utils/utils/text_formatters.dart'
-    as formatters;
 
 class AddTravelPlanScheduleScreen extends StatefulWidget {
   final String country;
@@ -30,10 +31,8 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
 
   late Map travelInfo = {
     'title': '${widget.city} 여행',
-    'startDay':
-        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
-    'endDay':
-        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
+    'startDay': DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
+    'endDay': DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
     'period': 1,
     'country': widget.country,
     'city': widget.city,
@@ -42,7 +41,8 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
   };
 
   late GoogleMapController mapController;
-  final LatLng _center = const LatLng(37.5665, 126.9780);
+  late LatLng _latlng = LatLng(TravelData.cityLatLng[widget.city]![0], TravelData.cityLatLng[widget.city]![1]);
+  Set<Marker> _markers = {};
 
   final List<Map> _rcmndPkgList = [
     {
@@ -110,7 +110,9 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
   // 'place':<String>,
   // 'address':<String>,
   // 'price':<Double>,
-  // 'time':<TimeOfDay(hour: 11, minute: 25)>,
+  // 'time':<TimeOfDay(hour: 00, minute: 00)>,
+  // 'lat' : <double>
+  // 'lng' : <double>
   List<List<Map>> travelSchedule = [[]];
 
   List<Color> travelDailyColors = [
@@ -123,7 +125,7 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
   bool _isRelease = true;
 
   final TextEditingController _priceController =
-      TextEditingController(text: '₩');
+  TextEditingController(text: '₩');
 
   void _editTitle() {
     setState(() {
@@ -176,20 +178,32 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
     mapController = controller;
   }
 
-  // void _addSchedule(int travelIndex) {
-  //   setState(() {
-  //     travelSchedule[travelIndex].add({
-  //       'place': '',
-  //       'address': '',
-  //       'price': 0,
-  //       'time': const TimeOfDay(hour: 0, minute: 0),
-  //     });
-  //   });
-  // }
+  void _setMarkers() async {
+    Set<Marker> newMarkers = {};
+
+    for (int periodIdx = 0; periodIdx < travelInfo['period']; periodIdx++) {
+      for (int scheduleIdx = 0; scheduleIdx < travelSchedule.length; scheduleIdx++) {
+        if (travelSchedule[periodIdx][scheduleIdx]['lat'] != 0 && travelSchedule[periodIdx][scheduleIdx]['lng'] != 0) {
+          newMarkers.add(
+              Marker(
+                markerId: MarkerId(scheduleIdx.toString()),
+                position: LatLng(travelSchedule[periodIdx][scheduleIdx]['lat'], travelSchedule[periodIdx][scheduleIdx]['lng']),
+                infoWindow: InfoWindow(title: travelSchedule[periodIdx][scheduleIdx]['place']),
+                icon: await MapMarker(text: (scheduleIdx+1).toString(), color: travelDailyColors[periodIdx%3],).toBitmapDescriptor(logicalSize: const Size(150, 150), imageSize: const Size(150, 150)),
+              )
+          );
+        }
+      }
+    }
+    setState(() {
+      _markers = newMarkers;
+    });
+  }
 
   void _removeSchedule(int travelIndex, int scheduleIndex) {
     setState(() {
       travelSchedule[travelIndex].removeAt(scheduleIndex);
+      _setMarkers();
     });
   }
 
@@ -250,6 +264,7 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
   void initState() {
     super.initState();
     _titleController = TextEditingController(text: travelInfo['title']);
+    _setMarkers();
   }
 
   @override
@@ -266,81 +281,67 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
         child: Column(
           children: [
             Container(
-              height: 53,
+              height: 52,
               // margin: const EdgeInsets.fromLTRB(0, 16, 0, 0),
               decoration: const BoxDecoration(
                   border: Border(
-                bottom: BorderSide(width: 2.0, color: AppColors.neutral20),
-              )),
+                    bottom: BorderSide(width: 2.0, color: AppColors.neutral20),
+                  )),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Flexible(
-                    flex: 1,
-                    fit: FlexFit.tight,
-                    child: Container(
-                      margin: const EdgeInsets.fromLTRB(12, 0, 0, 0),
-                      alignment: Alignment.centerLeft,
-                      child: InkWell(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(28)),
-                        onTap: () => Navigator.pop(context),
-                        child: Container(
-                          width: 28,
-                          height: 28,
-                          decoration: const BoxDecoration(
-                            color: AppColors.neutral10,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
-                            child: AppOutlinePngIcons.arrowNarrowLeft(
-                              color: Colors.black,
-                              size: 20,
-                            ),
-                          ),
+                  Container(
+                    width: 64,
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.only(left: 12),
+                    child: InkWell(
+                      borderRadius: const BorderRadius.all(Radius.circular(28)),
+                      onTap: () => Navigator.pop(context),
+                      child: Container(
+                        width: 28,
+                        height: 28,
+                        decoration: const BoxDecoration(
+                          color: AppColors.neutral10,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: AppOutlinePngIcons.arrowNarrowLeft(color: Colors.black, size: 20,),
                         ),
                       ),
                     ),
                   ),
-                  Flexible(
-                    flex: 1,
-                    fit: FlexFit.tight,
-                    child: Text(
-                      "여행 추가",
-                      style: AppTypography.subtitle16SemiBold
-                          .copyWith(color: AppColors.neutral100),
-                      textAlign: TextAlign.center,
+                  Text(
+                    "여행 추가",
+                    style: AppTypography.subtitle16SemiBold.copyWith(color: AppColors.neutral100),
+                    textAlign: TextAlign.center,
+                  ),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: const Size(0, 0),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    onPressed: () => {
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                          builder: (context) => const TravelCalendarScreen(),
+                        ),
+                        (route) => false,
+                      ),
+                    },
+                    child: Container(
+                      width: 64,
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.only(right: 24),
+                      child: Text("등록",style: AppTypography.subtitle16SemiBold.copyWith(color: AppColors.indigo60),),
                     ),
                   ),
-                  Flexible(
-                      flex: 1,
-                      fit: FlexFit.tight,
-                      child: Container(
-                        margin: const EdgeInsets.fromLTRB(0, 0, 12, 0),
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                          onPressed: () => {
-                            Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const TravelCalendarScreen(),
-                              ),
-                              (route) => false,
-                            ),
-                          },
-                          child: Text(
-                            "등록",
-                            style: AppTypography.subtitle16SemiBold
-                                .copyWith(color: AppColors.indigo60),
-                          ),
-                        ),
-                      )),
                 ],
               ),
             ),
             Expanded(
               child: Container(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   child: Column(
@@ -356,6 +357,7 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                               focusNode: _titleFocus,
                               decoration: const InputDecoration(
                                 hintText: '제목을 입력하세요',
+                                contentPadding: EdgeInsets.zero,
                                 border: InputBorder.none,
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
@@ -364,66 +366,76 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                                   ),
                                 ),
                               ),
-                              style: _titleFocus.hasFocus
-                                  ? AppTypography.body14Medium
-                                  : AppTypography.subtitle18SemiBold,
+                              style: _titleFocus.hasFocus ? AppTypography.body14Medium : AppTypography.subtitle18SemiBold,
                             ),
                           ),
                           TextButton(
-                            onPressed: _editTitle,
-                            child: Text(
-                              _titleEditButtonText,
-                              style: AppTypography.body14Medium
-                                  .copyWith(color: AppColors.neutral100),
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsets.zero,
+                              minimumSize: const Size(0, 0),
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             ),
+                            onPressed: _editTitle,
+                            child: Text(_titleEditButtonText, style: AppTypography.body14Medium.copyWith(color: AppColors.neutral100),),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 4), // 간격을 4로 수정
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          AppOutlinePngIcons.calendar(),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: AppOutlinePngIcons.calendar(),
+                          ),
                           TextButton(
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsets.zero,
+                              minimumSize: const Size(0, 0),
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
                             onPressed: () => _setDate(0),
                             child: Text(
                               // '${startDay.year}.${startDay.month}.${startDay.day}',
                               '${travelInfo['startDay'].year}.${travelInfo['startDay'].month}.${travelInfo['startDay'].day}',
-                              style: AppTypography.caption12Medium
-                                  .copyWith(color: AppColors.neutral100),
+                              style: AppTypography.caption12Medium.copyWith(color: AppColors.neutral100),
                             ),
                           ),
                           Text(
-                            '~',
-                            style: AppTypography.caption12Medium
-                                .copyWith(color: AppColors.neutral100),
+                            ' ~ ',
+                            style: AppTypography.caption12Medium.copyWith(color: AppColors.neutral100),
                           ),
                           TextButton(
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsets.zero,
+                              minimumSize: const Size(0, 0),
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
                             onPressed: () => _setDate(1),
                             child: Text(
                               // '${endDay.year}.${endDay.month}.${endDay.day}',
                               '${travelInfo['endDay'].year}.${travelInfo['endDay'].month}.${travelInfo['endDay'].day}',
-                              style: AppTypography.caption12Medium
-                                  .copyWith(color: AppColors.neutral100),
+                              style: AppTypography.caption12Medium.copyWith(color: AppColors.neutral100),
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(
+                      Container(
+                        margin: const EdgeInsets.only(top: 20),
                         height: 160,
                         child: GoogleMap(
                           onMapCreated: _onMapCreated,
                           initialCameraPosition: CameraPosition(
-                            target: _center,
-                            zoom: 16.0,
+                            target: _latlng,
+                            zoom: 11.0,
                           ),
                           myLocationEnabled: true,
                           zoomControlsEnabled: true,
+                          markers: _markers,
                         ),
                       ),
                       const Padding(
-                        padding: EdgeInsets.fromLTRB(0, 20, 0, 10),
+                        padding: EdgeInsets.fromLTRB(4, 24, 0, 12),
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
@@ -444,20 +456,17 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children:
-                                  List.generate(_rcmndPkgList.length, (index) {
+                              List.generate(_rcmndPkgList.length, (index) {
                                 return Padding(
-                                  padding: _rcmndPkgList.length - 1 == index
-                                      ? const EdgeInsets.fromLTRB(0, 0, 0, 0)
-                                      : const EdgeInsets.fromLTRB(0, 0, 26, 0),
+                                  padding: _rcmndPkgList.length - 1 == index ? EdgeInsets.zero : const EdgeInsets.only(right: 20),
                                   child: Column(
                                     children: [
                                       Container(
-                                        width: 74,
-                                        height: 74,
+                                        width: 72,
+                                        height: 72,
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
-                                          border: Border.all(
-                                              color: AppColors.neutral40),
+                                          border: Border.all(color: AppColors.neutral40),
                                         ),
                                         child: Center(
                                           child: FilledButton(
@@ -465,19 +474,14 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                                               shape: const CircleBorder(),
                                               fixedSize: const Size(64, 64),
                                               padding: const EdgeInsets.all(0),
-                                              side: const BorderSide(
-                                                  color: AppColors.neutral40),
+                                              side: const BorderSide(color: AppColors.neutral40),
                                               backgroundColor: AppColors.white,
                                             ),
                                             onPressed: () {
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      TravelPackage(
-                                                    travelInfo:
-                                                        _rcmndPkgList[index],
-                                                  ),
+                                                  builder: (context) => TravelPackage(travelInfo: _rcmndPkgList[index],),
                                                 ),
                                               );
                                             },
@@ -485,21 +489,14 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                                               decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
                                                 image: DecorationImage(
-                                                  image: AssetImage(
-                                                      _rcmndPkgList[index]
-                                                          ['thumbnail']),
+                                                  image: AssetImage(_rcmndPkgList[index]['thumbnail']),
                                                 ),
                                               ),
                                             ),
                                           ),
                                         ),
                                       ),
-                                      Text(
-                                        '${_rcmndPkgList[index]['user']} 님',
-                                        style: AppTypography.body14Medium
-                                            .copyWith(
-                                                color: AppColors.neutral100),
-                                      ),
+                                      Text('${_rcmndPkgList[index]['user']} 님', style: AppTypography.body14Medium.copyWith(color: AppColors.neutral100),),
                                     ],
                                   ),
                                 );
@@ -509,7 +506,7 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                         ),
                       ),
                       const Padding(
-                        padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                        padding: EdgeInsets.fromLTRB(0, 24, 0, 0),
                         child: Divider(
                           thickness: 1,
                           color: AppColors.neutral40,
@@ -517,7 +514,7 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                       ),
                       Column(
                         children:
-                            List.generate(travelInfo['period'], (periodIndex) {
+                        List.generate(travelInfo['period'], (periodIndex) {
                           return ListTileTheme(
                             contentPadding: const EdgeInsets.all(0),
                             child: ExpansionTile(
@@ -525,8 +522,7 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                               controlAffinity: ListTileControlAffinity.leading,
                               expandedAlignment: Alignment.topLeft,
                               title: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Row(
@@ -535,13 +531,10 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                                         '${periodIndex + 1}일 차',
                                         style: AppTypography.subtitle16SemiBold,
                                       ),
-                                      const Padding(
-                                          padding: EdgeInsets.only(left: 10)),
+                                      const Padding(padding: EdgeInsets.only(left: 10)),
                                       Text(
                                         '${travelInfo['startDay'].add(Duration(days: periodIndex)).month}월 ${travelInfo['startDay'].add(Duration(days: periodIndex)).day}일',
-                                        style: AppTypography.caption12Regular
-                                            .copyWith(
-                                                color: AppColors.neutral60),
+                                        style: AppTypography.caption12Regular.copyWith(color: AppColors.neutral60),
                                       ),
                                     ],
                                   ),
@@ -550,23 +543,18 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                                       final result = await Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>
-                                              OrganizeTravelPackagesScreen(
+                                          builder: (context) => OrganizeTravelPackagesScreen(
                                             dayIndex: periodIndex,
                                             travelSchedule: travelSchedule,
-                                            selectedCity: widget.city == '자유'
-                                                ? '자유 여행'
-                                                : widget
-                                                    .city, // 자유여행이거나 선택된 도시/나라/대륙 전달
+                                            selectedCity: widget.city == '자유' ? '자유 여행' : widget.city, // 자유여행이거나 선택된 도시/나라/대륙 전달
                                           ),
                                         ),
                                       );
-
                                       // 선택된 패키지 데이터를 일정에 추가
                                       if (result != null) {
                                         setState(() {
-                                          travelSchedule[periodIndex]
-                                              .add(result);
+                                          travelSchedule[periodIndex].add(result);
+                                          _setMarkers();
                                         });
                                       }
                                     },
@@ -579,261 +567,142 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
                                   onReorder: (oldIndex, newIndex) {
-                                    _reorderSchedule(
-                                        periodIndex, oldIndex, newIndex);
+                                    _reorderSchedule(periodIndex, oldIndex, newIndex);
                                   },
-                                  children: List.generate(
-                                      travelSchedule[periodIndex].length,
-                                      (scheduleIndex) {
+                                  children: List.generate(travelSchedule[periodIndex].length, (scheduleIndex) {
                                     return Column(
-                                      key: ValueKey(
-                                          '${periodIndex}_$scheduleIndex'),
+                                      key: ValueKey('${periodIndex}_$scheduleIndex'),
                                       children: [
-                                        Container(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              10, 10, 20, 10),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        0, 0, 20, 0),
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Container(
-                                                      width: 30,
-                                                      height: 30,
-                                                      decoration:
-                                                          ShapeDecoration(
-                                                        shape:
-                                                            const CircleBorder(),
-                                                        color:
-                                                            travelDailyColors[
-                                                                scheduleIndex %
-                                                                    3],
-                                                      ),
-                                                      child: Center(
-                                                        child: Text(
-                                                          '${scheduleIndex + 1}',
-                                                          style: AppTypography
-                                                              .body16Medium
-                                                              .copyWith(
-                                                                  color: AppColors
-                                                                      .white),
-                                                        ),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(right: 20),
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                    width: 32,
+                                                    height: 32,
+                                                    decoration: ShapeDecoration(
+                                                      shape: const CircleBorder(),
+                                                      color: travelDailyColors[periodIndex % 3],
+                                                    ),
+                                                    child: Center(
+                                                      child: Text(
+                                                        '${scheduleIndex + 1}',
+                                                        style: AppTypography.body16Medium.copyWith(color: AppColors.white),
                                                       ),
                                                     ),
-                                                    const Padding(
-                                                      padding: EdgeInsets.only(
-                                                          top: 10),
+                                                  ),
+                                                  const Padding(padding: EdgeInsets.only(top: 8),),
+                                                  GestureDetector(
+                                                    onTap: () => _selectTime(
+                                                        periodIndex,
+                                                        scheduleIndex
                                                     ),
-                                                    GestureDetector(
-                                                      onTap: () => _selectTime(
-                                                          periodIndex,
-                                                          scheduleIndex),
-                                                      child: Container(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                                horizontal: 8,
-                                                                vertical: 4),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: Colors.white,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(8),
-                                                          border: Border.all(
-                                                            color: AppColors
-                                                                .neutral40,
-                                                            width: 1,
-                                                          ),
-                                                        ),
-                                                        child: Text(
-                                                          '${travelSchedule[periodIndex][scheduleIndex]['time'].hour.toString().padLeft(2, '0')}:${travelSchedule[periodIndex][scheduleIndex]['time'].minute.toString().padLeft(2, '0')}',
-                                                          style: AppTypography
-                                                              .body14Medium
-                                                              .copyWith(
-                                                            color: AppColors
-                                                                .neutral100,
-                                                          ),
-                                                        ),
+                                                    child: Text(
+                                                      '${travelSchedule[periodIndex][scheduleIndex]['time'].hour.toString().padLeft(2, '0')}:${travelSchedule[periodIndex][scheduleIndex]['time'].minute.toString().padLeft(2, '0')}',
+                                                      style: AppTypography.body14Medium.copyWith(color: AppColors.neutral100,
                                                       ),
                                                     ),
-                                                  ],
-                                                ),
+                                                  ),
+                                                ],
                                               ),
-                                              Expanded(
-                                                child: Stack(
-                                                  children: [
-                                                    Container(
-                                                      padding: const EdgeInsets
-                                                          .fromLTRB(
-                                                          30, 20, 30, 20),
-                                                      decoration:
-                                                          const BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    12)),
-                                                        color:
-                                                            AppColors.neutral20,
-                                                      ),
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Text(
-                                                            travelSchedule[
-                                                                        periodIndex]
-                                                                    [
-                                                                    scheduleIndex]
-                                                                ['place'],
-                                                            style: AppTypography
-                                                                .body14Medium
-                                                                .copyWith(
-                                                                    color: AppColors
-                                                                        .neutral100),
-                                                          ),
-                                                          Row(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              AppOutlinePngIcons
-                                                                  .locationMarker(
-                                                                size: 16,
-                                                                color: AppColors
-                                                                    .neutral60,
-                                                              ),
-                                                              const Padding(
-                                                                padding: EdgeInsets
-                                                                    .only(
-                                                                        left:
-                                                                            6),
-                                                              ),
-                                                              Flexible(
-                                                                child: Text(
-                                                                  travelSchedule[
-                                                                              periodIndex]
-                                                                          [
-                                                                          scheduleIndex]
-                                                                      [
-                                                                      'address'],
-                                                                  style: AppTypography
-                                                                      .caption12Regular
-                                                                      .copyWith(
-                                                                          color:
-                                                                              AppColors.neutral60),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          if (travelSchedule[
-                                                                          periodIndex]
-                                                                      [
-                                                                      scheduleIndex]
-                                                                  ['price'] >
-                                                              0)
-                                                            Text(
-                                                              '₩ ${NumberFormat('#,###').format(travelSchedule[periodIndex][scheduleIndex]['price'])}',
-                                                              style: AppTypography
-                                                                  .subtitle18Bold
-                                                                  .copyWith(
-                                                                      color: AppColors
-                                                                          .indigo60),
+                                            ),
+                                            Expanded(
+                                              child: Stack(
+                                                children: [
+                                                  Container(
+                                                    padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
+                                                    decoration: const BoxDecoration(
+                                                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                                                      color: AppColors.neutral20,
+                                                    ),
+                                                    child: Column(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Text(
+                                                          travelSchedule[periodIndex][scheduleIndex]['place'],
+                                                          style: AppTypography.body14Medium.copyWith(color: AppColors.neutral100),
+                                                        ),
+                                                        Row(
+                                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                                          children: [
+                                                            AppOutlinePngIcons.locationMarker(
+                                                              size: 16,
+                                                              color: AppColors.neutral60,
                                                             ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Positioned(
-                                                      top: -10,
-                                                      right: -10,
-                                                      child: IconButton(
-                                                        onPressed: () =>
-                                                            _removeSchedule(
-                                                                periodIndex,
-                                                                scheduleIndex),
-                                                        icon: AppOutlinePngIcons
-                                                            .x(
-                                                          color: AppColors
-                                                              .neutral80,
-                                                          size: 12,
+                                                            const Padding(padding: EdgeInsets.only(left:4),),
+                                                            Flexible(
+                                                              child: Text(
+                                                                travelSchedule[periodIndex][scheduleIndex]['address'],
+                                                                style: AppTypography.caption12Regular.copyWith(color:AppColors.neutral60),
+                                                              ),
+                                                            ),
+                                                          ],
                                                         ),
-                                                      ),
+                                                      ],
                                                     ),
-                                                  ],
-                                                ),
+                                                  ),
+                                                  Positioned(
+                                                    top: -12,
+                                                    right: -8,
+                                                    child: IconButton(
+                                                      onPressed: () => _removeSchedule(periodIndex,scheduleIndex),
+                                                      icon: AppOutlinePngIcons.x(color: AppColors.neutral80, size: 12,),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
-                                        if (travelSchedule[periodIndex].length -
-                                                1 !=
-                                            scheduleIndex)
-                                          AppOutlinePngIcons.dotsVertical(
-                                              size: 16,
-                                              color: AppColors.neutral40),
+                                        if (travelSchedule[periodIndex].length - 1 != scheduleIndex)
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
+                                            child: AppOutlinePngIcons.dotsVertical(size: 16, color: AppColors.neutral40),
+                                          ),
                                       ],
                                     );
                                   }),
                                 ),
                                 if (travelSchedule[periodIndex].isEmpty)
-                                  Container(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        10, 10, 20, 10),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 0, 20, 0),
-                                          child: Container(
-                                            width: 30,
-                                            height: 30,
-                                            decoration: ShapeDecoration(
-                                                shape: const CircleBorder(),
-                                                color: travelDailyColors[
-                                                    periodIndex % 3]),
-                                            child: Center(
-                                              child: Text(
-                                                '1',
-                                                style: AppTypography
-                                                    .body16Medium
-                                                    .copyWith(
-                                                        color: AppColors.white),
-                                              ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 20),
+                                        child: Container(
+                                          width: 32,
+                                          height: 32,
+                                          decoration: ShapeDecoration(
+                                              shape: const CircleBorder(),
+                                              color: travelDailyColors[periodIndex % 3]
+                                          ),
+                                          child: Center(
+                                            child: Text('1', style: AppTypography.body16Medium.copyWith(color: AppColors.white),
                                             ),
                                           ),
                                         ),
-                                        Expanded(
-                                          child: Container(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                30, 20, 30, 20),
-                                            decoration: const BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(12)),
-                                              color: AppColors.neutral20,
-                                            ),
-                                            child: const Text(
-                                              '일정을 추가해주세요.',
-                                              style: AppTypography.body14Medium,
-                                            ),
+                                      ),
+                                      Expanded(
+                                        child: Container(
+                                          padding: const EdgeInsets.fromLTRB(32, 24, 32, 24),
+                                          decoration: const BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(12)),
+                                            color: AppColors.neutral20,
+                                          ),
+                                          child: const Text(
+                                            '일정을 추가해주세요.',
+                                            style: AppTypography.body14Medium,
                                           ),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                               ],
                             ),
@@ -841,7 +710,7 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                         }),
                       ),
                       const Padding(
-                        padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                        padding: EdgeInsets.only(top: 24),
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
@@ -851,15 +720,19 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                           ),
                         ),
                       ),
-                      const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          '최대 3개까지 선택 가능합니다.',
-                          style: AppTypography.caption12Regular,
-                          textAlign: TextAlign.start,
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            '최대 3개까지 선택 가능합니다.',
+                            style: AppTypography.caption12Regular,
+                            textAlign: TextAlign.start,
+                          ),
                         ),
                       ),
                       Container(
+                        padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
                         height: 100,
                         decoration: const BoxDecoration(
                           color: AppColors.neutral20,
@@ -868,48 +741,37 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            ...List.generate(travelInfo['hashtag'].length,
-                                (index) {
+                            ...List.generate(travelInfo['hashtag'].length, (index) {
                               return SizedBox(
-                                width: 86,
+                                width: 114,
                                 height: 48,
                                 child: Stack(
                                   children: [
                                     Center(
                                       child: Container(
-                                        width: 80,
+                                        width: 108,
                                         height: 40,
-                                        padding: const EdgeInsets.fromLTRB(
-                                            10, 4, 10, 4),
+                                        padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
                                         decoration: const BoxDecoration(
                                           color: AppColors.indigo60,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(8)),
+                                          borderRadius: BorderRadius.all(Radius.circular(8)),
                                         ),
                                         child: Center(
                                           child: TextField(
                                             controller:
-                                                _hashtagController[index],
+                                            _hashtagController[index],
                                             maxLength: 6,
                                             textAlign: TextAlign.center,
-                                            inputFormatters: [
-                                              formatters.PrefixInputFormatter(
-                                                  '#')
-                                            ],
-                                            style: AppTypography.body14SemiBold
-                                                .copyWith(
-                                                    color: AppColors.white),
+                                            inputFormatters: [formatters.PrefixInputFormatter('#')],
+                                            style: AppTypography.body14SemiBold.copyWith(color: AppColors.white),
                                             decoration: const InputDecoration(
                                               border: InputBorder.none,
                                               contentPadding:
-                                                  EdgeInsets.only(bottom: 8),
+                                              EdgeInsets.only(bottom: 8),
                                             ),
                                             onEditingComplete: () => {
                                               setState(() {
-                                                travelInfo['hashtag'][index] =
-                                                    _hashtagController[index]
-                                                        .text
-                                                        .replaceFirst('#', '');
+                                                travelInfo['hashtag'][index] =_hashtagController[index].text.replaceFirst('#', '');
                                               }),
                                             },
                                           ),
@@ -928,13 +790,10 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                                             padding: const EdgeInsets.all(0),
                                             backgroundColor: AppColors.white,
                                             disabledBackgroundColor:
-                                                AppColors.white,
+                                            AppColors.white,
                                           ),
-                                          onPressed: () =>
-                                              _removeHashtag(index),
-                                          icon: AppOutlinePngIcons.x(
-                                            color: AppColors.neutral80,
-                                          ),
+                                          onPressed: () => _removeHashtag(index),
+                                          icon: AppOutlinePngIcons.x(color: AppColors.neutral80,),
                                         ),
                                       ),
                                     ),
@@ -954,16 +813,14 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                                     disabledBackgroundColor: AppColors.white,
                                   ),
                                   onPressed: _addHashtag, // _isRelease 조건 제거
-                                  icon: AppOutlinePngIcons.plus(
-                                    color: AppColors.neutral80, // 항상 활성화된 색상
-                                  ),
+                                  icon: AppOutlinePngIcons.plus(color: AppColors.neutral80,),
                                 ),
                               ),
                           ],
                         ),
                       ),
                       const Padding(
-                        padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                        padding: EdgeInsets.only(top: 24,),
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
@@ -1014,7 +871,7 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                         ],
                       ),
                       const Padding(
-                        padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                        padding: EdgeInsets.only(top: 24,),
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
@@ -1025,31 +882,22 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        padding: const EdgeInsets.only(top: 12),
                         child: TextField(
                           controller: _priceController,
                           enabled: _isRelease, // 공개일 때만 활성화
-                          style: AppTypography.body16Medium.copyWith(
-                            color: _isRelease
-                                ? AppColors.neutral100
-                                : AppColors.neutral40,
-                          ),
+                          style: AppTypography.body16Medium.copyWith(color: _isRelease ? AppColors.neutral100 : AppColors.neutral40,),
                           decoration: InputDecoration(
-                            contentPadding:
-                                const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            contentPadding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
                             border: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: _isRelease
-                                    ? AppColors.neutral40
-                                    : AppColors.neutral20,
+                                color: _isRelease ? AppColors.neutral40 : AppColors.neutral20,
                                 width: 0.5,
                               ),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: _isRelease
-                                    ? AppColors.neutral40
-                                    : AppColors.neutral20,
+                                color: _isRelease ? AppColors.neutral40 : AppColors.neutral20,
                                 width: 0.5,
                               ),
                             ),
@@ -1059,9 +907,7 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                                 width: 0.5,
                               ),
                             ),
-                            fillColor: _isRelease
-                                ? AppColors.white
-                                : AppColors.neutral10,
+                            fillColor: _isRelease ? AppColors.white : AppColors.neutral10,
                             filled: true,
                           ),
                           keyboardType: TextInputType.number,
@@ -1074,9 +920,7 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                             if (_isRelease)
                               {
                                 setState(() {
-                                  travelInfo['price'] = double.parse(
-                                      _priceController.text
-                                          .replaceFirst('₩', ''));
+                                  travelInfo['price'] = double.parse(_priceController.text.replaceFirst('₩', ''));
                                 }),
                               }
                           },
