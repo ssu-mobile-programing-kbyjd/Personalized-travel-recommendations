@@ -1,12 +1,45 @@
 class TravelContentDataSource {
   static final List<Map<String, dynamic>> _contents = [
     {
+      'title': '공항 입국 절차 총정리 5가지✨',
+      'location': '도쿄',
+      'image': 'https://img.freepik.com/free-photo/airport-terminal_1417-1456.jpg?semt=ais_hybrid&w=740',
+      'tags': ['#도쿄', '#입국절차', '#가이드'],
+      'isLiked': true,
+      'url': 'https://blog.naver.com/tripblock/223904840422',
+    },
+    {
+      'title': '자유여행자 추천! 파리 3박 4일 알짜 일정표',
+      'location': '파리',
+      'image': 'https://media.istockphoto.com/id/2153347966/ko/%EC%82%AC%EC%A7%84/eiffel-tower-in-paris-france-on-a-sunny-day.jpg?s=2048x2048&w=is&k=20&c=TtOuyu2Lgt_m2QMLROK36W-IMvEwKJ2mG-elf58YTnc=',
+      'tags': ['#파리', '#일정표', '#자유여행'],
+      'isLiked': true,
+      'url': 'https://blog.naver.com/tripblock/223904837267',
+    },
+    {
+      'title': '해외에서 데이터 걱정 끝! 🌍 유심 추천 가이드',
+      'location': '글로벌',
+      'image': 'https://images.unsplash.com/photo-1520880867055-1e30d1cb001c?auto=format&fit=crop&w=400&q=80',
+      'tags': ['#유심', '#와이파이', '#해외여행'],
+      'isLiked': true,
+      'url': 'https://blog.naver.com/tripblock/223904834339',
+    },
+    {
+      'title': '도시 및 국가별 여행 가이드 5가지',
+      'location': '전세계',
+      'image': 'assets/images/content4.png',
+      'tags': ['#도시', '#국가', '#가이드'],
+      'isLiked': false,
+      'url': 'https://blog.naver.com/tripblock/223904821676',
+    },
+
+    {
       'title': '서울 속 골목 여행',
       'location': '서울',
       'tags': ['#로컬투어', '#도보여행', '#전통시장'],
       'image': 'https://images.unsplash.com/photo-1520880867055-1e30d1cb001c?auto=format&fit=crop&w=400&q=80',
       'description': '...',
-      'isLiked': true,
+      'isLiked': false,
     },
     {
       'title': '도쿄 벚꽃 명소 BEST 5',
@@ -22,7 +55,7 @@ class TravelContentDataSource {
       'tags': ['#감성여행', '#디저트', '#인스타감성'],
       'image': 'https://images.unsplash.com/photo-1520880867055-1e30d1cb001c?auto=format&fit=crop&w=400&q=80',
       'description': '''파리에서만 느낄 수 있는 고즈넉한 분위기의 감성 카페들을 소개합니다. 마카롱과 크루아상을 곁들인 브런치, 창밖으로 보이는 에펠탑 뷰까지 함께 즐겨보세요.''',
-      'isLiked': true,
+      'isLiked': false,
     },
     {
       'title': '오사카 시장 먹거리 탐방',

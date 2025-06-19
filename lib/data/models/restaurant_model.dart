@@ -2,38 +2,46 @@ class Restaurant {
   final String name;
   final String address;
   final String description;
+  final double latitude;
+  final double longitude;
   final String image;
-  final String? latitude;
-  final String? longitude;
 
   Restaurant({
     required this.name,
     required this.address,
     required this.description,
+    required this.latitude,
+    required this.longitude,
     required this.image,
-    this.latitude,
-    this.longitude,
   });
 
-  factory Restaurant.fromMap(Map<String, String> map) {
+  // 안전한 double 변환을 위한 헬퍼 메서드
+  static double _toDouble(dynamic value) {
+    if (value is double) return value;
+    if (value is int) return value.toDouble();
+    if (value is String) return double.tryParse(value) ?? 0.0;
+    return 0.0;
+  }
+
+  factory Restaurant.fromMap(Map<String, dynamic> map) {
     return Restaurant(
       name: map['name'] ?? '',
       address: map['address'] ?? '',
       description: map['description'] ?? '',
-      image: map['image'] ?? 'assets/images/thumb-1.png',
-      latitude: map['latitude'],
-      longitude: map['longitude'],
+      latitude: _toDouble(map['latitude']),
+      longitude: _toDouble(map['longitude']),
+      image: map['image'] ?? '',
     );
   }
 
-  Map<String, String> toMap() {
+  Map<String, dynamic> toMap() {
     return {
       'name': name,
       'address': address,
       'description': description,
+      'latitude': latitude,
+      'longitude': longitude,
       'image': image,
-      if (latitude != null) 'latitude': latitude!,
-      if (longitude != null) 'longitude': longitude!,
     };
   }
 
@@ -42,9 +50,9 @@ class Restaurant {
       name: json['name'] ?? '',
       address: json['address'] ?? '',
       description: json['description'] ?? '',
+      latitude: _toDouble(json['latitude']),
+      longitude: _toDouble(json['longitude']),
       image: json['image'] ?? 'assets/images/thumb-1.png',
-      latitude: json['latitude'],
-      longitude: json['longitude'],
     );
   }
 
@@ -53,9 +61,9 @@ class Restaurant {
       'name': name,
       'address': address,
       'description': description,
+      'latitude': latitude,
+      'longitude': longitude,
       'image': image,
-      if (latitude != null) 'latitude': latitude!,
-      if (longitude != null) 'longitude': longitude!,
     };
   }
 
@@ -63,23 +71,23 @@ class Restaurant {
     String? name,
     String? address,
     String? description,
+    double? latitude,
+    double? longitude,
     String? image,
-    String? latitude,
-    String? longitude,
   }) {
     return Restaurant(
       name: name ?? this.name,
       address: address ?? this.address,
       description: description ?? this.description,
-      image: image ?? this.image,
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
+      image: image ?? this.image,
     );
   }
 
   @override
   String toString() {
-    return 'Restaurant{name: $name, address: $address, description: $description, image: $image, latitude: $latitude, longitude: $longitude}';
+    return 'Restaurant{name: $name, address: $address, description: $description, latitude: $latitude, longitude: $longitude, image: $image}';
   }
 
   @override
@@ -90,16 +98,16 @@ class Restaurant {
           name == other.name &&
           address == other.address &&
           description == other.description &&
-          image == other.image &&
           latitude == other.latitude &&
-          longitude == other.longitude;
+          longitude == other.longitude &&
+          image == other.image;
 
   @override
   int get hashCode =>
       name.hashCode ^
       address.hashCode ^
       description.hashCode ^
-      image.hashCode ^
       latitude.hashCode ^
-      longitude.hashCode;
+      longitude.hashCode ^
+      image.hashCode;
 }

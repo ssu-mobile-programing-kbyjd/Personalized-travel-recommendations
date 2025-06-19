@@ -14,6 +14,7 @@ class FavoriteCard extends StatelessWidget {
   final bool isContent;
   final bool isLiked;
   final VoidCallback? onHeartTap;
+  final VoidCallback? onTap;
 
   const FavoriteCard({
     super.key,
@@ -28,6 +29,7 @@ class FavoriteCard extends StatelessWidget {
     this.isContent = false,
     this.isLiked = false,
     this.onHeartTap,
+    this.onTap,
   });
 
   Widget buildHeartIcon() {
@@ -78,9 +80,22 @@ class FavoriteCard extends StatelessWidget {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: isAssetImage
-                          ? Image.asset(imageUrl, width: 80, height: 80, fit: BoxFit.cover)
-                          : Image.network(imageUrl, width: 80, height: 80, fit: BoxFit.cover),
+                          ? Image.asset(
+                        imageUrl,
+                        width: 80,
+                        height: 80,
+                        fit: BoxFit.cover,
+                      )
+                          : Image.network(
+                        imageUrl,
+                        width: 80,
+                        height: 80,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) =>
+                        const Icon(Icons.broken_image, size: 80),
+                      ),
                     ),
+
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(
@@ -150,93 +165,96 @@ class FavoriteCard extends StatelessWidget {
         ),
       );
     }
-
     if (isContent) {
-      return Container(
-        margin: const EdgeInsets.only(bottom: 16),
-        width: double.infinity,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.neutral100.withAlpha((0.1 * 255).toInt()),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: Stack(
-            children: [
-              SizedBox(
-                width: double.infinity,
-                height: 125,
-                child: isAssetImage
-                    ? Image.asset(imageUrl, fit: BoxFit.cover)
-                    : Image.network(imageUrl, fit: BoxFit.cover),
-              ),
-              Positioned(
-                top: 13,
-                right: 18,
-                child: buildHeartIcon(),
-              ),
-              Positioned.fill(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(28, 31, 28, 28),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '$subtitle 여행 정보',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              title,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                overflow: TextOverflow.ellipsis,
-                                shadows: [
-                                  Shadow(
-                                    blurRadius: 4,
-                                    color: Colors.black54,
-                                    offset: Offset(1, 1),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Image.asset(
-                            'assets/icons/Outline/png/cheveron-right.png',
-                            width: 24,
-                            height: 24,
-                            fit: BoxFit.cover,
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+      return GestureDetector(
+        onTap: onTap, // 외부에서 전달한 링크 이동 콜백
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 16),
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.neutral100.withAlpha((0.1 * 255).toInt()),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
               ),
             ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Stack(
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  height: 125,
+                  child: isAssetImage
+                      ? Image.asset(imageUrl, fit: BoxFit.cover)
+                      : Image.network(imageUrl, fit: BoxFit.cover),
+                ),
+                Positioned(
+                  top: 13,
+                  right: 18,
+                  child: buildHeartIcon(),
+                ),
+                Positioned.fill(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(28, 31, 28, 28),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          subtitle,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                title,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  overflow: TextOverflow.ellipsis,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 4,
+                                      color: Colors.black54,
+                                      offset: Offset(1, 1),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Image.asset(
+                              'assets/icons/Outline/png/cheveron-right.png',
+                              width: 24,
+                              height: 24,
+                              fit: BoxFit.cover,
+                              color: Colors.white,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );
     }
+
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
