@@ -42,28 +42,20 @@ class _DevPageState extends State<DevPage> {
       }
       return;
     }
-    Map<String, dynamic> editableItem = Map<String, dynamic>.from(items.first);
-    final controllers = <String, TextEditingController>{};
-    editableItem.forEach((key, value) {
-      controllers[key] = TextEditingController(text: value?.toString() ?? '');
-    });
+    String jsonString = const JsonEncoder.withIndent('  ').convert(items.first);
+    final controller = TextEditingController(text: jsonString);
+
     await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('$collection 데이터 수정 후 업로드'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: controllers.entries.map((entry) =>
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: TextField(
-                    controller: entry.value,
-                    decoration: InputDecoration(labelText: entry.key),
-                  ),
-                )
-              ).toList(),
+          title: Text('$collection JSON 데이터 수정 후 업로드'),
+          content: TextField(
+            controller: controller,
+            maxLines: 10,
+            decoration: const InputDecoration(
+              labelText: 'JSON 데이터',
+              border: OutlineInputBorder(),
             ),
           ),
           actions: [
@@ -73,17 +65,22 @@ class _DevPageState extends State<DevPage> {
             ),
             ElevatedButton(
               onPressed: () async {
-                final newItem = <String, dynamic>{};
-                controllers.forEach((key, controller) {
-                  newItem[key] = controller.text;
-                });
-                await FirebaseFirestore.instance.collection(collection).add(newItem);
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('$collection 데이터 업로드 완료!')),
-                  );
+                try {
+                  final newItem = json.decode(controller.text);
+                  await FirebaseFirestore.instance.collection(collection).add(newItem);
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('$collection 데이터 업로드 완료!')),
+                    );
+                  }
+                  Navigator.of(context).pop();
+                } catch (e) {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('JSON 파싱 오류: $e')),
+                    );
+                  }
                 }
-                Navigator.of(context).pop();
               },
               child: const Text('업로드'),
             ),
@@ -148,6 +145,55 @@ class _DevPageState extends State<DevPage> {
                 }
               },
               child: const Text('생성'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showEditDocumentDialog(String collection, String docId, Map<String, dynamic> data) async {
+    String jsonString = const JsonEncoder.withIndent('  ').convert(data);
+    final controller = TextEditingController(text: jsonString);
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('$collection 문서 수정'),
+          content: TextField(
+            controller: controller,
+            maxLines: 10,
+            decoration: const InputDecoration(
+              labelText: 'JSON 데이터',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('취소'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                try {
+                  final newItem = json.decode(controller.text);
+                  await FirebaseFirestore.instance.collection(collection).doc(docId).set(newItem);
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('문서가 성공적으로 수정되었습니다!')),
+                    );
+                  }
+                  Navigator.of(context).pop();
+                } catch (e) {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('JSON 파싱 오류: $e')),
+                    );
+                  }
+                }
+              },
+              child: const Text('업데이트'),
             ),
           ],
         );
@@ -220,6 +266,7 @@ class _DevPageState extends State<DevPage> {
                     return ListTile(
                       title: Text(data['title']?.toString() ?? data['nickname']?.toString() ?? data['uid']?.toString() ?? 'No title'),
                       subtitle: Text(data.toString()),
+                      onTap: () => _showEditDocumentDialog(selectedCollection, docs[index].id, data),
                     );
                   },
                 );

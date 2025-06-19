@@ -55,7 +55,16 @@ class _MainScreenState extends State<MainScreen> {
             _selectedIndex = index;
           });
         },
-
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const DevPage()),
+          );
+        },
+        child: const Icon(Icons.developer_mode),
+        tooltip: '개발자 페이지',
       ),
     );
   }
