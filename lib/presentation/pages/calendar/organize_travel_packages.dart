@@ -65,55 +65,55 @@ class _OrganizeTravelPackagesScreenState
         final flights = _getFlights(cityKey);
         packages = flights
             .map((flight) => AddTravelModel.fromFlight(
-                  packageId: DateTime.now().millisecondsSinceEpoch.toString(),
-                  tripId: 'temp_trip_id',
-                  flight: flight,
-                  date: DateTime.now(),
-                  time: TimeOfDay(
-                    hour: int.parse(flight.departureTime.split(':')[0]),
-                    minute: int.parse(flight.departureTime.split(':')[1]),
-                  ),
-                  city: cityKey,
-                ))
+          packageId: DateTime.now().millisecondsSinceEpoch.toString(),
+          tripId: 'temp_trip_id',
+          flight: flight,
+          date: DateTime.now(),
+          time: TimeOfDay(
+            hour: int.parse(flight.departureTime.split(':')[0]),
+            minute: int.parse(flight.departureTime.split(':')[1]),
+          ),
+          city: cityKey,
+        ))
             .toList();
         break;
       case 1: // 관광명소
         final attractions = _getAttractions(cityKey);
         packages = attractions
             .map((attraction) => AddTravelModel.fromAttraction(
-                  packageId: DateTime.now().millisecondsSinceEpoch.toString(),
-                  tripId: 'temp_trip_id',
-                  attraction: attraction,
-                  date: DateTime.now(),
-                  time: const TimeOfDay(hour: 0, minute: 0),
-                  city: cityKey,
-                ))
+          packageId: DateTime.now().millisecondsSinceEpoch.toString(),
+          tripId: 'temp_trip_id',
+          attraction: attraction,
+          date: DateTime.now(),
+          time: const TimeOfDay(hour: 0, minute: 0),
+          city: cityKey,
+        ))
             .toList();
         break;
       case 2: // 맛집
         final restaurants = _getRestaurants(cityKey);
         packages = restaurants
             .map((restaurant) => AddTravelModel.fromRestaurant(
-                  packageId: DateTime.now().millisecondsSinceEpoch.toString(),
-                  tripId: 'temp_trip_id',
-                  restaurant: restaurant,
-                  date: DateTime.now(),
-                  time: const TimeOfDay(hour: 0, minute: 0),
-                  city: cityKey,
-                ))
+          packageId: DateTime.now().millisecondsSinceEpoch.toString(),
+          tripId: 'temp_trip_id',
+          restaurant: restaurant,
+          date: DateTime.now(),
+          time: const TimeOfDay(hour: 0, minute: 0),
+          city: cityKey,
+        ))
             .toList();
         break;
       case 3: // 숙소
         final accommodations = _getAccommodations(cityKey);
         packages = accommodations
             .map((accommodation) => AddTravelModel.fromAccommodation(
-                  packageId: DateTime.now().millisecondsSinceEpoch.toString(),
-                  tripId: 'temp_trip_id',
-                  accommodation: accommodation,
-                  date: DateTime.now(),
-                  time: const TimeOfDay(hour: 0, minute: 0),
-                  city: cityKey,
-                ))
+          packageId: DateTime.now().millisecondsSinceEpoch.toString(),
+          tripId: 'temp_trip_id',
+          accommodation: accommodation,
+          date: DateTime.now(),
+          time: const TimeOfDay(hour: 0, minute: 0),
+          city: cityKey,
+        ))
             .toList();
         break;
     }
@@ -123,9 +123,9 @@ class _OrganizeTravelPackagesScreenState
       final query = searchQuery.toLowerCase();
       packages = packages
           .where((package) =>
-              package.title.toLowerCase().contains(query) ||
-              package.description.toLowerCase().contains(query) ||
-              package.address.toLowerCase().contains(query))
+      package.title.toLowerCase().contains(query) ||
+          package.description.toLowerCase().contains(query) ||
+          package.address.toLowerCase().contains(query))
           .toList();
     }
 
@@ -167,14 +167,14 @@ class _OrganizeTravelPackagesScreenState
     }
   }
 
-  List<Accommodation> _getAccommodations(String cityKey) {
+  List<AccommodationModel> _getAccommodations(String cityKey) {
     if (cityKey == '자유' || cityKey == '자유 여행') {
       return AccommodationDataSource.getAllAccommodations();
     } else if (_isContinentOrCountry(cityKey)) {
       return _getAccommodationsByRegion(cityKey);
     } else {
       final accommodationsMap =
-          AccommodationDataSource.getAllAccommodationsMap();
+      AccommodationDataSource.getAllAccommodationsMap();
       return accommodationsMap[cityKey] ??
           AccommodationDataSource.getJejuAccommodations();
     }
@@ -262,8 +262,8 @@ class _OrganizeTravelPackagesScreenState
   }
 
   // 지역별 숙박 데이터 가져오기 - 모델 사용으로 수정
-  List<Accommodation> _getAccommodationsByRegion(String region) {
-    List<Accommodation> accommodations = [];
+  List<AccommodationModel> _getAccommodationsByRegion(String region) {
+    List<AccommodationModel> accommodations = [];
 
     if (TravelData.continents.contains(region)) {
       final countries = TravelData.continentCountries[region] ?? [];
@@ -271,7 +271,7 @@ class _OrganizeTravelPackagesScreenState
         final cities = TravelData.countryCities[country] ?? [];
         for (String city in cities) {
           final accommodationsMap =
-              AccommodationDataSource.getAllAccommodationsMap();
+          AccommodationDataSource.getAllAccommodationsMap();
           accommodations.addAll(accommodationsMap[city] ?? []);
         }
       }
@@ -279,7 +279,7 @@ class _OrganizeTravelPackagesScreenState
       final cities = TravelData.countryCities[region] ?? [];
       for (String city in cities) {
         final accommodationsMap =
-            AccommodationDataSource.getAllAccommodationsMap();
+        AccommodationDataSource.getAllAccommodationsMap();
         accommodations.addAll(accommodationsMap[city] ?? []);
       }
     }
@@ -359,8 +359,8 @@ class _OrganizeTravelPackagesScreenState
                         'address': package.address,
                         'price': package.price,
                         'time': package.time,
-                        'lat': package.latitude,
-                        'log': package.longitude,
+                        'lat': package.locationLatitude,
+                        'lng': package.locationLongitude,
                         'travelPackage': package, // 전체 패키지 데이터 포함
                       };
 
@@ -418,7 +418,7 @@ class _OrganizeTravelPackagesScreenState
               ),
             ),
             contentPadding:
-                const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           ),
         ),
       ),
@@ -540,8 +540,8 @@ class _OrganizeTravelPackagesScreenState
                         selectedCategory == 1
                             ? Icons.location_on
                             : selectedCategory == 2
-                                ? Icons.restaurant
-                                : Icons.hotel,
+                            ? Icons.restaurant
+                            : Icons.hotel,
                         color: AppColors.neutral60,
                         size: 32,
                       ),
