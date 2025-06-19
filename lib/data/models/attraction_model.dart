@@ -50,9 +50,9 @@ class Attraction {
       name: json['name'] ?? '',
       address: json['address'] ?? '',
       description: json['description'] ?? '',
+      latitude: _toDouble(json['latitude']),
+      longitude: _toDouble(json['longitude']),
       image: json['image'] ?? 'assets/images/thumb-1.png',
-      latitude: json['latitude'],
-      longitude: json['longitude'],
     );
   }
 
@@ -61,9 +61,9 @@ class Attraction {
       'name': name,
       'address': address,
       'description': description,
+      'latitude': latitude,
+      'longitude': longitude,
       'image': image,
-      if (latitude != null) 'latitude': latitude!,
-      if (longitude != null) 'longitude': longitude!,
     };
   }
 
@@ -71,23 +71,23 @@ class Attraction {
     String? name,
     String? address,
     String? description,
-    String? image,
     double? latitude,
     double? longitude,
+    String? image,
   }) {
     return Attraction(
       name: name ?? this.name,
       address: address ?? this.address,
       description: description ?? this.description,
-      image: image ?? this.image,
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
+      image: image ?? this.image,
     );
   }
 
   @override
   String toString() {
-    return 'Attraction{name: $name, address: $address, description: $description, image: $image, latitude: $latitude, longitude: $longitude}';
+    return 'Attraction{name: $name, address: $address, description: $description, latitude: $latitude, longitude: $longitude, image: $image}';
   }
 
   @override
@@ -98,16 +98,16 @@ class Attraction {
           name == other.name &&
           address == other.address &&
           description == other.description &&
-          image == other.image &&
           latitude == other.latitude &&
-          longitude == other.longitude;
+          longitude == other.longitude &&
+          image == other.image;
 
   @override
   int get hashCode =>
       name.hashCode ^
       address.hashCode ^
       description.hashCode ^
-      image.hashCode ^
       latitude.hashCode ^
-      longitude.hashCode;
+      longitude.hashCode ^
+      image.hashCode;
 }
