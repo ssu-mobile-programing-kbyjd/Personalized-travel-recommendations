@@ -2,38 +2,46 @@ class Attraction {
   final String name;
   final String address;
   final String description;
+  final double latitude;
+  final double longitude;
   final String image;
-  final String? latitude;
-  final String? longitude;
 
   Attraction({
     required this.name,
     required this.address,
     required this.description,
+    required this.latitude,
+    required this.longitude,
     required this.image,
-    this.latitude,
-    this.longitude,
   });
 
-  factory Attraction.fromMap(Map<String, String> map) {
+  // 안전한 double 변환을 위한 헬퍼 메서드
+  static double _toDouble(dynamic value) {
+    if (value is double) return value;
+    if (value is int) return value.toDouble();
+    if (value is String) return double.tryParse(value) ?? 0.0;
+    return 0.0;
+  }
+
+  factory Attraction.fromMap(Map<String, dynamic> map) {
     return Attraction(
-      name: map['name'] ?? '',
-      address: map['address'] ?? '',
-      description: map['description'] ?? '',
-      image: map['image'] ?? 'assets/images/thumb-1.png',
-      latitude: map['latitude'],
-      longitude: map['longitude'],
+      name: map['name'] as String,
+      address: map['address'] as String,
+      description: map['description'] as String,
+      latitude: _toDouble(map['latitude']),
+      longitude: _toDouble(map['longitude']),
+      image: map['image'] as String,
     );
   }
 
-  Map<String, String> toMap() {
+  Map<String, dynamic> toMap() {
     return {
       'name': name,
       'address': address,
       'description': description,
+      'latitude': latitude,
+      'longitude': longitude,
       'image': image,
-      if (latitude != null) 'latitude': latitude!,
-      if (longitude != null) 'longitude': longitude!,
     };
   }
 
@@ -64,8 +72,8 @@ class Attraction {
     String? address,
     String? description,
     String? image,
-    String? latitude,
-    String? longitude,
+    double? latitude,
+    double? longitude,
   }) {
     return Attraction(
       name: name ?? this.name,

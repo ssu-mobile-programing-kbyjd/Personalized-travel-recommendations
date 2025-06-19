@@ -15,14 +15,14 @@ class Restaurant {
     this.longitude,
   });
 
-  factory Restaurant.fromMap(Map<String, String> map) {
+  factory Restaurant.fromMap(Map<String, dynamic> map) {
     return Restaurant(
-      name: map['name'] ?? '',
-      address: map['address'] ?? '',
-      description: map['description'] ?? '',
-      image: map['image'] ?? 'assets/images/thumb-1.png',
-      latitude: map['latitude'],
-      longitude: map['longitude'],
+      name: map['name'] as String,
+      address: map['address'] as String,
+      description: map['description'] as String,
+      latitude: map['latitude']?.toString(),
+      longitude: map['longitude']?.toString(),
+      image: map['image'] as String,
     );
   }
 
@@ -43,8 +43,8 @@ class Restaurant {
       address: json['address'] ?? '',
       description: json['description'] ?? '',
       image: json['image'] ?? 'assets/images/thumb-1.png',
-      latitude: json['latitude'],
-      longitude: json['longitude'],
+      latitude: json['latitude']?.toString(),
+      longitude: json['longitude']?.toString(),
     );
   }
 
