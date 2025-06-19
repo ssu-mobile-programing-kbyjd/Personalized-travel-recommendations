@@ -80,9 +80,22 @@ class FavoriteCard extends StatelessWidget {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: isAssetImage
-                          ? Image.asset(imageUrl, width: 80, height: 80, fit: BoxFit.cover)
-                          : Image.network(imageUrl, width: 80, height: 80, fit: BoxFit.cover),
+                          ? Image.asset(
+                        imageUrl,
+                        width: 80,
+                        height: 80,
+                        fit: BoxFit.cover,
+                      )
+                          : Image.network(
+                        imageUrl,
+                        width: 80,
+                        height: 80,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) =>
+                        const Icon(Icons.broken_image, size: 80),
+                      ),
                     ),
+
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(

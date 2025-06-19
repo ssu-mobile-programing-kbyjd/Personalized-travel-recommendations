@@ -11,7 +11,7 @@ class TravelContentDataSource {
     {
       'title': '자유여행자 추천! 파리 3박 4일 알짜 일정표',
       'location': '파리',
-      'image': 'https://media.istockphoto.com/id/2153347966/ko/%EC%82%AC%EC%A7%84/eiffel-tower-in-paris-france-on-a-sunny-day.jpg?s=612x612&w=is&k=20&c=ikNVuUMSzWs4Bhl0YlpZQSLd_E7tDcG9VEbVRKvPAEk=',
+      'image': 'https://media.istockphoto.com/id/2153347966/ko/%EC%82%AC%EC%A7%84/eiffel-tower-in-paris-france-on-a-sunny-day.jpg?s=2048x2048&w=is&k=20&c=TtOuyu2Lgt_m2QMLROK36W-IMvEwKJ2mG-elf58YTnc=',
       'tags': ['#파리', '#일정표', '#자유여행'],
       'isLiked': true,
       'url': 'https://blog.naver.com/tripblock/223904837267',
