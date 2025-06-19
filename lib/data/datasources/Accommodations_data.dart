@@ -1603,7 +1603,6 @@ final List<Map<String, dynamic>> phuquocAccommodations = [
     "longitude": 103.9702
   }
 ];
-
 final List<Map<String, dynamic>> phuketAccommodations = [
   {
     "name": "반얀트리 푸켓",
@@ -1711,7 +1710,7 @@ final List<Map<String, dynamic>> pattayaAccommodations = [
     "longitude": 100.8776
   }
 ];
-
+// 필리핀 숙박 데이터
 final List<Map<String, dynamic>> cebuAccommodations = [
   {
     "name": "샹그릴라 막탄 세부",
@@ -1781,7 +1780,6 @@ final List<Map<String, dynamic>> boracayAccommodations = [
     "longitude": 121.9270
   }
 ];
-
 final List<Map<String, dynamic>> manilaAccommodations = [
   {
     "name": "마카티 샹그릴라 마닐라",
@@ -2340,18 +2338,18 @@ final List<Map<String, dynamic>> cairoAccommodations = [
     "address": "35 Giza Street, Giza, Cairo",
     "description":
         "기자 피라미드 전망을 자랑하는 5성급 럭셔리 호텔. 나일강변에 위치하며 고대 이집트의 웅장함과 현대적 편의시설이 조화를 이룬 프리미엄 숙소.",
+    "image": "assets/images/accommodations/cairo_four_seasons.jpg",
     "latitude": 30.0444,
-    "longitude": 31.2089,
-    "image": "assets/images/accommodations/cairo_four_seasons.jpg"
+    "longitude": 31.2357
   },
   {
     "name": "올드 윈터 팰리스",
     "address": "Tahrir Square, Downtown Cairo",
     "description":
         "카이로 다운타운의 역사적인 호텔. 이집트 박물관과 가까우며 식민지 시대 건축양식이 보존된 클래식한 분위기의 중급 호텔.",
+    "image": "assets/images/accommodations/cairo_old_winter_palace.jpg",
     "latitude": 30.0444,
-    "longitude": 31.2357,
-    "image": "assets/images/accommodations/cairo_old_winter_palace.jpg"
+    "longitude": 31.2357
   }
 ];
 
@@ -2372,7 +2370,7 @@ final List<Map<String, dynamic>> luxorAccommodations = [
     "description":
         "카르나크 신전 근처의 이집트 전통 스타일 게스트하우스. 파라오 시대 분위기를 재현한 인테리어와 따뜻한 이집트 환대를 경험할 수 있는 중급 숙소.",
     "latitude": 25.7188,
-    "longitude": 32.6573,
+    "longitude": 32.6574,
     "image": "assets/images/accommodations/luxor_guesthouse.jpg"
   }
 ];
@@ -2674,425 +2672,425 @@ final List<Map<String, dynamic>> buenosairesAccommodations = [
     "address": "Palermo, Buenos Aires",
     "description":
         "팔레르모 지구의 배낭여행객용 호스텔. 부에노스아이레스의 트렌디한 지역에서 탱고와 아르헨티나 문화를 체험할 수 있는 젊은 분위기의 숙소.",
-    "latitude": -34.5845,
-    "longitude": -58.4274,
+    "latitude": -34.5875,
+    "longitude": -58.4189,
     "image": "assets/images/accommodations/buenosaires_hostel.jpg"
   }
 ];
 
 // 모델 변환 함수들
 class AccommodationDataSource {
-  static List<Accommodation> getJejuAccommodations() {
+  static List<AccommodationModel> getJejuAccommodations() {
     return jejuAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getFukuokaAccommodations() {
+  static List<AccommodationModel> getFukuokaAccommodations() {
     return fukuokaAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getShanghaiAccommodations() {
+  static List<AccommodationModel> getShanghaiAccommodations() {
     return shanghaiAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getDanangAccommodations() {
+  static List<AccommodationModel> getDanangAccommodations() {
     return danangAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getBangkokAccommodations() {
+  static List<AccommodationModel> getBangkokAccommodations() {
     return bankokAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getIstanbulAccommodations() {
+  static List<AccommodationModel> getIstanbulAccommodations() {
     return istanbulAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getParisAccommodations() {
+  static List<AccommodationModel> getParisAccommodations() {
     return parisAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getNewyorkAccommodations() {
+  static List<AccommodationModel> getNewyorkAccommodations() {
     return newyorkAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getSeoulAccommodations() {
+  static List<AccommodationModel> getSeoulAccommodations() {
     return seoulAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getBusanAccommodations() {
+  static List<AccommodationModel> getBusanAccommodations() {
     return busanAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getGangneungAccommodations() {
+  static List<AccommodationModel> getGangneungAccommodations() {
     return gangneungAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getYeosuAccommodations() {
+  static List<AccommodationModel> getYeosuAccommodations() {
     return yeosuAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getGyeongjuAccommodations() {
+  static List<AccommodationModel> getGyeongjuAccommodations() {
     return gyeongjuAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getTokyoAccommodations() {
+  static List<AccommodationModel> getTokyoAccommodations() {
     return tokyoAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getOsakaAccommodations() {
+  static List<AccommodationModel> getOsakaAccommodations() {
     return osakaAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getKagoshimaAccommodations() {
+  static List<AccommodationModel> getKagoshimaAccommodations() {
     return kagoshimaAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getNagoyaAccommodations() {
+  static List<AccommodationModel> getNagoyaAccommodations() {
     return nagoyaAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getSapporoAccommodations() {
+  static List<AccommodationModel> getSapporoAccommodations() {
     return sapporoAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getOkinawaAccommodations() {
+  static List<AccommodationModel> getOkinawaAccommodations() {
     return okinawaAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getBeijingAccommodations() {
+  static List<AccommodationModel> getBeijingAccommodations() {
     return beijingAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getQingdaoAccommodations() {
+  static List<AccommodationModel> getQingdaoAccommodations() {
     return qingdaoAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getZhangjiajieAccommodations() {
+  static List<AccommodationModel> getZhangjiajieAccommodations() {
     return zhangjiajieAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getTaipeiAccommodations() {
+  static List<AccommodationModel> getTaipeiAccommodations() {
     return taipeiAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getJiufenAccommodations() {
+  static List<AccommodationModel> getJiufenAccommodations() {
     return jiufenAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getDansuiAccommodations() {
+  static List<AccommodationModel> getDansuiAccommodations() {
     return dansuiAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getXimendingAccommodations() {
+  static List<AccommodationModel> getXimendingAccommodations() {
     return ximendingAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getYeliuAccommodations() {
+  static List<AccommodationModel> getYeliuAccommodations() {
     return yeliuAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getUlaanbaatarAccommodations() {
+  static List<AccommodationModel> getUlaanbaatarAccommodations() {
     return ulaanbaatarAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getTerljiAccommodations() {
+  static List<AccommodationModel> getTerljiAccommodations() {
     return terljiAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getHanoiAccommodations() {
+  static List<AccommodationModel> getHanoiAccommodations() {
     return hanoiAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getHochiminhAccommodations() {
+  static List<AccommodationModel> getHochiminhAccommodations() {
     return hochiminhAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getNhatrangAccommodations() {
+  static List<AccommodationModel> getNhatrangAccommodations() {
     return nhatrangAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getPhuquocAccommodations() {
+  static List<AccommodationModel> getPhuquocAccommodations() {
     return phuquocAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getPhuketAccommodations() {
+  static List<AccommodationModel> getPhuketAccommodations() {
     return phuketAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getChiangmaiAccommodations() {
+  static List<AccommodationModel> getChiangmaiAccommodations() {
     return chiangmaiAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getPattayaAccommodations() {
+  static List<AccommodationModel> getPattayaAccommodations() {
     return pattayaAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
   // 새로 추가된 도시들의 함수들
-  static List<Accommodation> getCebuAccommodations() {
+  static List<AccommodationModel> getCebuAccommodations() {
     return cebuAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getBoracayAccommodations() {
+  static List<AccommodationModel> getBoracayAccommodations() {
     return boracayAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getManilaAccommodations() {
+  static List<AccommodationModel> getManilaAccommodations() {
     return manilaAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getPalawanAccommodations() {
+  static List<AccommodationModel> getPalawanAccommodations() {
     return palawanAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getCappadociaAccommodations() {
+  static List<AccommodationModel> getCappadociaAccommodations() {
     return cappadociaAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getDelhiAccommodations() {
+  static List<AccommodationModel> getDelhiAccommodations() {
     return delhiAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getAgraAccommodations() {
+  static List<AccommodationModel> getAgraAccommodations() {
     return agraAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getColomboAccommodations() {
+  static List<AccommodationModel> getColomboAccommodations() {
     return colomboAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getKandyAccommodations() {
+  static List<AccommodationModel> getKandyAccommodations() {
     return kandyAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getNiceAccommodations() {
+  static List<AccommodationModel> getNiceAccommodations() {
     return niceAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getMarseilleAccommodations() {
+  static List<AccommodationModel> getMarseilleAccommodations() {
     return marseilleAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getStockholmAccommodations() {
+  static List<AccommodationModel> getStockholmAccommodations() {
     return stockholmAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getGothenburgAccommodations() {
+  static List<AccommodationModel> getGothenburgAccommodations() {
     return gothenburgAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getZurichAccommodations() {
+  static List<AccommodationModel> getZurichAccommodations() {
     return zurichAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getLucerneAccommodations() {
+  static List<AccommodationModel> getLucerneAccommodations() {
     return lucerneAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getLondonAccommodations() {
+  static List<AccommodationModel> getLondonAccommodations() {
     return londonAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getManchesterAccommodations() {
+  static List<AccommodationModel> getManchesterAccommodations() {
     return manchesterAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getNewmaldenAccommodations() {
+  static List<AccommodationModel> getNewmaldenAccommodations() {
     return newmaldenAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getCapetownAccommodations() {
+  static List<AccommodationModel> getCapetownAccommodations() {
     return capetownAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getCairoAccommodations() {
+  static List<AccommodationModel> getCairoAccommodations() {
     return cairoAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getLuxorAccommodations() {
+  static List<AccommodationModel> getLuxorAccommodations() {
     return luxorAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getLosangelesAccommodations() {
+  static List<AccommodationModel> getLosangelesAccommodations() {
     return losangelesAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getLasvegasAccommodations() {
+  static List<AccommodationModel> getLasvegasAccommodations() {
     return lasvegasAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getSanfranciscoAccommodations() {
+  static List<AccommodationModel> getSanfranciscoAccommodations() {
     return sanfranciscoAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getVancouverAccommodations() {
+  static List<AccommodationModel> getVancouverAccommodations() {
     return vancouverAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getTorontoAccommodations() {
+  static List<AccommodationModel> getTorontoAccommodations() {
     return torontoAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getMontrealAccommodations() {
+  static List<AccommodationModel> getMontrealAccommodations() {
     return montrealAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getQuebecAccommodations() {
+  static List<AccommodationModel> getQuebecAccommodations() {
     return quebecAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getNiagarafallsAccommodations() {
+  static List<AccommodationModel> getNiagarafallsAccommodations() {
     return niagarafallsAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getRiodejaneiroAccommodations() {
+  static List<AccommodationModel> getRiodejaneiroAccommodations() {
     return riodejaneiroAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getSaopauloAccommodations() {
+  static List<AccommodationModel> getSaopauloAccommodations() {
     return saopauloAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
-  static List<Accommodation> getBuenosairesAccommodations() {
+  static List<AccommodationModel> getBuenosairesAccommodations() {
     return buenosairesAccommodations
-        .map((accommodationMap) => Accommodation.fromMap(accommodationMap))
+        .map((accommodationMap) => AccommodationModel.fromMap(accommodationMap))
         .toList();
   }
 
   // 도시별 숙박 데이터 매핑 (업데이트됨)
-  static Map<String, List<Accommodation>> getAllAccommodationsMap() {
+  static Map<String, List<AccommodationModel>> getAllAccommodationsMap() {
     return {
       '서울': getSeoulAccommodations(),
       '부산': getBusanAccommodations(),
@@ -3166,8 +3164,8 @@ class AccommodationDataSource {
   }
 
   // 모든 숙박 데이터 가져오기
-  static List<Accommodation> getAllAccommodations() {
-    List<Accommodation> allAccommodations = [];
+  static List<AccommodationModel> getAllAccommodations() {
+    List<AccommodationModel> allAccommodations = [];
     for (var accommodations in getAllAccommodationsMap().values) {
       allAccommodations.addAll(accommodations);
     }
