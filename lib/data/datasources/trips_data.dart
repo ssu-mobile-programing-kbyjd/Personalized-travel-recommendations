@@ -1,0 +1,26 @@
+final List<Map<String, dynamic>> trips = [
+  {
+    "tripId": "trip_001",
+    "userId": "user_123",
+    "title": "제주도 가족여행",
+    "location": "제주도",
+    "duration": "3박 4일",
+    "startDate": "2024-06-10T09:00:00Z",
+    "endDate": "2024-06-13T18:00:00Z",
+    "tags": ["가족", "자연", "맛집"],
+    "cities": 1,
+    "createdAt": "2024-05-20T12:00:00Z",
+  },
+  {
+    "tripId": "trip_002",
+    "userId": "user_456",
+    "title": "부산 친구들과 여행",
+    "location": "부산",
+    "duration": "2박 3일",
+    "startDate": "2024-07-01T10:00:00Z",
+    "endDate": "2024-07-03T17:00:00Z",
+    "tags": ["친구", "해변", "관광"],
+    "cities": 1,
+    "createdAt": "2024-06-10T15:00:00Z",
+  },
+]; 
