@@ -172,21 +172,21 @@ class _WishlistScreenState extends State<WishlistScreen>
       separatorBuilder: (_, __) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
         final item = sourceList[index];
-        //if (isPackage && item['isLiked'] != true) return const SizedBox.shrink();
+        final imageUrl = item['image'] ?? '';
+        final isAssetImage = !(imageUrl.toString().startsWith('http'));
+
 
         return FavoriteCard(
-          imageUrl: isPackage
-              ? 'assets/images/TokyoRestaurants.png'
-              : item['image'] ?? '',
-          title: isPackage ? item['name'] : item['title'] ?? item['name'],
+          imageUrl: imageUrl,
+          isAssetImage: isAssetImage,
+          title: isPackage
+              ? (item['name'] ?? '')
+              : (item['title'] ?? item['name'] ?? ''),
           subtitle: isPackage
-              ? '${item['location']}\n${item['duration']}'
-              : '${item['location']} 여행 정보',
-          rating: isPackage
-              ? double.tryParse(item['rating']) ?? 0.0
-              : item['rating'] ?? 0.0,
+              ? '${item['location'] ?? ''}\n${item['duration'] ?? ''}'
+              : '${item['location'] ?? ''} 여행 정보',
+          rating: double.tryParse(item['rating']?.toString() ?? '') ?? 0.0,
           tags: List<String>.from(item['tags'] ?? []),
-          isAssetImage: isPackage,
           isPackage: isPackage,
           isContent: isContent,
           isLiked: item['isLiked'] ?? false,
@@ -203,8 +203,6 @@ class _WishlistScreenState extends State<WishlistScreen>
           onTap: isContent && item['url'] != null
               ? () => _launchExternalUrl(item['url'])
               : null,
-
-
         );
       },
     );
