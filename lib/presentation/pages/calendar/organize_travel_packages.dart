@@ -6,9 +6,9 @@ import 'package:personalized_travel_recommendations/core/theme/app_outline_png_i
 import 'package:personalized_travel_recommendations/data/datasources/flight_data.dart';
 import 'package:personalized_travel_recommendations/data/datasources/attractions_data.dart';
 import 'package:personalized_travel_recommendations/data/datasources/restaurants_data.dart';
-import 'package:personalized_travel_recommendations/data/datasources/accommodations_data.dart';
 import 'package:personalized_travel_recommendations/data/datasources/travel_data.dart';
 import 'package:personalized_travel_recommendations/data/models/models.dart';
+import 'package:personalized_travel_recommendations/data/services/firestore_util.dart';
 
 class OrganizeTravelPackagesScreen extends StatefulWidget {
   final int dayIndex;
@@ -37,18 +37,23 @@ class _OrganizeTravelPackagesScreenState
   // 카테고리별 스크롤 컨트롤러
   final Map<int, ScrollController> _scrollControllers = {};
 
+  // 숙소 실시간 스트림
+  Stream<List<AccommodationModel>>? accommodationsStream;
+
   @override
   void initState() {
     super.initState();
-    // 각 카테고리별로 스크롤 컨트롤러 초기화
     for (int i = 0; i < categories.length; i++) {
       _scrollControllers[i] = ScrollController();
     }
+    accommodationsStream = FirestoreUtil.streamCollection<AccommodationModel>(
+      collectionName: 'accommodations',
+      fromMap: (map) => AccommodationModel.fromMap(map),
+    );
   }
 
   @override
   void dispose() {
-    // 모든 스크롤 컨트롤러 정리
     for (var controller in _scrollControllers.values) {
       controller.dispose();
     }
@@ -97,19 +102,6 @@ class _OrganizeTravelPackagesScreenState
                   packageId: DateTime.now().millisecondsSinceEpoch.toString(),
                   tripId: 'temp_trip_id',
                   restaurant: restaurant,
-                  date: DateTime.now(),
-                  time: const TimeOfDay(hour: 0, minute: 0),
-                  city: cityKey,
-                ))
-            .toList();
-        break;
-      case 3: // 숙소
-        final accommodations = _getAccommodations(cityKey);
-        packages = accommodations
-            .map((accommodation) => AddTravelModel.fromAccommodation(
-                  packageId: DateTime.now().millisecondsSinceEpoch.toString(),
-                  tripId: 'temp_trip_id',
-                  accommodation: accommodation,
                   date: DateTime.now(),
                   time: const TimeOfDay(hour: 0, minute: 0),
                   city: cityKey,
@@ -167,18 +159,6 @@ class _OrganizeTravelPackagesScreenState
     }
   }
 
-  List<AccommodationModel> _getAccommodations(String cityKey) {
-    if (cityKey == '자유' || cityKey == '자유 여행') {
-      return AccommodationDataSource.getAllAccommodations();
-    } else if (_isContinentOrCountry(cityKey)) {
-      return _getAccommodationsByRegion(cityKey);
-    } else {
-      final accommodationsMap =
-          AccommodationDataSource.getAllAccommodationsMap();
-      return accommodationsMap[cityKey] ??
-          AccommodationDataSource.getJejuAccommodations();
-    }
-  }
 
   // 대륙 또는 나라인지 확인하는 함수
   bool _isContinentOrCountry(String region) {
@@ -261,34 +241,10 @@ class _OrganizeTravelPackagesScreenState
     return restaurants;
   }
 
-  // 지역별 숙박 데이터 가져오기 - 모델 사용으로 수정
-  List<AccommodationModel> _getAccommodationsByRegion(String region) {
-    List<AccommodationModel> accommodations = [];
-
-    if (TravelData.continents.contains(region)) {
-      final countries = TravelData.continentCountries[region] ?? [];
-      for (String country in countries) {
-        final cities = TravelData.countryCities[country] ?? [];
-        for (String city in cities) {
-          final accommodationsMap =
-              AccommodationDataSource.getAllAccommodationsMap();
-          accommodations.addAll(accommodationsMap[city] ?? []);
-        }
-      }
-    } else {
-      final cities = TravelData.countryCities[region] ?? [];
-      for (String city in cities) {
-        final accommodationsMap =
-            AccommodationDataSource.getAllAccommodationsMap();
-        accommodations.addAll(accommodationsMap[city] ?? []);
-      }
-    }
-
-    return accommodations;
-  }
 
   @override
   Widget build(BuildContext context) {
+    String cityKey = widget.selectedCity ?? '제주';
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -345,31 +301,91 @@ class _OrganizeTravelPackagesScreenState
             const SizedBox(height: 16),
             _buildCategories(),
             Expanded(
-              child: ListView.builder(
-                controller: _scrollControllers[selectedCategory],
-                padding: const EdgeInsets.all(16),
-                itemCount: currentTravelPackages.length,
-                itemBuilder: (context, index) {
-                  final package = currentTravelPackages[index];
-                  return GestureDetector(
-                    onTap: () {
-                      // AddTravelModel을 직접 반환
-                      final selectedScheduleData = {
-                        'place': package.title,
-                        'address': package.address,
-                        'price': package.price,
-                        'time': package.time,
-                        'lat': package.locationLatitude,
-                        'lng': package.locationLongitude,
-                        'travelPackage': package, // 전체 패키지 데이터 포함
-                      };
-
-                      Navigator.pop(context, selectedScheduleData);
-                    },
-                    child: _buildTravelPackageCard(package),
-                  );
-                },
-              ),
+              child: selectedCategory == 3 // 숙소 카테고리
+                  ? StreamBuilder<List<AccommodationModel>>(
+                      stream: accommodationsStream,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                          return const Center(child: Text('No data found'));
+                        }
+                        // 지역 필터링 (city 필드가 없으므로 address, name만 사용)
+                        final filtered = snapshot.data!.where((accommodation) {
+                          if (cityKey == '자유' || cityKey == '자유 여행') return true;
+                          final cityFields = [
+                            accommodation.address,
+                            accommodation.name,
+                          ].whereType<String>().map((e) => e.toLowerCase());
+                          return cityFields.any((field) => field.contains(cityKey.toLowerCase()));
+                        }).toList();
+                        // AccommodationModel → AddTravelModel 변환 및 검색
+                        final packages = filtered
+                            .map((accommodation) => AddTravelModel.fromAccommodation(
+                                  packageId: DateTime.now().millisecondsSinceEpoch.toString(),
+                                  tripId: 'temp_trip_id',
+                                  accommodation: accommodation,
+                                  date: DateTime.now(),
+                                  time: const TimeOfDay(hour: 0, minute: 0),
+                                  city: cityKey,
+                                ))
+                            .where((package) {
+                              final query = searchQuery.toLowerCase();
+                              return query.isEmpty ||
+                                  package.title.toLowerCase().contains(query) ||
+                                  package.description.toLowerCase().contains(query) ||
+                                  package.address.toLowerCase().contains(query);
+                            })
+                            .toList();
+                        return ListView.builder(
+                          controller: _scrollControllers[selectedCategory],
+                          padding: const EdgeInsets.all(16),
+                          itemCount: packages.length,
+                          itemBuilder: (context, index) {
+                            final package = packages[index];
+                            return GestureDetector(
+                              onTap: () {
+                                final selectedScheduleData = {
+                                  'place': package.title,
+                                  'address': package.address,
+                                  'price': package.price,
+                                  'time': package.time,
+                                  'latitude': package.locationLatitude,
+                                  'longitude': package.locationLongitude,
+                                  'travelPackage': package,
+                                };
+                                Navigator.pop(context, selectedScheduleData);
+                              },
+                              child: _buildTravelPackageCard(package),
+                            );
+                          },
+                        );
+                      },
+                    )
+                  : ListView.builder(
+                      controller: _scrollControllers[selectedCategory],
+                      padding: const EdgeInsets.all(16),
+                      itemCount: currentTravelPackages.length,
+                      itemBuilder: (context, index) {
+                        final package = currentTravelPackages[index];
+                        return GestureDetector(
+                          onTap: () {
+                            final selectedScheduleData = {
+                              'place': package.title,
+                              'address': package.address,
+                              'price': package.price,
+                              'time': package.time,
+                              'latitude': package.locationLatitude,
+                              'longitude': package.locationLongitude,
+                              'travelPackage': package,
+                            };
+                            Navigator.pop(context, selectedScheduleData);
+                          },
+                          child: _buildTravelPackageCard(package),
+                        );
+                      },
+                    ),
             ),
           ],
         ),

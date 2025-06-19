@@ -9,6 +9,7 @@ import '../../data/datasources/restaurants_data.dart';
 import '../../data/datasources/attractions_data.dart';
 import '../../data/datasources/flight_data.dart';
 import '../../data/datasources/Accommodations_data.dart';
+import '../../data/services/firestore_util.dart';
 
 class DevPage extends StatefulWidget {
   const DevPage({super.key});
@@ -83,8 +84,16 @@ class _DevPageState extends State<DevPage> {
             ElevatedButton(
               onPressed: () async {
                 try {
-                  final newItem = json.decode(controller.text);
-                  await FirebaseFirestore.instance.collection(collection).add(newItem);
+                  final parsed = json.decode(controller.text);
+                  if (parsed is List) {
+                    // 배열이면 여러 개 업로드
+                    for (final item in parsed) {
+                      await FirebaseFirestore.instance.collection(collection).add(Map<String, dynamic>.from(item));
+                    }
+                  } else if (parsed is Map) {
+                    // 객체면 하나만 업로드
+                    await FirebaseFirestore.instance.collection(collection).add(Map<String, dynamic>.from(parsed));
+                  }
                   if (mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('$collection 데이터 업로드 완료!')),
@@ -279,24 +288,27 @@ class _DevPageState extends State<DevPage> {
           const SizedBox(height: 8),
           // Firestore 데이터 조회 (StreamBuilder)
           Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance.collection(selectedCollection).snapshots(),
+            child: StreamBuilder<List<Map<String, dynamic>>>(
+              stream: FirestoreUtil.streamCollection<Map<String, dynamic>>(
+                collectionName: selectedCollection,
+                fromMap: (map) => map,
+              ),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                if (!snapshot.hasData || snapshot.data!.isEmpty) {
                   return const Center(child: Text('No data found'));
                 }
-                final docs = snapshot.data!.docs;
+                final docs = snapshot.data!;
                 return ListView.builder(
                   itemCount: docs.length,
                   itemBuilder: (context, index) {
-                    final data = docs[index].data() as Map<String, dynamic>;
+                    final data = docs[index];
                     return ListTile(
-                      title: Text(data['title']?.toString() ?? data['nickname']?.toString() ?? data['uid']?.toString() ?? 'No title'),
+                      title: Text(data['title']?.toString() ?? data['nickname']?.toString() ?? data['uid']?.toString() ?? data['name']?.toString() ?? 'No title'),
                       subtitle: Text(data.toString()),
-                      onTap: () => _showEditDocumentDialog(selectedCollection, docs[index].id, data),
+                      onTap: () => _showEditDocumentDialog(selectedCollection, '', data), // docId는 별도 처리 필요
                     );
                   },
                 );
