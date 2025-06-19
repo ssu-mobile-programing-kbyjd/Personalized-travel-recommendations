@@ -34,24 +34,13 @@ class _OrganizeTravelPackagesScreenState
 
   final List<String> categories = ['항공편', '관광명소', '맛집', '숙소'];
 
-  // 카테고리별 스크롤 컨트롤러
-  final Map<int, ScrollController> _scrollControllers = {};
-
   @override
   void initState() {
     super.initState();
-    // 각 카테고리별로 스크롤 컨트롤러 초기화
-    for (int i = 0; i < categories.length; i++) {
-      _scrollControllers[i] = ScrollController();
-    }
   }
 
   @override
   void dispose() {
-    // 모든 스크롤 컨트롤러 정리
-    for (var controller in _scrollControllers.values) {
-      controller.dispose();
-    }
     super.dispose();
   }
 
@@ -62,10 +51,13 @@ class _OrganizeTravelPackagesScreenState
 
     switch (selectedCategory) {
       case 0: // 항공편
-        final flights = _getFlights(cityKey);
+        final flights = _getData<Flight>(
+            cityKey,
+            FlightDataSource.getAllFlightsMap(),
+            FlightDataSource.getJejuFlights());
         packages = flights
             .map((flight) => AddTravelModel.fromFlight(
-                  packageId: DateTime.now().millisecondsSinceEpoch.toString(),
+                  packageId: 'flight_${flight.hashCode}',
                   tripId: 'temp_trip_id',
                   flight: flight,
                   date: DateTime.now(),
@@ -78,10 +70,13 @@ class _OrganizeTravelPackagesScreenState
             .toList();
         break;
       case 1: // 관광명소
-        final attractions = _getAttractions(cityKey);
+        final attractions = _getData<Attraction>(
+            cityKey,
+            AttractionDataSource.getAllAttractionsMap(),
+            AttractionDataSource.getJejuAttractions());
         packages = attractions
             .map((attraction) => AddTravelModel.fromAttraction(
-                  packageId: DateTime.now().millisecondsSinceEpoch.toString(),
+                  packageId: 'attraction_${attraction.hashCode}',
                   tripId: 'temp_trip_id',
                   attraction: attraction,
                   date: DateTime.now(),
@@ -91,10 +86,13 @@ class _OrganizeTravelPackagesScreenState
             .toList();
         break;
       case 2: // 맛집
-        final restaurants = _getRestaurants(cityKey);
+        final restaurants = _getData<Restaurant>(
+            cityKey,
+            RestaurantDataSource.getAllRestaurantsMap(),
+            RestaurantDataSource.getJejuRestaurants());
         packages = restaurants
             .map((restaurant) => AddTravelModel.fromRestaurant(
-                  packageId: DateTime.now().millisecondsSinceEpoch.toString(),
+                  packageId: 'restaurant_${restaurant.hashCode}',
                   tripId: 'temp_trip_id',
                   restaurant: restaurant,
                   date: DateTime.now(),
@@ -104,10 +102,13 @@ class _OrganizeTravelPackagesScreenState
             .toList();
         break;
       case 3: // 숙소
-        final accommodations = _getAccommodations(cityKey);
+        final accommodations = _getData<AccommodationModel>(
+            cityKey,
+            AccommodationDataSource.getAllAccommodationsMap(),
+            AccommodationDataSource.getJejuAccommodations());
         packages = accommodations
             .map((accommodation) => AddTravelModel.fromAccommodation(
-                  packageId: DateTime.now().millisecondsSinceEpoch.toString(),
+                  packageId: 'accommodation_${accommodation.hashCode}',
                   tripId: 'temp_trip_id',
                   accommodation: accommodation,
                   date: DateTime.now(),
@@ -132,51 +133,15 @@ class _OrganizeTravelPackagesScreenState
     return packages;
   }
 
-  List<Flight> _getFlights(String cityKey) {
+  // 통합된 데이터 가져오기 메서드
+  List<T> _getData<T>(
+      String cityKey, Map<String, List<T>> dataMap, List<T> fallbackData) {
     if (cityKey == '자유' || cityKey == '자유 여행') {
-      return FlightDataSource.getAllFlights();
+      return dataMap.values.expand((list) => list).toList();
     } else if (_isContinentOrCountry(cityKey)) {
-      return _getFlightsByRegion(cityKey);
+      return _getDataByRegion<T>(cityKey, dataMap);
     } else {
-      final flightsMap = FlightDataSource.getAllFlightsMap();
-      return flightsMap[cityKey] ?? FlightDataSource.getJejuFlights();
-    }
-  }
-
-  List<Attraction> _getAttractions(String cityKey) {
-    if (cityKey == '자유' || cityKey == '자유 여행') {
-      return AttractionDataSource.getAllAttractions();
-    } else if (_isContinentOrCountry(cityKey)) {
-      return _getAttractionsByRegion(cityKey);
-    } else {
-      final attractionsMap = AttractionDataSource.getAllAttractionsMap();
-      return attractionsMap[cityKey] ??
-          AttractionDataSource.getJejuAttractions();
-    }
-  }
-
-  List<Restaurant> _getRestaurants(String cityKey) {
-    if (cityKey == '자유' || cityKey == '자유 여행') {
-      return RestaurantDataSource.getAllRestaurants();
-    } else if (_isContinentOrCountry(cityKey)) {
-      return _getRestaurantsByRegion(cityKey);
-    } else {
-      final restaurantsMap = RestaurantDataSource.getAllRestaurantsMap();
-      return restaurantsMap[cityKey] ??
-          RestaurantDataSource.getJejuRestaurants();
-    }
-  }
-
-  List<AccommodationModel> _getAccommodations(String cityKey) {
-    if (cityKey == '자유' || cityKey == '자유 여행') {
-      return AccommodationDataSource.getAllAccommodations();
-    } else if (_isContinentOrCountry(cityKey)) {
-      return _getAccommodationsByRegion(cityKey);
-    } else {
-      final accommodationsMap =
-          AccommodationDataSource.getAllAccommodationsMap();
-      return accommodationsMap[cityKey] ??
-          AccommodationDataSource.getJejuAccommodations();
+      return dataMap[cityKey] ?? fallbackData;
     }
   }
 
@@ -187,104 +152,26 @@ class _OrganizeTravelPackagesScreenState
             .any((countries) => countries.contains(region));
   }
 
-  // 지역별 항공편 데이터 가져오기 - 모델 사용으로 수정
-  List<Flight> _getFlightsByRegion(String region) {
-    List<Flight> flights = [];
-
-    if (TravelData.continents.contains(region)) {
-      // 대륙이 선택된 경우
-      final countries = TravelData.continentCountries[region] ?? [];
-      for (String country in countries) {
-        final cities = TravelData.countryCities[country] ?? [];
-        for (String city in cities) {
-          final flightsMap = FlightDataSource.getAllFlightsMap();
-          flights.addAll(flightsMap[city] ?? []);
-        }
-      }
-    } else {
-      // 나라가 선택된 경우
-      final cities = TravelData.countryCities[region] ?? [];
-      for (String city in cities) {
-        final flightsMap = FlightDataSource.getAllFlightsMap();
-        flights.addAll(flightsMap[city] ?? []);
-      }
-    }
-
-    return flights;
-  }
-
-  // 지역별 관광명소 데이터 가져오기 - 모델 사용으로 수정
-  List<Attraction> _getAttractionsByRegion(String region) {
-    List<Attraction> attractions = [];
+  // 통합된 지역별 데이터 가져오기 메서드
+  List<T> _getDataByRegion<T>(String region, Map<String, List<T>> dataMap) {
+    List<T> data = [];
 
     if (TravelData.continents.contains(region)) {
       final countries = TravelData.continentCountries[region] ?? [];
       for (String country in countries) {
         final cities = TravelData.countryCities[country] ?? [];
         for (String city in cities) {
-          final attractionsMap = AttractionDataSource.getAllAttractionsMap();
-          attractions.addAll(attractionsMap[city] ?? []);
+          data.addAll(dataMap[city] ?? []);
         }
       }
     } else {
       final cities = TravelData.countryCities[region] ?? [];
       for (String city in cities) {
-        final attractionsMap = AttractionDataSource.getAllAttractionsMap();
-        attractions.addAll(attractionsMap[city] ?? []);
+        data.addAll(dataMap[city] ?? []);
       }
     }
 
-    return attractions;
-  }
-
-  // 지역별 레스토랑 데이터 가져오기 - 모델 사용으로 수정
-  List<Restaurant> _getRestaurantsByRegion(String region) {
-    List<Restaurant> restaurants = [];
-
-    if (TravelData.continents.contains(region)) {
-      final countries = TravelData.continentCountries[region] ?? [];
-      for (String country in countries) {
-        final cities = TravelData.countryCities[country] ?? [];
-        for (String city in cities) {
-          final restaurantsMap = RestaurantDataSource.getAllRestaurantsMap();
-          restaurants.addAll(restaurantsMap[city] ?? []);
-        }
-      }
-    } else {
-      final cities = TravelData.countryCities[region] ?? [];
-      for (String city in cities) {
-        final restaurantsMap = RestaurantDataSource.getAllRestaurantsMap();
-        restaurants.addAll(restaurantsMap[city] ?? []);
-      }
-    }
-
-    return restaurants;
-  }
-
-  // 지역별 숙박 데이터 가져오기 - 모델 사용으로 수정
-  List<AccommodationModel> _getAccommodationsByRegion(String region) {
-    List<AccommodationModel> accommodations = [];
-
-    if (TravelData.continents.contains(region)) {
-      final countries = TravelData.continentCountries[region] ?? [];
-      for (String country in countries) {
-        final cities = TravelData.countryCities[country] ?? [];
-        for (String city in cities) {
-          final accommodationsMap =
-              AccommodationDataSource.getAllAccommodationsMap();
-          accommodations.addAll(accommodationsMap[city] ?? []);
-        }
-      }
-    } else {
-      final cities = TravelData.countryCities[region] ?? [];
-      for (String city in cities) {
-        final accommodationsMap =
-            AccommodationDataSource.getAllAccommodationsMap();
-        accommodations.addAll(accommodationsMap[city] ?? []);
-      }
-    }
-
-    return accommodations;
+    return data;
   }
 
   @override
@@ -346,14 +233,12 @@ class _OrganizeTravelPackagesScreenState
             _buildCategories(),
             Expanded(
               child: ListView.builder(
-                controller: _scrollControllers[selectedCategory],
                 padding: const EdgeInsets.all(16),
                 itemCount: currentTravelPackages.length,
                 itemBuilder: (context, index) {
                   final package = currentTravelPackages[index];
                   return GestureDetector(
                     onTap: () {
-                      // AddTravelModel을 직접 반환
                       final selectedScheduleData = {
                         'place': package.title,
                         'address': package.address,
@@ -361,7 +246,7 @@ class _OrganizeTravelPackagesScreenState
                         'time': package.time,
                         'lat': package.locationLatitude,
                         'lng': package.locationLongitude,
-                        'travelPackage': package, // 전체 패키지 데이터 포함
+                        'travelPackage': package,
                       };
 
                       Navigator.pop(context, selectedScheduleData);
