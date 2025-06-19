@@ -479,19 +479,86 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
               if (!widget.isLoggedIn) {
                 final result = await showDialog(
                   context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text('로그인이 필요합니다'),
-                    content: const Text('로그인 후 이용해 주세요.'),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.of(context).pop(false),
-                        child: const Text('취소'),
+                  barrierDismissible: false,
+                  builder: (context) => Dialog(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 32),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFE0E7FF),
+                              shape: BoxShape.circle,
+                            ),
+                            padding: const EdgeInsets.all(16),
+                            child: const Icon(Icons.lock_outline,
+                                size: 40, color: Color(0xFF4032DC)),
+                          ),
+                          const SizedBox(height: 20),
+                          const Text(
+                            '로그인이 필요합니다',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF1E293B),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          const Text(
+                            '찜 기능은 로그인 후 이용하실 수 있습니다.',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Color(0xFF64748B),
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 28),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: OutlinedButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(false),
+                                  style: OutlinedButton.styleFrom(
+                                    foregroundColor: const Color(0xFF64748B),
+                                    side: const BorderSide(
+                                        color: Color(0xFFCBD5E1)),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 14),
+                                  ),
+                                  child: const Text('취소'),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(true),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFF4032DC),
+                                    foregroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 14),
+                                    elevation: 0,
+                                  ),
+                                  child: const Text('로그인하러 가기'),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      ElevatedButton(
-                        onPressed: () => Navigator.of(context).pop(true),
-                        child: const Text('확인'),
-                      ),
-                    ],
+                    ),
                   ),
                 );
                 if (result == true) {
@@ -731,19 +798,86 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
               if (!widget.isLoggedIn) {
                 final result = await showDialog(
                   context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text('로그인이 필요합니다'),
-                    content: const Text('로그인 후 이용해 주세요.'),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.of(context).pop(false),
-                        child: const Text('취소'),
+                  barrierDismissible: false,
+                  builder: (context) => Dialog(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 32),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFE0E7FF),
+                              shape: BoxShape.circle,
+                            ),
+                            padding: const EdgeInsets.all(16),
+                            child: const Icon(Icons.lock_outline,
+                                size: 40, color: Color(0xFF4032DC)),
+                          ),
+                          const SizedBox(height: 20),
+                          const Text(
+                            '로그인이 필요합니다',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF1E293B),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          const Text(
+                            '이 기능은 로그인 후 이용하실 수 있습니다.',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Color(0xFF64748B),
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 28),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: OutlinedButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(false),
+                                  style: OutlinedButton.styleFrom(
+                                    foregroundColor: const Color(0xFF64748B),
+                                    side: const BorderSide(
+                                        color: Color(0xFFCBD5E1)),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 14),
+                                  ),
+                                  child: const Text('취소'),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(true),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFF4032DC),
+                                    foregroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 14),
+                                    elevation: 0,
+                                  ),
+                                  child: const Text('로그인하러 가기'),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      ElevatedButton(
-                        onPressed: () => Navigator.of(context).pop(true),
-                        child: const Text('확인'),
-                      ),
-                    ],
+                    ),
                   ),
                 );
                 if (result == true) {
@@ -984,19 +1118,86 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
               if (!widget.isLoggedIn) {
                 final result = await showDialog(
                   context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text('로그인이 필요합니다'),
-                    content: const Text('로그인 후 이용해 주세요.'),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.of(context).pop(false),
-                        child: const Text('취소'),
+                  barrierDismissible: false,
+                  builder: (context) => Dialog(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 32),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFE0E7FF),
+                              shape: BoxShape.circle,
+                            ),
+                            padding: const EdgeInsets.all(16),
+                            child: const Icon(Icons.lock_outline,
+                                size: 40, color: Color(0xFF4032DC)),
+                          ),
+                          const SizedBox(height: 20),
+                          const Text(
+                            '로그인이 필요합니다',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF1E293B),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          const Text(
+                            '이 기능은 로그인 후 이용하실 수 있습니다.',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Color(0xFF64748B),
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 28),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: OutlinedButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(false),
+                                  style: OutlinedButton.styleFrom(
+                                    foregroundColor: const Color(0xFF64748B),
+                                    side: const BorderSide(
+                                        color: Color(0xFFCBD5E1)),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 14),
+                                  ),
+                                  child: const Text('취소'),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(true),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFF4032DC),
+                                    foregroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 14),
+                                    elevation: 0,
+                                  ),
+                                  child: const Text('로그인하러 가기'),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      ElevatedButton(
-                        onPressed: () => Navigator.of(context).pop(true),
-                        child: const Text('확인'),
-                      ),
-                    ],
+                    ),
                   ),
                 );
                 if (result == true) {
