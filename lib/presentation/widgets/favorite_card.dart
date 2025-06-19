@@ -30,9 +30,28 @@ class FavoriteCard extends StatelessWidget {
     this.onHeartTap,
   });
 
+  Widget buildHeartIcon() {
+    return GestureDetector(
+      onTap: onHeartTap,
+      child: Container(
+        width: 32,
+        height: 32,
+        alignment: Alignment.center,
+        child: Image.asset(
+          isLiked
+              ? 'assets/icons/Solid/png/heart-1.png'
+              : 'assets/icons/Outline/png/heartx.png',
+          width: 26,
+          height: 26,
+          fit: BoxFit.contain,
+          color: AppColors.error60,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    // 📦 패키지 카드
     if (isPackage) {
       return Container(
         margin: const EdgeInsets.only(bottom: 16),
@@ -97,19 +116,8 @@ class FavoriteCard extends StatelessWidget {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(right: 15),
-                                child: GestureDetector(
-                                  onTap: onHeartTap,
-                                  child: Image.asset(
-                                    isLiked
-                                        ? 'assets/icons/Solid/png/heart.png'
-                                        : 'assets/icons/Outline/png/heart.png',
-                                    width: 26,
-                                    height: 26,
-                                    fit: BoxFit.cover,
-                                    color: AppColors.error60,
-                                  ),
-                                ),
+                                padding: const EdgeInsets.only(right: 8),
+                                child: buildHeartIcon(),
                               ),
                             ],
                           ),
@@ -143,7 +151,6 @@ class FavoriteCard extends StatelessWidget {
       );
     }
 
-    // 📘 컨텐츠 카드
     if (isContent) {
       return Container(
         margin: const EdgeInsets.only(bottom: 16),
@@ -170,20 +177,9 @@ class FavoriteCard extends StatelessWidget {
                     : Image.network(imageUrl, fit: BoxFit.cover),
               ),
               Positioned(
-                top: 8,
-                right: 12,
-                child: GestureDetector(
-                  onTap: onHeartTap,
-                  child: Image.asset(
-                    isLiked
-                        ? 'assets/icons/Solid/png/heart.png'
-                        : 'assets/icons/Outline/png/heart.png',
-                    width: 26,
-                    height: 26,
-                    fit: BoxFit.cover,
-                    color: AppColors.error60,
-                  ),
-                ),
+                top: 13,
+                right: 18,
+                child: buildHeartIcon(),
               ),
               Positioned.fill(
                 child: Padding(
@@ -242,7 +238,6 @@ class FavoriteCard extends StatelessWidget {
       );
     }
 
-    // 🏝 일반 여행지 카드
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
@@ -268,20 +263,9 @@ class FavoriteCard extends StatelessWidget {
                     : Image.network(imageUrl, height: 160, width: double.infinity, fit: BoxFit.cover),
               ),
               Positioned(
-                top: 8,
-                right: 8,
-                child: GestureDetector(
-                  onTap: onHeartTap,
-                  child: Image.asset(
-                    isLiked
-                        ? 'assets/icons/Solid/png/heart.png'
-                        : 'assets/icons/Outline/png/heart.png',
-                    width: 26,
-                    height: 26,
-                    fit: BoxFit.cover,
-                    color: AppColors.error60,
-                  ),
-                ),
+                top: 13,
+                right: 18,
+                child: buildHeartIcon(),
               ),
             ],
           ),
