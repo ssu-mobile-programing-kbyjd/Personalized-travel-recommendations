@@ -125,29 +125,6 @@ class _AddTravelPlanContinentScreenState
               ),
             ),
             const Spacer(),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AddTravelPlanScheduleScreen(
-                      country: '자유 여행',
-                      city: '자유',
-                    ),
-                  ),
-                );
-              },
-              child: Container(
-                alignment: Alignment.center,
-                margin: const EdgeInsets.only(bottom: 32),
-                child: Text(
-                  '아직 안정했어요',
-                  style: AppTypography.body14Regular.copyWith(
-                    color: AppColors.neutral60,
-                  ),
-                ),
-              ),
-            ),
             CustomNextButton(
               text: '다음',
               onPressed: selectedIndex != null
