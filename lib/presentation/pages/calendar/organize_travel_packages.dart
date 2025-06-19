@@ -3,12 +3,9 @@ import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_text_styles.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_solid_png_icons.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_outline_png_icons.dart';
-import 'package:personalized_travel_recommendations/data/datasources/flight_data.dart';
-import 'package:personalized_travel_recommendations/data/datasources/attractions_data.dart';
-import 'package:personalized_travel_recommendations/data/datasources/restaurants_data.dart';
-import 'package:personalized_travel_recommendations/data/datasources/accommodations_data.dart';
 import 'package:personalized_travel_recommendations/data/datasources/travel_data.dart';
 import 'package:personalized_travel_recommendations/data/models/models.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class OrganizeTravelPackagesScreen extends StatefulWidget {
   final int dayIndex;
@@ -34,257 +31,90 @@ class _OrganizeTravelPackagesScreenState
 
   final List<String> categories = ['항공편', '관광명소', '맛집', '숙소'];
 
-  // 카테고리별 스크롤 컨트롤러
-  final Map<int, ScrollController> _scrollControllers = {};
-
   @override
   void initState() {
     super.initState();
-    // 각 카테고리별로 스크롤 컨트롤러 초기화
-    for (int i = 0; i < categories.length; i++) {
-      _scrollControllers[i] = ScrollController();
-    }
   }
 
   @override
   void dispose() {
-    // 모든 스크롤 컨트롤러 정리
-    for (var controller in _scrollControllers.values) {
-      controller.dispose();
-    }
     super.dispose();
   }
 
   // 통합된 여행 패키지 데이터 가져오기
-  List<AddTravelModel> get currentTravelPackages {
-    List<AddTravelModel> packages = [];
-    String cityKey = widget.selectedCity ?? '제주';
-
-    switch (selectedCategory) {
-      case 0: // 항공편
-        final flights = _getFlights(cityKey);
-        packages = flights
-            .map((flight) => AddTravelModel.fromFlight(
-                  packageId: DateTime.now().millisecondsSinceEpoch.toString(),
-                  tripId: 'temp_trip_id',
-                  flight: flight,
-                  date: DateTime.now(),
-                  time: TimeOfDay(
-                    hour: int.parse(flight.departureTime.split(':')[0]),
-                    minute: int.parse(flight.departureTime.split(':')[1]),
-                  ),
-                  city: cityKey,
-                ))
-            .toList();
-        break;
-      case 1: // 관광명소
-        final attractions = _getAttractions(cityKey);
-        packages = attractions
-            .map((attraction) => AddTravelModel.fromAttraction(
-                  packageId: DateTime.now().millisecondsSinceEpoch.toString(),
-                  tripId: 'temp_trip_id',
-                  attraction: attraction,
-                  date: DateTime.now(),
-                  time: const TimeOfDay(hour: 0, minute: 0),
-                  city: cityKey,
-                ))
-            .toList();
-        break;
-      case 2: // 맛집
-        final restaurants = _getRestaurants(cityKey);
-        packages = restaurants
-            .map((restaurant) => AddTravelModel.fromRestaurant(
-                  packageId: DateTime.now().millisecondsSinceEpoch.toString(),
-                  tripId: 'temp_trip_id',
-                  restaurant: restaurant,
-                  date: DateTime.now(),
-                  time: const TimeOfDay(hour: 0, minute: 0),
-                  city: cityKey,
-                ))
-            .toList();
-        break;
-      case 3: // 숙소
-        final accommodations = _getAccommodations(cityKey);
-        packages = accommodations
-            .map((accommodation) => AddTravelModel.fromAccommodation(
-                  packageId: DateTime.now().millisecondsSinceEpoch.toString(),
-                  tripId: 'temp_trip_id',
-                  accommodation: accommodation,
-                  date: DateTime.now(),
-                  time: const TimeOfDay(hour: 0, minute: 0),
-                  city: cityKey,
-                ))
-            .toList();
-        break;
-    }
-
-    // 검색 기능
-    if (searchQuery.isNotEmpty) {
-      final query = searchQuery.toLowerCase();
-      packages = packages
-          .where((package) =>
-              package.title.toLowerCase().contains(query) ||
-              package.description.toLowerCase().contains(query) ||
-              package.address.toLowerCase().contains(query))
-          .toList();
-    }
-
-    return packages;
+  // 항공편 데이터 가져오기
+  Future<List<Map<String, dynamic>>> fetchFlights(String cityKey) async {
+    final snapshot =
+        await FirebaseFirestore.instance.collection('flights').get();
+    return snapshot.docs
+        .map((doc) => doc.data() as Map<String, dynamic>)
+        .toList();
   }
 
-  List<Flight> _getFlights(String cityKey) {
-    if (cityKey == '자유' || cityKey == '자유 여행') {
-      return FlightDataSource.getAllFlights();
-    } else if (_isContinentOrCountry(cityKey)) {
-      return _getFlightsByRegion(cityKey);
-    } else {
-      final flightsMap = FlightDataSource.getAllFlightsMap();
-      return flightsMap[cityKey] ?? FlightDataSource.getJejuFlights();
+  // 관광명소 데이터 가져오기
+  Future<List<Map<String, dynamic>>> fetchAttractions(String cityKey) async {
+    CollectionReference ref =
+        FirebaseFirestore.instance.collection('attractions');
+    final snapshot = await ref.get();
+    final allDocs =
+        snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+    if (cityKey.isEmpty || cityKey == '전체') {
+      return allDocs;
     }
+    return allDocs.where((doc) {
+      final city = (doc['city'] ?? '').toString();
+      final title = (doc['title'] ?? '').toString();
+      final description = (doc['description'] ?? '').toString();
+      final address = (doc['address'] ?? '').toString();
+      return city.contains(cityKey) ||
+          title.contains(cityKey) ||
+          description.contains(cityKey) ||
+          address.contains(cityKey);
+    }).toList();
   }
 
-  List<Attraction> _getAttractions(String cityKey) {
-    if (cityKey == '자유' || cityKey == '자유 여행') {
-      return AttractionDataSource.getAllAttractions();
-    } else if (_isContinentOrCountry(cityKey)) {
-      return _getAttractionsByRegion(cityKey);
-    } else {
-      final attractionsMap = AttractionDataSource.getAllAttractionsMap();
-      return attractionsMap[cityKey] ??
-          AttractionDataSource.getJejuAttractions();
+  // 맛집 데이터 가져오기
+  Future<List<Map<String, dynamic>>> fetchRestaurants(String cityKey) async {
+    CollectionReference ref =
+        FirebaseFirestore.instance.collection('restaurants');
+    final snapshot = await ref.get();
+    final allDocs =
+        snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+    if (cityKey.isEmpty || cityKey == '전체') {
+      return allDocs;
     }
+    return allDocs.where((doc) {
+      final city = (doc['city'] ?? '').toString();
+      final title = (doc['title'] ?? '').toString();
+      final description = (doc['description'] ?? '').toString();
+      final address = (doc['address'] ?? '').toString();
+      return city.contains(cityKey) ||
+          title.contains(cityKey) ||
+          description.contains(cityKey) ||
+          address.contains(cityKey);
+    }).toList();
   }
 
-  List<Restaurant> _getRestaurants(String cityKey) {
-    if (cityKey == '자유' || cityKey == '자유 여행') {
-      return RestaurantDataSource.getAllRestaurants();
-    } else if (_isContinentOrCountry(cityKey)) {
-      return _getRestaurantsByRegion(cityKey);
-    } else {
-      final restaurantsMap = RestaurantDataSource.getAllRestaurantsMap();
-      return restaurantsMap[cityKey] ??
-          RestaurantDataSource.getJejuRestaurants();
+  // 숙소 데이터 가져오기
+  Future<List<Map<String, dynamic>>> fetchAccommodations(String cityKey) async {
+    CollectionReference ref =
+        FirebaseFirestore.instance.collection('accommodations');
+    final snapshot = await ref.get();
+    final allDocs =
+        snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+    if (cityKey.isEmpty || cityKey == '전체') {
+      return allDocs;
     }
-  }
-
-  List<Accommodation> _getAccommodations(String cityKey) {
-    if (cityKey == '자유' || cityKey == '자유 여행') {
-      return AccommodationDataSource.getAllAccommodations();
-    } else if (_isContinentOrCountry(cityKey)) {
-      return _getAccommodationsByRegion(cityKey);
-    } else {
-      final accommodationsMap =
-          AccommodationDataSource.getAllAccommodationsMap();
-      return accommodationsMap[cityKey] ??
-          AccommodationDataSource.getJejuAccommodations();
-    }
-  }
-
-  // 대륙 또는 나라인지 확인하는 함수
-  bool _isContinentOrCountry(String region) {
-    return TravelData.continents.contains(region) ||
-        TravelData.continentCountries.values
-            .any((countries) => countries.contains(region));
-  }
-
-  // 지역별 항공편 데이터 가져오기 - 모델 사용으로 수정
-  List<Flight> _getFlightsByRegion(String region) {
-    List<Flight> flights = [];
-
-    if (TravelData.continents.contains(region)) {
-      // 대륙이 선택된 경우
-      final countries = TravelData.continentCountries[region] ?? [];
-      for (String country in countries) {
-        final cities = TravelData.countryCities[country] ?? [];
-        for (String city in cities) {
-          final flightsMap = FlightDataSource.getAllFlightsMap();
-          flights.addAll(flightsMap[city] ?? []);
-        }
-      }
-    } else {
-      // 나라가 선택된 경우
-      final cities = TravelData.countryCities[region] ?? [];
-      for (String city in cities) {
-        final flightsMap = FlightDataSource.getAllFlightsMap();
-        flights.addAll(flightsMap[city] ?? []);
-      }
-    }
-
-    return flights;
-  }
-
-  // 지역별 관광명소 데이터 가져오기 - 모델 사용으로 수정
-  List<Attraction> _getAttractionsByRegion(String region) {
-    List<Attraction> attractions = [];
-
-    if (TravelData.continents.contains(region)) {
-      final countries = TravelData.continentCountries[region] ?? [];
-      for (String country in countries) {
-        final cities = TravelData.countryCities[country] ?? [];
-        for (String city in cities) {
-          final attractionsMap = AttractionDataSource.getAllAttractionsMap();
-          attractions.addAll(attractionsMap[city] ?? []);
-        }
-      }
-    } else {
-      final cities = TravelData.countryCities[region] ?? [];
-      for (String city in cities) {
-        final attractionsMap = AttractionDataSource.getAllAttractionsMap();
-        attractions.addAll(attractionsMap[city] ?? []);
-      }
-    }
-
-    return attractions;
-  }
-
-  // 지역별 레스토랑 데이터 가져오기 - 모델 사용으로 수정
-  List<Restaurant> _getRestaurantsByRegion(String region) {
-    List<Restaurant> restaurants = [];
-
-    if (TravelData.continents.contains(region)) {
-      final countries = TravelData.continentCountries[region] ?? [];
-      for (String country in countries) {
-        final cities = TravelData.countryCities[country] ?? [];
-        for (String city in cities) {
-          final restaurantsMap = RestaurantDataSource.getAllRestaurantsMap();
-          restaurants.addAll(restaurantsMap[city] ?? []);
-        }
-      }
-    } else {
-      final cities = TravelData.countryCities[region] ?? [];
-      for (String city in cities) {
-        final restaurantsMap = RestaurantDataSource.getAllRestaurantsMap();
-        restaurants.addAll(restaurantsMap[city] ?? []);
-      }
-    }
-
-    return restaurants;
-  }
-
-  // 지역별 숙박 데이터 가져오기 - 모델 사용으로 수정
-  List<Accommodation> _getAccommodationsByRegion(String region) {
-    List<Accommodation> accommodations = [];
-
-    if (TravelData.continents.contains(region)) {
-      final countries = TravelData.continentCountries[region] ?? [];
-      for (String country in countries) {
-        final cities = TravelData.countryCities[country] ?? [];
-        for (String city in cities) {
-          final accommodationsMap =
-              AccommodationDataSource.getAllAccommodationsMap();
-          accommodations.addAll(accommodationsMap[city] ?? []);
-        }
-      }
-    } else {
-      final cities = TravelData.countryCities[region] ?? [];
-      for (String city in cities) {
-        final accommodationsMap =
-            AccommodationDataSource.getAllAccommodationsMap();
-        accommodations.addAll(accommodationsMap[city] ?? []);
-      }
-    }
-
-    return accommodations;
+    return allDocs.where((doc) {
+      final city = (doc['city'] ?? '').toString();
+      final title = (doc['title'] ?? '').toString();
+      final description = (doc['description'] ?? '').toString();
+      final address = (doc['address'] ?? '').toString();
+      return city.contains(cityKey) ||
+          title.contains(cityKey) ||
+          description.contains(cityKey) ||
+          address.contains(cityKey);
+    }).toList();
   }
 
   @override
@@ -345,28 +175,117 @@ class _OrganizeTravelPackagesScreenState
             const SizedBox(height: 16),
             _buildCategories(),
             Expanded(
-              child: ListView.builder(
-                controller: _scrollControllers[selectedCategory],
-                padding: const EdgeInsets.all(16),
-                itemCount: currentTravelPackages.length,
-                itemBuilder: (context, index) {
-                  final package = currentTravelPackages[index];
-                  return GestureDetector(
-                    onTap: () {
-                      // AddTravelModel을 직접 반환
-                      final selectedScheduleData = {
-                        'place': package.title,
-                        'address': package.address,
-                        'price': package.price,
-                        'time': package.time,
-                        'latitude': package.latitude,
-                        'longitude': package.longitude,
-                        'travelPackage': package, // 전체 패키지 데이터 포함
-                      };
-
-                      Navigator.pop(context, selectedScheduleData);
+              child: FutureBuilder<List<Map<String, dynamic>>>(
+                future: _fetchDataByCategory(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Center(child: Text('해당 패키지가 없습니다.'));
+                  }
+                  final dataList = snapshot.data!;
+                  // 검색 필터 적용
+                  final filtered = searchQuery.isNotEmpty
+                      ? dataList.where((item) {
+                          final title =
+                              (item['title'] ?? '').toString().toLowerCase();
+                          final description = (item['description'] ?? '')
+                              .toString()
+                              .toLowerCase();
+                          final address =
+                              (item['address'] ?? '').toString().toLowerCase();
+                          final query = searchQuery.toLowerCase();
+                          return title.contains(query) ||
+                              description.contains(query) ||
+                              address.contains(query);
+                        }).toList()
+                      : dataList;
+                  final packages = filtered.map((item) {
+                    switch (selectedCategory) {
+                      case 0:
+                        return AddTravelModel.fromFlight(
+                          packageId:
+                              DateTime.now().millisecondsSinceEpoch.toString(),
+                          tripId: 'temp_trip_id',
+                          flight: Flight.fromJson(item),
+                          date: DateTime.now(),
+                          time: TimeOfDay(
+                            hour: int.parse(
+                                (item['departureTime'] ?? '0:0').split(':')[0]),
+                            minute: int.parse(
+                                (item['departureTime'] ?? '0:0').split(':')[1]),
+                          ),
+                          city: widget.selectedCity ?? '제주',
+                        );
+                      case 1:
+                        return AddTravelModel.fromAttraction(
+                          packageId:
+                              DateTime.now().millisecondsSinceEpoch.toString(),
+                          tripId: 'temp_trip_id',
+                          attraction: Attraction.fromJson(item),
+                          date: DateTime.now(),
+                          time: const TimeOfDay(hour: 0, minute: 0),
+                          city: widget.selectedCity ?? '제주',
+                        );
+                      case 2:
+                        return AddTravelModel.fromRestaurant(
+                          packageId:
+                              DateTime.now().millisecondsSinceEpoch.toString(),
+                          tripId: 'temp_trip_id',
+                          restaurant: Restaurant.fromJson(item),
+                          date: DateTime.now(),
+                          time: const TimeOfDay(hour: 0, minute: 0),
+                          city: widget.selectedCity ?? '제주',
+                        );
+                      case 3:
+                        return AddTravelModel.fromAccommodation(
+                          packageId:
+                              DateTime.now().millisecondsSinceEpoch.toString(),
+                          tripId: 'temp_trip_id',
+                          accommodation: AccommodationModel.fromJson(item),
+                          date: DateTime.now(),
+                          time: const TimeOfDay(hour: 0, minute: 0),
+                          city: widget.selectedCity ?? '제주',
+                        );
+                      default:
+                        return AddTravelModel.fromFlight(
+                          packageId:
+                              DateTime.now().millisecondsSinceEpoch.toString(),
+                          tripId: 'temp_trip_id',
+                          flight: Flight.fromJson(item),
+                          date: DateTime.now(),
+                          time: TimeOfDay(
+                            hour: int.parse(
+                                (item['departureTime'] ?? '0:0').split(':')[0]),
+                            minute: int.parse(
+                                (item['departureTime'] ?? '0:0').split(':')[1]),
+                          ),
+                          city: widget.selectedCity ?? '제주',
+                        );
+                    }
+                  }).toList();
+                  return ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: packages.length,
+                    itemBuilder: (context, index) {
+                      final package = packages[index];
+                      return GestureDetector(
+                        onTap: () {
+                          final selectedScheduleData = {
+                            'place': package.title,
+                            'address': package.address,
+                            'price': package.price,
+                            'time': package.time,
+                            'lat': package.locationLatitude,
+                            'lng': package.locationLongitude,
+                            'travelPackage': package,
+                          };
+                          Navigator.pop(context, selectedScheduleData);
+                        },
+                        child: _buildTravelPackageCard(package),
+                      );
                     },
-                    child: _buildTravelPackageCard(package),
                   );
                 },
               ),
@@ -600,5 +519,22 @@ class _OrganizeTravelPackagesScreenState
         ],
       ),
     );
+  }
+
+  // 카테고리에 따라 Firestore에서 데이터 가져오기
+  Future<List<Map<String, dynamic>>> _fetchDataByCategory() {
+    final cityKey = widget.selectedCity ?? '제주';
+    switch (selectedCategory) {
+      case 0:
+        return fetchFlights(cityKey);
+      case 1:
+        return fetchAttractions(cityKey);
+      case 2:
+        return fetchRestaurants(cityKey);
+      case 3:
+        return fetchAccommodations(cityKey);
+      default:
+        return fetchFlights(cityKey);
+    }
   }
 }

@@ -12,20 +12,24 @@ import 'package:personalized_travel_recommendations/presentation/pages/calendar/
 import 'package:personalized_travel_recommendations/presentation/pages/calendar/package_screen.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/calendar/organize_travel_packages.dart';
 
-class AddTravelPlanScheduleScreen extends StatefulWidget {
+class EditTravelPlanScheduleScreen extends StatefulWidget {
   final String country;
   final String city;
-  const AddTravelPlanScheduleScreen(
+  const EditTravelPlanScheduleScreen(
       {super.key, required this.country, required this.city});
 
   @override
-  State<AddTravelPlanScheduleScreen> createState() =>
-      _AddTravelPlanScheduleScreen();
+  State<EditTravelPlanScheduleScreen> createState() =>
+      _EditTravelPlanScheduleScreen();
 }
 
-class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
+class _EditTravelPlanScheduleScreen extends State<EditTravelPlanScheduleScreen> {
   TextEditingController _titleController = TextEditingController();
   final FocusNode _titleFocus = FocusNode();
+
+  String _infoEditButtonText = '수정';
+  bool _isInfoEdit = false;
+
   String _titleEditButtonText = '편집';
   bool _isReadOnlyTitleEdit = true;
 
@@ -36,77 +40,13 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
     'period': 1,
     'country': widget.country,
     'city': widget.city,
-    'hashtag': [],
+    'hashtag': ['친구와', '1개 도시', '맛집 투어',],
     'price': 0,
   };
 
   late GoogleMapController mapController;
-  LatLng _latlng = const LatLng(37.5666791, 126.9782914);
-  double _zoom = 9.0;
+  late LatLng _latlng = LatLng(TravelData.cityLatLng[widget.city]![0], TravelData.cityLatLng[widget.city]![1]);
   Set<Marker> _markers = {};
-
-  final List<Map> _rcmndPkgList = [
-    {
-      'user': '고병지',
-      'title': '도쿄 10대 맛집 부수기',
-      'startDay': DateTime.utc(2025, 3, 18),
-      'endDay': DateTime.utc(2025, 3, 20),
-      'period': 3,
-      'country': '일본',
-      'city': '도쿄',
-      'hashtag': ['친구와', '1개 도시', '맛집 투어'],
-      'price': 10000,
-      'thumbnail': 'assets/images/TokyoRestaurants.png',
-    },
-    {
-      'user': '권도예',
-      'title': '도쿄 10대 맛집 부수기',
-      'startDay': DateTime.utc(2025, 3, 18),
-      'endDay': DateTime.utc(2025, 3, 20),
-      'period': 3,
-      'country': '일본',
-      'city': '도쿄',
-      'hashtag': ['친구와', '1개 도시', '맛집 투어'],
-      'price': 10000,
-      'thumbnail': 'assets/images/TokyoRestaurants.png',
-    },
-    {
-      'user': '김영은',
-      'title': '도쿄 10대 맛집 부수기',
-      'startDay': DateTime.utc(2025, 3, 18),
-      'endDay': DateTime.utc(2025, 3, 20),
-      'period': 3,
-      'country': '일본',
-      'city': '도쿄',
-      'hashtag': ['친구와', '1개 도시', '맛집 투어'],
-      'price': 10000,
-      'thumbnail': 'assets/images/TokyoRestaurants.png',
-    },
-    {
-      'user': '박재성',
-      'title': '도쿄 10대 맛집 부수기',
-      'startDay': DateTime.utc(2025, 3, 18),
-      'endDay': DateTime.utc(2025, 3, 20),
-      'period': 3,
-      'country': '일본',
-      'city': '도쿄',
-      'hashtag': ['친구와', '1개 도시', '맛집 투어'],
-      'price': 10000,
-      'thumbnail': 'assets/images/TokyoRestaurants.png',
-    },
-    {
-      'user': '이겅현',
-      'title': '도쿄 10대 맛집 부수기',
-      'startDay': DateTime.utc(2025, 3, 18),
-      'endDay': DateTime.utc(2025, 3, 20),
-      'period': 3,
-      'country': '일본',
-      'city': '도쿄',
-      'hashtag': ['친구와', '1개 도시', '맛집 투어'],
-      'price': 10000,
-      'thumbnail': 'assets/images/TokyoRestaurants.png',
-    },
-  ];
 
   // 'place':<String>,
   // 'address':<String>,
@@ -127,6 +67,18 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
 
   final TextEditingController _priceController =
   TextEditingController(text: '₩');
+
+  void _editInfo() {
+    setState(() {
+      if (_infoEditButtonText == '수정') {
+        _infoEditButtonText = '완료';
+        _isInfoEdit = true;
+      } else {
+        _infoEditButtonText = '수정';
+        _isInfoEdit = false;
+      }
+    });
+  }
 
   void _editTitle() {
     setState(() {
@@ -208,17 +160,13 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
   }
 
   void _moveCamera() {
-    setState(() {
-      _zoom = 14.0;
-    });
-
     mapController.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(
-          target: _latlng,
-          zoom: _zoom,
+        CameraUpdate.newCameraPosition(
+            CameraPosition(
+              target: _latlng,
+              zoom: 14.0,
+            )
         )
-      )
     );
   }
 
@@ -251,8 +199,6 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
 
         // 시간 순서대로 정렬
         _sortSchedulesByTime(travelIndex);
-
-        _setMarkers();
       });
     }
   }
@@ -268,6 +214,14 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
 
       return minutesA.compareTo(minutesB);
     });
+  }
+
+  void _setHashtag() {
+    for (var hashtag in travelInfo['hashtag']) {
+      setState(() {
+        _hashtagController.add(TextEditingController(text: "#"+hashtag));
+      });
+    }
   }
 
   void _addHashtag() {
@@ -288,17 +242,8 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
   void initState() {
     super.initState();
     _titleController = TextEditingController(text: travelInfo['title']);
-
-    if (TravelData.continentLatLng.containsKey(widget.city)) {
-      _latlng = LatLng(TravelData.continentLatLng[widget.city]![0], TravelData.continentLatLng[widget.city]![1]);
-      _zoom = 3.0;
-    } else if (widget.country == widget.city) {
-      _latlng = LatLng(TravelData.countryLatLng[widget.city]![0], TravelData.countryLatLng[widget.city]![1]);
-      _zoom = 5.0;
-    } else {
-      _latlng = LatLng(TravelData.cityLatLng[widget.city]![0], TravelData.cityLatLng[widget.city]![1]);
-      _zoom = 9.0;
-    }
+    _setMarkers();
+    _setHashtag();
   }
 
   @override
@@ -355,19 +300,12 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                       minimumSize: const Size(0, 0),
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
-                    onPressed: () => {
-                      Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                          builder: (context) => const TravelCalendarScreen(),
-                        ),
-                        (route) => false,
-                      ),
-                    },
+                    onPressed: _editInfo,
                     child: Container(
                       width: 64,
                       alignment: Alignment.centerRight,
                       padding: const EdgeInsets.only(right: 24),
-                      child: Text("등록",style: AppTypography.subtitle16SemiBold.copyWith(color: AppColors.indigo60),),
+                      child: Text(_infoEditButtonText, style: AppTypography.subtitle16SemiBold.copyWith(color: AppColors.indigo60),),
                     ),
                   ),
                 ],
@@ -375,7 +313,7 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
             ),
             Expanded(
               child: Container(
-                padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
+                padding: const EdgeInsets.fromLTRB(24, 12, 24, 20),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   child: Column(
@@ -409,7 +347,7 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                               minimumSize: const Size(0, 0),
                               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             ),
-                            onPressed: _editTitle,
+                            onPressed: _isInfoEdit ? _editTitle : null,
                             child: Text(_titleEditButtonText, style: AppTypography.body14Medium.copyWith(color: AppColors.neutral100),),
                           ),
                         ],
@@ -428,7 +366,7 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                               minimumSize: const Size(0, 0),
                               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             ),
-                            onPressed: () => _setDate(0),
+                            onPressed: _isInfoEdit ? () => _setDate(0) : null,
                             child: Text(
                               // '${startDay.year}.${startDay.month}.${startDay.day}',
                               '${travelInfo['startDay'].year}.${travelInfo['startDay'].month}.${travelInfo['startDay'].day}',
@@ -445,7 +383,7 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                               minimumSize: const Size(0, 0),
                               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             ),
-                            onPressed: () => _setDate(1),
+                            onPressed: _isInfoEdit ? () => _setDate(1) : null,
                             child: Text(
                               // '${endDay.year}.${endDay.month}.${endDay.day}',
                               '${travelInfo['endDay'].year}.${travelInfo['endDay'].month}.${travelInfo['endDay'].day}',
@@ -461,82 +399,11 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                           onMapCreated: _onMapCreated,
                           initialCameraPosition: CameraPosition(
                             target: _latlng,
-                            zoom: _zoom,
+                            zoom: 14.0,
                           ),
                           myLocationEnabled: true,
                           zoomControlsEnabled: true,
                           markers: _markers,
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(4, 24, 0, 12),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            '추천 패키지',
-                            style: AppTypography.subtitle18Bold,
-                            textAlign: TextAlign.start,
-                          ),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: SizedBox(
-                          // width: 349,
-                          height: 106,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children:
-                              List.generate(_rcmndPkgList.length, (index) {
-                                return Padding(
-                                  padding: _rcmndPkgList.length - 1 == index ? EdgeInsets.zero : const EdgeInsets.only(right: 20),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        width: 72,
-                                        height: 72,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          border: Border.all(color: AppColors.neutral40),
-                                        ),
-                                        child: Center(
-                                          child: FilledButton(
-                                            style: FilledButton.styleFrom(
-                                              shape: const CircleBorder(),
-                                              fixedSize: const Size(64, 64),
-                                              padding: const EdgeInsets.all(0),
-                                              side: const BorderSide(color: AppColors.neutral40),
-                                              backgroundColor: AppColors.white,
-                                            ),
-                                            onPressed: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) => TravelPackage(travelInfo: _rcmndPkgList[index],),
-                                                ),
-                                              );
-                                            },
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                image: DecorationImage(
-                                                  image: AssetImage(_rcmndPkgList[index]['thumbnail']),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Text('${_rcmndPkgList[index]['user']} 님', style: AppTypography.body14Medium.copyWith(color: AppColors.neutral100),),
-                                    ],
-                                  ),
-                                );
-                              }),
-                            ),
-                          ),
                         ),
                       ),
                       const Padding(
@@ -573,7 +440,7 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                                     ],
                                   ),
                                   IconButton(
-                                    onPressed: () async {
+                                    onPressed: _isInfoEdit ? () async {
                                       final result = await Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -591,8 +458,8 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                                           _setMarkers();
                                         });
                                       }
-                                    },
-                                    icon: AppOutlinePngIcons.plus(),
+                                    } : null,
+                                    icon: AppOutlinePngIcons.plus(color: _isInfoEdit ? AppColors.neutral100 : AppColors.neutral40),
                                   ),
                                 ],
                               ),
@@ -681,14 +548,15 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                                                       ],
                                                     ),
                                                   ),
-                                                  Positioned(
-                                                    top: -12,
-                                                    right: -8,
-                                                    child: IconButton(
-                                                      onPressed: () => _removeSchedule(periodIndex,scheduleIndex),
-                                                      icon: AppOutlinePngIcons.x(color: AppColors.neutral80, size: 12,),
+                                                  if (_isInfoEdit)
+                                                    Positioned(
+                                                      top: -12,
+                                                      right: -8,
+                                                      child: IconButton(
+                                                        onPressed: () => _removeSchedule(periodIndex,scheduleIndex),
+                                                        icon: AppOutlinePngIcons.x(color: AppColors.neutral80, size: 12,),
+                                                      ),
                                                     ),
-                                                  ),
                                                 ],
                                               ),
                                             ),
@@ -784,7 +652,7 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                                     Center(
                                       child: Container(
                                         width: 108,
-                                        height: 40,
+                                        height: 48,
                                         padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
                                         decoration: const BoxDecoration(
                                           color: AppColors.indigo60,
@@ -792,16 +660,15 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                                         ),
                                         child: Center(
                                           child: TextField(
-                                            controller:
-                                            _hashtagController[index],
+                                            controller: _hashtagController[index],
+                                            readOnly: !_isInfoEdit,
                                             maxLength: 6,
                                             textAlign: TextAlign.center,
                                             inputFormatters: [formatters.PrefixInputFormatter('#')],
                                             style: AppTypography.body14SemiBold.copyWith(color: AppColors.white),
                                             decoration: const InputDecoration(
                                               border: InputBorder.none,
-                                              contentPadding:
-                                              EdgeInsets.only(bottom: 8),
+                                              contentPadding: EdgeInsets.only(bottom: 8),
                                             ),
                                             onEditingComplete: () => {
                                               setState(() {
@@ -812,30 +679,31 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                                         ),
                                       ),
                                     ),
-                                    Positioned(
-                                      right: 0,
-                                      top: 0,
-                                      child: SizedBox(
-                                        width: 12,
-                                        height: 12,
-                                        child: IconButton(
-                                          style: IconButton.styleFrom(
-                                            shape: const CircleBorder(),
-                                            padding: const EdgeInsets.all(0),
-                                            backgroundColor: AppColors.white,
-                                            disabledBackgroundColor:
-                                            AppColors.white,
+                                    if (_isInfoEdit)
+                                      Positioned(
+                                        right: 0,
+                                        top: 0,
+                                        child: SizedBox(
+                                          width: 12,
+                                          height: 12,
+                                          child: IconButton(
+                                            style: IconButton.styleFrom(
+                                              shape: const CircleBorder(),
+                                              padding: const EdgeInsets.all(0),
+                                              backgroundColor: AppColors.white,
+                                              disabledBackgroundColor:
+                                              AppColors.white,
+                                            ),
+                                            onPressed: () => _removeHashtag(index),
+                                            icon: AppOutlinePngIcons.x(color: AppColors.neutral80,),
                                           ),
-                                          onPressed: () => _removeHashtag(index),
-                                          icon: AppOutlinePngIcons.x(color: AppColors.neutral80,),
                                         ),
                                       ),
-                                    ),
                                   ],
                                 ),
                               );
                             }),
-                            if (travelInfo['hashtag'].length < 3)
+                            if (travelInfo['hashtag'].length < 3 && _isInfoEdit)
                               SizedBox(
                                 width: 28,
                                 height: 28,
@@ -875,11 +743,11 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                               ),
                               value: true,
                               groupValue: _isRelease,
-                              onChanged: (bool? value) {
+                              onChanged: _isInfoEdit ? (bool? value) {
                                 setState(() {
                                   _isRelease = value!;
                                 });
-                              },
+                              }: null,
                               activeColor: AppColors.indigo60,
                               contentPadding: const EdgeInsets.all(0),
                             ),
@@ -893,11 +761,11 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                               ),
                               value: false,
                               groupValue: _isRelease,
-                              onChanged: (bool? value) {
+                              onChanged: _isInfoEdit ? (bool? value) {
                                 setState(() {
                                   _isRelease = value!;
                                 });
-                              },
+                              } : null,
                               activeColor: AppColors.indigo60,
                               contentPadding: const EdgeInsets.all(0),
                             ),
@@ -919,8 +787,8 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                         padding: const EdgeInsets.only(top: 12),
                         child: TextField(
                           controller: _priceController,
-                          enabled: _isRelease, // 공개일 때만 활성화
-                          style: AppTypography.body16Medium.copyWith(color: _isRelease ? AppColors.neutral100 : AppColors.neutral40,),
+                          enabled: (_isInfoEdit && _isRelease),
+                          style: AppTypography.body16Medium.copyWith(color: (_isInfoEdit && _isRelease) ? AppColors.neutral100 : AppColors.neutral40,),
                           decoration: InputDecoration(
                             contentPadding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
                             border: OutlineInputBorder(

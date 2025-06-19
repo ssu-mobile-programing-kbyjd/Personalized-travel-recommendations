@@ -7,6 +7,7 @@ import 'package:personalized_travel_recommendations/core/theme/app_text_styles.d
 import 'package:personalized_travel_recommendations/presentation/pages/calendar/add_travel_plan_continent_screen.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/home/home_screen.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/main_screen.dart';
+import 'package:personalized_travel_recommendations/presentation/pages/calendar/edit_travel_plan_schedule_screen.dart';
 
 class TravelCalendarScreen extends StatefulWidget {
   const TravelCalendarScreen({super.key});
@@ -131,13 +132,13 @@ class _TravelCalendarScreenState extends State<TravelCalendarScreen> {
         backgroundColor: AppColors.white,
         scrolledUnderElevation: 0,
       ),
-      body: Center(
+      body: Container(
+        padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-              height: 400,
+              height: 325,
               decoration: const BoxDecoration(
                   color: AppColors.neutral10,
                   borderRadius: BorderRadius.all(Radius.circular(20))),
@@ -186,21 +187,19 @@ class _TravelCalendarScreenState extends State<TravelCalendarScreen> {
                             Center(
                               child: Container(
                                 height: 36,
-                                margin: const EdgeInsets.fromLTRB(0, 6, 0, 6),
+                                margin: const EdgeInsets.fromLTRB(0, 8, 0, 8),
                                 decoration: const BoxDecoration(
                                   color: AppColors.indigo60,
                                   shape: BoxShape.rectangle,
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(25),
-                                      bottomLeft: Radius.circular(25)),
+                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(25), bottomLeft: Radius.circular(25)),
                                 ),
                                 alignment: Alignment.center,
                               ),
                             ),
                             Center(
                               child: Container(
-                                width: 36,
-                                height: 36,
+                                width: 32,
+                                height: 32,
                                 decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: AppColors.neutral40,
@@ -224,21 +223,19 @@ class _TravelCalendarScreenState extends State<TravelCalendarScreen> {
                             Center(
                               child: Container(
                                 height: 36,
-                                margin: const EdgeInsets.fromLTRB(0, 6, 0, 6),
+                                margin: const EdgeInsets.fromLTRB(0, 8, 0, 8),
                                 decoration: const BoxDecoration(
                                   color: AppColors.indigo60,
                                   shape: BoxShape.rectangle,
-                                  borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(25),
-                                      bottomRight: Radius.circular(25)),
+                                  borderRadius: BorderRadius.only(topRight: Radius.circular(25), bottomRight: Radius.circular(25)),
                                 ),
                                 alignment: Alignment.center,
                               ),
                             ),
                             Center(
                               child: Container(
-                                width: 36,
-                                height: 36,
+                                width: 32,
+                                height: 32,
                                 decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: AppColors.neutral40,
@@ -262,7 +259,7 @@ class _TravelCalendarScreenState extends State<TravelCalendarScreen> {
                             Center(
                               child: Container(
                                 height: 36,
-                                margin: const EdgeInsets.fromLTRB(0, 6, 0, 6),
+                                margin: const EdgeInsets.fromLTRB(0, 8, 0, 8),
                                 decoration: const BoxDecoration(
                                   color: AppColors.indigo60,
                                   shape: BoxShape.rectangle,
@@ -272,8 +269,8 @@ class _TravelCalendarScreenState extends State<TravelCalendarScreen> {
                             ),
                             Center(
                               child: Container(
-                                width: 36,
-                                height: 36,
+                                width: 32,
+                                height: 32,
                                 decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: AppColors.neutral40,
@@ -295,7 +292,7 @@ class _TravelCalendarScreenState extends State<TravelCalendarScreen> {
                       child: Container(
                         width: 36,
                         height: 36,
-                        margin: const EdgeInsets.fromLTRB(0, 6, 0, 6),
+                        margin: const EdgeInsets.fromLTRB(0, 8, 0, 8),
                         alignment: Alignment.center,
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
@@ -317,21 +314,19 @@ class _TravelCalendarScreenState extends State<TravelCalendarScreen> {
                             Center(
                               child: Container(
                                 height: 36,
-                                margin: const EdgeInsets.fromLTRB(0, 6, 0, 6),
+                                margin: const EdgeInsets.fromLTRB(0, 8, 0, 8),
                                 decoration: const BoxDecoration(
                                   color: AppColors.indigo60,
                                   shape: BoxShape.rectangle,
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(25),
-                                      bottomLeft: Radius.circular(25)),
+                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(25), bottomLeft: Radius.circular(25)),
                                 ),
                                 alignment: Alignment.center,
                               ),
                             ),
                             Center(
                               child: Container(
-                                width: 36,
-                                height: 36,
+                                width: 32,
+                                height: 32,
                                 decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: AppColors.indigo20,
@@ -355,21 +350,19 @@ class _TravelCalendarScreenState extends State<TravelCalendarScreen> {
                             Center(
                               child: Container(
                                 height: 36,
-                                margin: const EdgeInsets.fromLTRB(0, 6, 0, 6),
+                                margin: const EdgeInsets.fromLTRB(0, 8, 0, 8),
                                 decoration: const BoxDecoration(
                                   color: AppColors.indigo60,
                                   shape: BoxShape.rectangle,
-                                  borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(25),
-                                      bottomRight: Radius.circular(25)),
+                                  borderRadius: BorderRadius.only(topRight: Radius.circular(25), bottomRight: Radius.circular(25)),
                                 ),
                                 alignment: Alignment.center,
                               ),
                             ),
                             Center(
                               child: Container(
-                                width: 36,
-                                height: 36,
+                                width: 32,
+                                height: 32,
                                 decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: AppColors.indigo20,
@@ -393,7 +386,7 @@ class _TravelCalendarScreenState extends State<TravelCalendarScreen> {
                             Center(
                               child: Container(
                                 height: 36,
-                                margin: const EdgeInsets.fromLTRB(0, 6, 0, 6),
+                                margin: const EdgeInsets.fromLTRB(0, 8, 0, 8),
                                 decoration: const BoxDecoration(
                                   color: AppColors.indigo60,
                                   shape: BoxShape.rectangle,
@@ -403,8 +396,8 @@ class _TravelCalendarScreenState extends State<TravelCalendarScreen> {
                             ),
                             Center(
                               child: Container(
-                                width: 36,
-                                height: 36,
+                                width: 32,
+                                height: 32,
                                 decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: AppColors.indigo20,
@@ -424,9 +417,9 @@ class _TravelCalendarScreenState extends State<TravelCalendarScreen> {
                     }
                     return Center(
                       child: Container(
-                        width: 36,
-                        height: 36,
-                        margin: const EdgeInsets.fromLTRB(0, 6, 0, 6),
+                        width: 32,
+                        height: 32,
+                        margin: const EdgeInsets.fromLTRB(0, 8, 0, 8),
                         alignment: Alignment.center,
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
@@ -445,45 +438,35 @@ class _TravelCalendarScreenState extends State<TravelCalendarScreen> {
                       return Center(
                         child: Container(
                           height: 36,
-                          margin: const EdgeInsets.fromLTRB(0, 6, 0, 6),
+                          margin: const EdgeInsets.fromLTRB(0, 8, 0, 8),
                           alignment: Alignment.center,
                           decoration: const BoxDecoration(
                               color: AppColors.indigo60,
                               shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(25),
-                                  bottomLeft: Radius.circular(25))),
-                          child: Text(
-                            '${day.day}',
-                            style: AppTypography.caption12Medium
-                                .copyWith(color: AppColors.white),
+                              borderRadius: BorderRadius.only(topLeft: Radius.circular(25), bottomLeft: Radius.circular(25))
                           ),
+                          child: Text('${day.day}', style: AppTypography.caption12Medium.copyWith(color: AppColors.white),),
                         ),
                       );
                     } else if (_isEnd(day)) {
                       return Center(
                         child: Container(
                           height: 36,
-                          margin: const EdgeInsets.fromLTRB(0, 6, 0, 6),
+                          margin: const EdgeInsets.fromLTRB(0, 8, 0, 8),
                           alignment: Alignment.center,
                           decoration: const BoxDecoration(
                               color: AppColors.indigo60,
                               shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(25),
-                                  bottomRight: Radius.circular(25))),
-                          child: Text(
-                            '${day.day}',
-                            style: AppTypography.caption12Medium
-                                .copyWith(color: AppColors.white),
+                              borderRadius: BorderRadius.only(topRight: Radius.circular(25), bottomRight: Radius.circular(25))
                           ),
+                          child: Text('${day.day}', style: AppTypography.caption12Medium.copyWith(color: AppColors.white),),
                         ),
                       );
                     } else if (_isInAnyRange(day)) {
                       return Center(
                         child: Container(
                           height: 36,
-                          margin: const EdgeInsets.fromLTRB(0, 6, 0, 6),
+                          margin: const EdgeInsets.fromLTRB(0, 8, 0, 8),
                           alignment: Alignment.center,
                           decoration: const BoxDecoration(
                             color: AppColors.indigo60,
@@ -499,7 +482,7 @@ class _TravelCalendarScreenState extends State<TravelCalendarScreen> {
                     }
                     return Center(
                       child: Container(
-                        margin: const EdgeInsets.fromLTRB(0, 6, 0, 6),
+                        margin: const EdgeInsets.fromLTRB(0, 8, 0, 8),
                         decoration: const BoxDecoration(
                           shape: BoxShape.rectangle,
                         ),
@@ -517,164 +500,131 @@ class _TravelCalendarScreenState extends State<TravelCalendarScreen> {
               ),
             ),
             Container(
-              width: 360,
-              margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+              margin: const EdgeInsets.only(top:20),
               child: const Text(
                 "나의 이전 여행",
                 style: AppTypography.subtitle16SemiBold,
                 textAlign: TextAlign.left,
               ),
             ),
+            const Padding(padding: EdgeInsets.only(top:8),),
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
-                child: Column(children: [
-                  ...List.generate(travelList.length, (travelIndex) {
-                    return _isInRange(
-                            selectedDay,
-                            travelList[travelIndex]['startDay'],
-                            travelList[travelIndex]['endDay'])
-                        ? Container(
-                            margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            width: 360,
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    AppOutlinePngIcons.calendar(size: 19),
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 0, 0, 0),
-                                      child: Text(
-                                        '${DateFormat('yyyy.MM.dd').format(travelList[travelIndex]['startDay'])} ~ ${DateFormat('yyyy.MM.dd').format(travelList[travelIndex]['endDay'])}',
-                                        style: AppTypography.caption12Medium,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                Container(
-                                  width: 360,
-                                  height: 180,
-                                  margin: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                                  decoration: const BoxDecoration(
-                                    color: AppColors.neutral20,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(12)),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        15, 20, 15, 20),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              width: 75,
-                                              height: 75,
-                                              decoration: const BoxDecoration(
-                                                color: AppColors.neutral70,
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(12)),
-                                                image: DecorationImage(
-                                                  image: AssetImage(
-                                                      'assets/images/TokyoRestaurants.png'),
-                                                ),
-                                              ),
-                                            ),
-                                            const Padding(
-                                                padding: EdgeInsets.all(10)),
-                                            Expanded(
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    travelList[travelIndex]
-                                                        ['title'],
-                                                    style: AppTypography
-                                                        .subtitle18SemiBold,
-                                                  ),
-                                                  const Padding(
-                                                      padding:
-                                                          EdgeInsets.all(2)),
-                                                  Text(
-                                                    '${travelList[travelIndex]['country']} ${travelList[travelIndex]['city']}',
-                                                    style: const TextStyle(
-                                                        color: AppColors
-                                                            .neutral50),
-                                                  ),
-                                                  const Padding(
-                                                      padding:
-                                                          EdgeInsets.all(4)),
-                                                  Text(
-                                                    '${travelList[travelIndex]['period'] - 1}박 ${travelList[travelIndex]['period']}일',
-                                                    style: const TextStyle(
-                                                        color:
-                                                            AppColors.info60),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            AppOutlinePngIcons
-                                                .chevronDoubleRight(),
-                                          ],
-                                        ),
-                                        const Padding(
-                                          padding: EdgeInsets.all(10),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: List.generate(
-                                              travelList[travelIndex]['hashtag']
-                                                  .length, (hashtagIndex) {
-                                            return Container(
-                                              padding: const EdgeInsets.all(10),
-                                              decoration: const BoxDecoration(
-                                                color: AppColors.indigo60,
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(8)),
-                                              ),
-                                              child: Text(
-                                                '#${travelList[travelIndex]['hashtag'][hashtagIndex]}',
-                                                style: const TextStyle(
-                                                    color: AppColors.white),
-                                              ),
-                                            );
-                                          }),
-                                        )
-                                      ],
+                child: Column(
+                    children: [
+                      ...List.generate(travelList.length, (travelIndex) {
+                        return _isInRange(selectedDay, travelList[travelIndex]['startDay'], travelList[travelIndex]['endDay']) ?
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          width: 360,
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  AppOutlinePngIcons.calendar(size: 19),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    child: Text(
+                                      '${DateFormat('yyyy.MM.dd').format(travelList[travelIndex]['startDay'])} ~ ${DateFormat('yyyy.MM.dd').format(travelList[travelIndex]['endDay'])}',
+                                      style: AppTypography.caption12Medium,
                                     ),
+                                  )
+                                ],
+                              ),
+                              Container(
+                                width: 360,
+                                height: 180,
+                                margin: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                decoration: const BoxDecoration(
+                                  color: AppColors.neutral20,
+                                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            width: 75,
+                                            height: 75,
+                                            decoration: const BoxDecoration(
+                                              color: AppColors.neutral70,
+                                              borderRadius: BorderRadius.all(Radius.circular(12)),
+                                              image: DecorationImage(image: AssetImage('assets/images/TokyoRestaurants.png'),),
+                                            ),
+                                          ),
+                                          const Padding(padding: EdgeInsets.all(10)),
+                                          Expanded(
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  travelList[travelIndex]['title'],
+                                                  style: AppTypography.subtitle18SemiBold,
+                                                ),
+                                                const Padding(padding: EdgeInsets.all(2)),
+                                                Text(
+                                                  '${travelList[travelIndex]['country']} ${travelList[travelIndex]['city']}',
+                                                  style: const TextStyle(color: AppColors.neutral50),),
+                                                const Padding(padding: EdgeInsets.all(4)),
+                                                Text(
+                                                  '${travelList[travelIndex]['period']-1}박 ${travelList[travelIndex]['period']}일',
+                                                  style: const TextStyle(color: AppColors.info60),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          AppOutlinePngIcons.chevronDoubleRight(),
+                                        ],
+                                      ),
+                                      const Padding(padding: EdgeInsets.all(10),),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        children: List.generate(travelList[travelIndex]['hashtag'].length, (hashtagIndex) {
+                                          return Container(
+                                            padding: const EdgeInsets.all(10),
+                                            decoration: const BoxDecoration(
+                                              color: AppColors.indigo60,
+                                              borderRadius: BorderRadius.all(Radius.circular(8)),
+                                            ),
+                                            child: Text(
+                                              '#${travelList[travelIndex]['hashtag'][hashtagIndex]}',
+                                              style: const TextStyle(color: AppColors.white),
+                                            ),
+                                          );
+                                        }),
+                                      )
+                                    ],
                                   ),
-                                )
-                              ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ) : Container();
+                      }),
+                      if (!_isInAnyRange(selectedDay))
+                        Container(
+                          width: 360,
+                          height: 180,
+                          margin: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+                          decoration: const BoxDecoration(
+                            color: AppColors.neutral20,
+                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                          ),
+                          child: Center(
+                            child: Text(
+                              '해당 일자에 등록된 여행이 없습니다.',
+                              style: AppTypography.subtitle16SemiBold.copyWith(color: AppColors.neutral100),
                             ),
-                          )
-                        : Container();
-                  }),
-                  if (!_isInAnyRange(selectedDay))
-                    Container(
-                      width: 360,
-                      height: 180,
-                      margin: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                      decoration: const BoxDecoration(
-                        color: AppColors.neutral20,
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
-                      ),
-                      child: Center(
-                        child: Text(
-                          '해당 일자에 등록된 여행이 없습니다.',
-                          style: AppTypography.subtitle16SemiBold
-                              .copyWith(color: AppColors.neutral100),
+                          ),
                         ),
-                      ),
-                    ),
-                ]),
+                    ]
+                ),
               ),
             )
           ],
