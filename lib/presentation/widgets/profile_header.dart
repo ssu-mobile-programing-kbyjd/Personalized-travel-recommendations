@@ -31,11 +31,14 @@ class ProfileHeader extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.asset(
+            child: Image.network(
               profileImage,
               width: 75,
               height: 75,
               fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return const Icon(Icons.person, size: 75, color: Colors.white);
+              },
             ),
           ),
           const SizedBox(width: 16),

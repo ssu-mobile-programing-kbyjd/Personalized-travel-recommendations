@@ -10,12 +10,17 @@ import 'package:personalized_travel_recommendations/presentation/pages/main_scre
 import 'package:personalized_travel_recommendations/presentation/pages/mypage/my_page_notice_screen.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/mypage/my_page_wishlist_modal_wrapper.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/mypage/my_page_support_center_screen.dart';
+import 'package:personalized_travel_recommendations/data/datasources/sample_data.dart';
+
 
 class LoggedInMyPageScreen extends StatelessWidget {
   const LoggedInMyPageScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    const currentUserId = 'user_123';
+    final user = sampleUsers.firstWhere((u) => u['uid'] == currentUserId);
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -35,15 +40,16 @@ class LoggedInMyPageScreen extends StatelessWidget {
               const MyPageHeader(),
               const SizedBox(height: 8),
 
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: ProfileHeader(
-                  nickname: '재성구리',
-                  daysTogether: 125,
-                  travelCount: 5,
-                  profileImage: 'assets/images/JaeseongGuri.png',
+                  nickname: user['nickname'] as String,
+                  daysTogether: user['daysWithService'] as int,
+                  travelCount: user['tripCount'] as int,
+                  profileImage: user['profileImage'] as String,
                 ),
               ),
+
               const SizedBox(height: 16),
 
               Padding(
@@ -53,7 +59,7 @@ class LoggedInMyPageScreen extends StatelessWidget {
                   children: [
                     FeatureIconButton(
                       icon: Image.asset(
-                        'assets/icons/Solid/png/shopping-bag.png',
+                        'assets/icons/Solid/png/buy-list.png',
                         width: 24,
                         height: 24,
                         color: AppColors.white,
@@ -64,7 +70,7 @@ class LoggedInMyPageScreen extends StatelessWidget {
                     ),
                     FeatureIconButton(
                       icon: Image.asset(
-                        'assets/icons/Solid/png/heart.png',
+                        'assets/icons/Solid/png/heart-1.png',
                         width: 24,
                         height: 24,
                         color: AppColors.white,
@@ -83,7 +89,7 @@ class LoggedInMyPageScreen extends StatelessWidget {
                     ),
                     FeatureIconButton(
                       icon: Image.asset(
-                        'assets/icons/Solid/png/chat-alt.png',
+                        'assets/icons/Solid/png/Post.png',
                         width: 24,
                         height: 24,
                         color: AppColors.white,
@@ -94,7 +100,7 @@ class LoggedInMyPageScreen extends StatelessWidget {
                     ),
                     FeatureIconButton(
                       icon: Image.asset(
-                        'assets/icons/Solid/png/map.png',
+                        'assets/icons/Solid/png/Route.png',
                         width: 24,
                         height: 24,
                         color: AppColors.white,
