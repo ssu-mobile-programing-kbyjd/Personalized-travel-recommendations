@@ -19,12 +19,19 @@ class InfluencersScreen extends StatefulWidget {
 class _InfluencersScreenState extends State<InfluencersScreen> {
   late int _selectedCategoryIndex;
   late List<String> _cityList;
+  final TextEditingController _searchController = TextEditingController();
+  String _searchText = '';
 
   @override
   void initState() {
     super.initState();
     _selectedCategoryIndex = widget.selectedCityIndex;
     _cityList = widget.cityList;
+    _searchController.addListener(() {
+      setState(() {
+        _searchText = _searchController.text;
+      });
+    });
   }
 
   @override
@@ -98,8 +105,9 @@ class _InfluencersScreenState extends State<InfluencersScreen> {
         border: Border.all(color: const Color(0xFFE2E8F0)),
         borderRadius: BorderRadius.circular(20),
       ),
-      child: const TextField(
-        decoration: InputDecoration(
+      child: TextField(
+        controller: _searchController,
+        decoration: const InputDecoration(
           hintText: '검색어를 입력하세요',
           hintStyle: TextStyle(
             color: Color(0x4D12121D),
@@ -201,13 +209,17 @@ class _InfluencersScreenState extends State<InfluencersScreen> {
                         return const Center(child: CircularProgressIndicator());
                       }
                       final docs = snapshot.data!.docs;
-                      if (docs.isEmpty) {
+                      final filteredDocs = docs.where((doc) {
+                        final data = doc.data() as Map<String, dynamic>;
+                        return _searchText.isEmpty || (data['name']?.toString().toLowerCase().contains(_searchText.toLowerCase()) ?? false);
+                      }).toList();
+                      if (filteredDocs.isEmpty) {
                         return const Center(child: Text('No data found'));
                       }
                       return ListView.builder(
-                        itemCount: docs.length,
+                        itemCount: filteredDocs.length,
                         itemBuilder: (context, index) {
-                          final data = docs[index].data() as Map<String, dynamic>;
+                          final data = filteredDocs[index].data() as Map<String, dynamic>;
                           return _buildInfluencerCardFromFirestore(data);
                         },
                       );
