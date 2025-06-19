@@ -6,6 +6,7 @@ const List<Map<String, dynamic>> destinationsDummyData = [
     'image': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
     'rating': 4.8,
     'isLiked': true,
+    'hits': 3,
   },
   {
     'name': '도쿄타워',
@@ -14,6 +15,7 @@ const List<Map<String, dynamic>> destinationsDummyData = [
     'image': 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80',
     'rating': 4.6,
     'isLiked': true,
+    'hits': 3,
   },
   {
     'name': '센트럴 파크',
@@ -22,5 +24,6 @@ const List<Map<String, dynamic>> destinationsDummyData = [
     'image': 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80',
     'rating': 4.9,
     'isLiked': true,
+    'hits': 3,
   },
 ];

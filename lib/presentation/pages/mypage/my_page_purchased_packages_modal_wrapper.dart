@@ -18,7 +18,7 @@ class PurchasedPackagesModalWrapper extends StatelessWidget {
             color: AppColors.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
           ),
-          child: PurchasedTripsScreen(scrollController: scrollController),
+          //child: PurchasedTripsScreen(scrollController: scrollController),
         );
       },
     );
