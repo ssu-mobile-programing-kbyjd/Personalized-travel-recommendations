@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_text_styles.dart';
-import 'package:personalized_travel_recommendations/presentation/widgets/favorite_card.dart';
+import 'package:personalized_travel_recommendations/presentation/widgets/purchased_packages_card.dart';
 import 'package:personalized_travel_recommendations/presentation/widgets/tab_bar_selector.dart';
 import 'package:personalized_travel_recommendations/presentation/widgets/custom_navbar.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/main_screen.dart';
@@ -30,8 +30,8 @@ class _PurchasedTripsScreenState extends State<PurchasedTripsScreen>
     _tabController = TabController(length: _tabs.length, vsync: this);
 
     _tabController.addListener(() {
-      if (_tabController.indexIsChanging) return; // 스와이프 중복 호출 방지
-      setState(() {}); // index 변경 시 UI 갱신
+      if (_tabController.indexIsChanging) return;
+      setState(() {});
     });
 
     final allTrips = TravelPackagesDataSource.getAllPackages()
@@ -121,17 +121,17 @@ class _PurchasedTripsScreenState extends State<PurchasedTripsScreen>
       separatorBuilder: (_, __) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
         final item = sourceList[index];
-        return FavoriteCard(
-          imageUrl: 'assets/images/TokyoRestaurants.png',
-          title: item['name'],
-          subtitle: '${item['location']}\n${item['duration']}',
-          rating: double.tryParse(item['rating']) ?? 0.0,
-          tags: List<String>.from(item['tags'] ?? []),
-          isAssetImage: true,
-          isPackage: true,
-          isContent: false,
-          isLiked: false,
-          onHeartTap: null,
+        return Align(
+          alignment: Alignment.center,
+          child: TripCard(
+            imageUrl: item['image'],
+            title: item['name'],
+            subtitle: item['location'],
+            departureDate: '2025.03.01 ~ 2025.03.10',
+            tags: const ['벚꽃', '봄추천', '자연'],
+            isAssetImage: false,
+            onTap: () {},
+          ),
         );
       },
     );
