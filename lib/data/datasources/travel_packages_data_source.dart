@@ -11,6 +11,7 @@ class TravelPackagesDataSource {
       'price': '₩899,000',
       'category': '스페인',
       'tags': ['#인기', '#예약가능', '#문화탐방'],
+      'image': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', //임시
       'isLiked': true,
     },
     {
@@ -23,6 +24,7 @@ class TravelPackagesDataSource {
       'price': '₩1,199,000',
       'category': '스페인',
       'tags': ['#건축', '#가우디', '#예술'],
+      'image': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', //임시
       'isLiked': false,
     },
     {
@@ -35,6 +37,7 @@ class TravelPackagesDataSource {
       'price': '₩699,000',
       'category': '스페인',
       'tags': ['#역사', '#고성', '#투어'],
+      'image': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', //임시
       'isLiked': false,
     },
     {
@@ -47,6 +50,7 @@ class TravelPackagesDataSource {
       'price': '₩999,000',
       'category': '스페인',
       'tags': ['#남부', '#이슬람문화', '#세계유산'],
+      'image': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', //임시
       'isLiked': false,
     },
 
@@ -61,6 +65,7 @@ class TravelPackagesDataSource {
       'price': '₩899,000',
       'category': '일본',
       'tags': ['#벚꽃', '#봄추천', '#자연'],
+      'image': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', //임시
       'isLiked': true,
     },
     {
@@ -73,6 +78,7 @@ class TravelPackagesDataSource {
       'price': '₩699,000',
       'category': '일본',
       'tags': ['#가족여행', '#놀이공원', '#엔터테인먼트'],
+      'image': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', //임시
       'isLiked': false,
     },
     {
@@ -85,6 +91,7 @@ class TravelPackagesDataSource {
       'price': '₩799,000',
       'category': '일본',
       'tags': ['#기모노', '#문화체험', '#전통'],
+      'image': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', //임시
       'isLiked': false,
     },
     {
@@ -97,6 +104,7 @@ class TravelPackagesDataSource {
       'price': '₩599,000',
       'category': '일본',
       'tags': ['#먹방', '#시장투어', '#현지음식'],
+      'image': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', //임시
       'isLiked': false,
     },
 
@@ -111,6 +119,7 @@ class TravelPackagesDataSource {
       'price': '₩599,000',
       'category': '동남아시아',
       'tags': ['#휴양지', '#해변', '#마사지'],
+      'image': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', //임시
       'isLiked': true,
     },
     {
@@ -123,6 +132,7 @@ class TravelPackagesDataSource {
       'price': '₩799,000',
       'category': '동남아시아',
       'tags': ['#사원탐방', '#역사', '#문화유산'],
+      'image': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', //임시
       'isLiked': false,
     },
     {
@@ -135,6 +145,7 @@ class TravelPackagesDataSource {
       'price': '₩499,000',
       'category': '동남아시아',
       'tags': ['#도시여행', '#야경', '#시장'],
+      'image': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', //임시
       'isLiked': false,
     },
     {
@@ -147,6 +158,7 @@ class TravelPackagesDataSource {
       'price': '₩699,000',
       'category': '동남아시아',
       'tags': ['#야시장', '#리조트', '#코끼리체험'],
+      'image': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', //임시
       'isLiked': false,
     },
   ];
