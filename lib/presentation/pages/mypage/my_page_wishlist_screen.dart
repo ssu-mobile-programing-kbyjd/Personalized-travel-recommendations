@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_text_styles.dart';
 import 'package:personalized_travel_recommendations/presentation/widgets/favorite_card.dart';
@@ -71,6 +72,16 @@ class _WishlistScreenState extends State<WishlistScreen>
       MaterialPageRoute(builder: (_) => MainScreen(initialIndex: index)),
     );
   }
+
+  void _launchExternalUrl(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      debugPrint('🔴 Could not launch $url');
+    }
+  }
+
 
   @override
   void dispose() {
@@ -161,33 +172,37 @@ class _WishlistScreenState extends State<WishlistScreen>
       separatorBuilder: (_, __) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
         final item = sourceList[index];
-        //if (isPackage && item['isLiked'] != true) return const SizedBox.shrink();
+        final imageUrl = item['image'] ?? '';
+        final isAssetImage = !(imageUrl.toString().startsWith('http'));
+
 
         return FavoriteCard(
-          imageUrl: isPackage
-              ? 'assets/images/TokyoRestaurants.png'
-              : item['image'] ?? '',
-          title: isPackage ? item['name'] : item['title'] ?? item['name'],
+          imageUrl: imageUrl,
+          isAssetImage: isAssetImage,
+          title: isPackage
+              ? (item['name'] ?? '')
+              : (item['title'] ?? item['name'] ?? ''),
           subtitle: isPackage
-              ? '${item['location']}\n${item['duration']}'
-              : '${item['location']} 여행 정보',
-          rating: isPackage
-              ? double.tryParse(item['rating']) ?? 0.0
-              : item['rating'] ?? 0.0,
+              ? '${item['location'] ?? ''}\n${item['duration'] ?? ''}'
+              : '${item['location'] ?? ''} 여행 정보',
+          rating: double.tryParse(item['rating']?.toString() ?? '') ?? 0.0,
           tags: List<String>.from(item['tags'] ?? []),
-          isAssetImage: isPackage,
           isPackage: isPackage,
           isContent: isContent,
           isLiked: item['isLiked'] ?? false,
           onHeartTap: () {
             setState(() {
               item['isLiked'] = !(item['isLiked'] ?? false);
-              final indexInMaster = packageMaster.indexWhere((e) => e['id'] == item['id']);
+              final indexInMaster =
+              packageMaster.indexWhere((e) => e['id'] == item['id']);
               if (indexInMaster != -1) {
                 packageMaster[indexInMaster]['isLiked'] = item['isLiked'];
               }
             });
           },
+          onTap: isContent && item['url'] != null
+              ? () => _launchExternalUrl(item['url'])
+              : null,
         );
       },
     );
