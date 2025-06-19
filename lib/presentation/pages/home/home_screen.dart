@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../create_dummy_data.dart';
 import 'package:personalized_travel_recommendations/data/datasources/travel_data.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
+import 'package:personalized_travel_recommendations/presentation/utils/webview_screen.dart';
 
 class MainHomeScreen extends StatefulWidget {
   const MainHomeScreen({super.key});
@@ -990,8 +991,16 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
               return GestureDetector(
                 onTap: () async {
                   final url = banner['url'];
-                  if (url != null && await canLaunchUrl(Uri.parse(url))) {
-                    await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+                  if (url != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => WebViewScreen(
+                          url: url,
+                          title: banner['title'],
+                        ),
+                      ),
+                    );
                   }
                 },
                 child: Container(
