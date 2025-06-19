@@ -32,7 +32,7 @@ class _TravelPackage extends State<TravelPackage> {
   ];
 
   late GoogleMapController mapController;
-  final LatLng _latlng = LatLng(35.6852, 139.6953);
+  late LatLng _latlng = LatLng(35.6852, 139.6953);
   Set<Marker> _markers = {};
 
   static const List<List<Map>> travelSchedule = [
@@ -73,22 +73,39 @@ class _TravelPackage extends State<TravelPackage> {
 
   void _setMarkers() async {
     Set<Marker> newMarkers = {};
+    LatLng newLatLng = _latlng;
 
     for (int scheduleIdx = 0; scheduleIdx < travelSchedule[0].length; scheduleIdx++) {
       if (travelSchedule[0][scheduleIdx]['lat'] != 0 && travelSchedule[0][scheduleIdx]['lng'] != 0) {
         newMarkers.add(
-            Marker(
-              markerId: MarkerId(scheduleIdx.toString()),
-              position: LatLng(travelSchedule[0][scheduleIdx]['lat'], travelSchedule[0][scheduleIdx]['lng']),
-              infoWindow: InfoWindow(title: travelSchedule[0][scheduleIdx]['place']),
-              icon: await MapMarker(text: (scheduleIdx+1).toString(), color: travelDailyColors[scheduleIdx%3],).toBitmapDescriptor(logicalSize: const Size(150, 150), imageSize: const Size(150, 150)),
-            )
+          Marker(
+            markerId: MarkerId(scheduleIdx.toString()),
+            position: LatLng(travelSchedule[0][scheduleIdx]['lat'], travelSchedule[0][scheduleIdx]['lng']),
+            infoWindow: InfoWindow(title: travelSchedule[0][scheduleIdx]['place']),
+            icon: await MapMarker(text: (scheduleIdx+1).toString(), color: travelDailyColors[scheduleIdx%3],).toBitmapDescriptor(logicalSize: const Size(150, 150), imageSize: const Size(150, 150)),
+          ),
         );
+
+        newLatLng = LatLng(travelSchedule[0][scheduleIdx]['lat'], travelSchedule[0][scheduleIdx]['lng']);
       }
     }
     setState(() {
       _markers = newMarkers;
+      _latlng = newLatLng;
     });
+
+    _moveCamera();
+  }
+
+  void _moveCamera() {
+    mapController.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: _latlng,
+          zoom: 14.0,
+        )
+      )
+    );
   }
 
   @override

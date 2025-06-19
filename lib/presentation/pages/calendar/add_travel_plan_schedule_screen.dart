@@ -180,24 +180,41 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
 
   void _setMarkers() async {
     Set<Marker> newMarkers = {};
+    LatLng newLatLng = _latlng;
 
     for (int periodIdx = 0; periodIdx < travelInfo['period']; periodIdx++) {
-      for (int scheduleIdx = 0; scheduleIdx < travelSchedule.length; scheduleIdx++) {
+      for (int scheduleIdx = 0; scheduleIdx < travelSchedule[periodIdx].length; scheduleIdx++) {
         if (travelSchedule[periodIdx][scheduleIdx]['lat'] != 0 && travelSchedule[periodIdx][scheduleIdx]['lng'] != 0) {
           newMarkers.add(
-              Marker(
-                markerId: MarkerId(scheduleIdx.toString()),
-                position: LatLng(travelSchedule[periodIdx][scheduleIdx]['lat'], travelSchedule[periodIdx][scheduleIdx]['lng']),
-                infoWindow: InfoWindow(title: travelSchedule[periodIdx][scheduleIdx]['place']),
-                icon: await MapMarker(text: (scheduleIdx+1).toString(), color: travelDailyColors[periodIdx%3],).toBitmapDescriptor(logicalSize: const Size(150, 150), imageSize: const Size(150, 150)),
-              )
+            Marker(
+              markerId: MarkerId(scheduleIdx.toString()),
+              position: LatLng(travelSchedule[periodIdx][scheduleIdx]['lat'], travelSchedule[periodIdx][scheduleIdx]['lng']),
+              infoWindow: InfoWindow(title: travelSchedule[periodIdx][scheduleIdx]['place']),
+              icon: await MapMarker(text: (scheduleIdx+1).toString(), color: travelDailyColors[periodIdx%3],).toBitmapDescriptor(logicalSize: const Size(150, 150), imageSize: const Size(150, 150)),
+            ),
           );
+
+          newLatLng = LatLng(travelSchedule[periodIdx][scheduleIdx]['lat'], travelSchedule[periodIdx][scheduleIdx]['lng']);
         }
       }
     }
     setState(() {
       _markers = newMarkers;
+      _latlng = newLatLng;
     });
+
+    _moveCamera();
+  }
+
+  void _moveCamera() {
+    mapController.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: _latlng,
+          zoom: 14.0,
+        )
+      )
+    );
   }
 
   void _removeSchedule(int travelIndex, int scheduleIndex) {
@@ -427,7 +444,7 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                           onMapCreated: _onMapCreated,
                           initialCameraPosition: CameraPosition(
                             target: _latlng,
-                            zoom: 16.0,
+                            zoom: 14.0,
                           ),
                           myLocationEnabled: true,
                           zoomControlsEnabled: true,
