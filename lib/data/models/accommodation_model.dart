@@ -1,4 +1,4 @@
-class Accommodation {
+class AccommodationModel {
   final String name;
   final String address;
   final String description;
@@ -6,7 +6,7 @@ class Accommodation {
   final double longitude;
   final String image;
 
-  Accommodation({
+  AccommodationModel({
     required this.name,
     required this.address,
     required this.description,
@@ -23,8 +23,8 @@ class Accommodation {
     return 0.0;
   }
 
-  factory Accommodation.fromMap(Map<String, dynamic> map) {
-    return Accommodation(
+  factory AccommodationModel.fromMap(Map<String, dynamic> map) {
+    return AccommodationModel(
       name: map['name'] ?? '',
       address: map['address'] ?? '',
       description: map['description'] ?? '',
@@ -45,8 +45,8 @@ class Accommodation {
     };
   }
 
-  factory Accommodation.fromJson(Map<String, dynamic> json) {
-    return Accommodation(
+  factory AccommodationModel.fromJson(Map<String, dynamic> json) {
+    return AccommodationModel(
       name: json['name'] ?? '',
       address: json['address'] ?? '',
       description: json['description'] ?? '',
@@ -67,7 +67,7 @@ class Accommodation {
     };
   }
 
-  Accommodation copyWith({
+  AccommodationModel copyWith({
     String? name,
     String? address,
     String? description,
@@ -75,7 +75,7 @@ class Accommodation {
     double? longitude,
     String? image,
   }) {
-    return Accommodation(
+    return AccommodationModel(
       name: name ?? this.name,
       address: address ?? this.address,
       description: description ?? this.description,
@@ -87,13 +87,13 @@ class Accommodation {
 
   @override
   String toString() {
-    return 'Accommodation{name: $name, address: $address, description: $description, latitude: $latitude, longitude: $longitude, image: $image}';
+    return 'AccommodationModel{name: $name, address: $address, description: $description, latitude: $latitude, longitude: $longitude, image: $image}';
   }
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is Accommodation &&
+      other is AccommodationModel &&
           runtimeType == other.runtimeType &&
           name == other.name &&
           address == other.address &&

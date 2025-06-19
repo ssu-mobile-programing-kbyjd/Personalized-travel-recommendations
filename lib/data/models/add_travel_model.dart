@@ -20,7 +20,7 @@ class AddTravelModel {
   final Flight? flight;
   final Attraction? attraction;
   final Restaurant? restaurant;
-  final Accommodation? accommodation;
+  final AccommodationModel? accommodation;
   final DateTime createdAt;
 
   AddTravelModel({
@@ -62,8 +62,8 @@ class AddTravelModel {
       price: 0,
       category: 'flight',
       city: city,
-      latitude: latitude,
-      longitude: longitude,
+      latitude: latitude ?? flight.latitude,
+      longitude: longitude ?? flight.longitude,
       flight: flight,
       createdAt: DateTime.now(),
     );
@@ -89,8 +89,8 @@ class AddTravelModel {
       price: 0,
       category: 'attraction',
       city: city,
-      latitude: latitude,
-      longitude: longitude,
+      latitude: latitude ?? attraction.latitude,
+      longitude: longitude ?? attraction.longitude,
       attraction: attraction,
       createdAt: DateTime.now(),
     );
@@ -116,8 +116,8 @@ class AddTravelModel {
       price: 25000,
       category: 'restaurant',
       city: city,
-      latitude: latitude,
-      longitude: longitude,
+      latitude: latitude ?? restaurant.latitude,
+      longitude: longitude ?? restaurant.longitude,
       restaurant: restaurant,
       createdAt: DateTime.now(),
     );
@@ -126,7 +126,7 @@ class AddTravelModel {
   factory AddTravelModel.fromAccommodation({
     required String packageId,
     required String tripId,
-    required Accommodation accommodation,
+    required AccommodationModel accommodation,
     required DateTime date,
     required TimeOfDay time,
     required String city,
@@ -143,8 +143,8 @@ class AddTravelModel {
       price: 120000,
       category: 'accommodation',
       city: city,
-      latitude: latitude,
-      longitude: longitude,
+      latitude: latitude ?? accommodation.latitude,
+      longitude: longitude ?? accommodation.longitude,
       accommodation: accommodation,
       createdAt: DateTime.now(),
     );
@@ -176,7 +176,7 @@ class AddTravelModel {
           ? Restaurant.fromJson(json['restaurant'])
           : null,
       accommodation: json['accommodation'] != null
-          ? Accommodation.fromJson(json['accommodation'])
+          ? AccommodationModel.fromJson(json['accommodation'])
           : null,
       createdAt: DateTime.parse(json['createdAt']),
     );
@@ -216,6 +216,32 @@ class AddTravelModel {
     }
   }
 
+  double get locationLatitude {
+    switch (category) {
+      case 'attraction':
+        return attraction?.latitude ?? 0.0;
+      case 'restaurant':
+        return restaurant?.latitude ?? 0.0;
+      case 'accommodation':
+        return accommodation?.latitude ?? 0.0;
+      default:
+        return 0.0;
+    }
+  }
+
+  double get locationLongitude {
+    switch (category) {
+      case 'attraction':
+        return attraction?.longitude ?? 0.0;
+      case 'restaurant':
+        return restaurant?.longitude ?? 0.0;
+      case 'accommodation':
+        return accommodation?.longitude ?? 0.0;
+      default:
+        return 0.0;
+    }
+  }
+
   String get imageUrl {
     switch (category) {
       case 'attraction':
@@ -244,7 +270,7 @@ class AddTravelModel {
     Flight? flight,
     Attraction? attraction,
     Restaurant? restaurant,
-    Accommodation? accommodation,
+    AccommodationModel? accommodation,
     DateTime? createdAt,
   }) {
     return AddTravelModel(
