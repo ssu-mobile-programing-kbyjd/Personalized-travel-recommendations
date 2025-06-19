@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+//import 'package:url_launcher/url_launcher.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_text_styles.dart';
 import 'package:personalized_travel_recommendations/presentation/widgets/favorite_card.dart';
@@ -9,6 +9,7 @@ import 'package:personalized_travel_recommendations/presentation/pages/main_scre
 import 'package:personalized_travel_recommendations/data/datasources/travel_packages_data_source.dart';
 import 'package:personalized_travel_recommendations/data/datasources/destinations_dummy_data.dart';
 import 'package:personalized_travel_recommendations/data/datasources/travel_content_data_source.dart';
+import 'package:personalized_travel_recommendations/presentation/utils/webview_screen.dart';
 
 class WishlistScreen extends StatefulWidget {
   final ScrollController? scrollController;
@@ -96,14 +97,6 @@ class _WishlistScreenState extends State<WishlistScreen>
     );
   }
 
-  void _launchExternalUrl(String url) async {
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
-      debugPrint('🔴 Could not launch $url');
-    }
-  }
 
   @override
   void dispose() {
@@ -217,8 +210,20 @@ class _WishlistScreenState extends State<WishlistScreen>
             isContent: isContent,
           ),
           onTap: isContent && item['url'] != null
-              ? () => _launchExternalUrl(item['url'])
+              ? () {
+            final url = item['url'] as String;
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => WebViewScreen(
+                  url: url,
+                  title: item['title'] ?? item['name'] ?? '상세보기',
+                ),
+              ),
+            );
+          }
               : null,
+
         );
       },
     );

@@ -13,7 +13,6 @@ import 'package:personalized_travel_recommendations/presentation/pages/mypage/my
 import 'package:personalized_travel_recommendations/presentation/pages/mypage/my_page_support_center_screen.dart';
 import 'package:personalized_travel_recommendations/data/datasources/sample_data.dart';
 
-
 class LoggedInMyPageScreen extends StatelessWidget {
   const LoggedInMyPageScreen({super.key});
 
@@ -30,7 +29,7 @@ class LoggedInMyPageScreen extends StatelessWidget {
             end: Alignment.bottomCenter,
             colors: [
               AppColors.indigo10, // AppColors.indigo 그라데이션 시작
-              Colors.white,      // 아래로 갈수록 흰색
+              Colors.white, // 아래로 갈수록 흰색
             ],
           ),
         ),
@@ -40,7 +39,6 @@ class LoggedInMyPageScreen extends StatelessWidget {
             children: [
               const MyPageHeader(),
               const SizedBox(height: 8),
-
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: ProfileHeader(
@@ -50,80 +48,97 @@ class LoggedInMyPageScreen extends StatelessWidget {
                   profileImage: user['profileImage'] as String,
                 ),
               ),
-
               const SizedBox(height: 16),
-
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    FeatureIconButton(
-                      icon: Image.asset(
-                        'assets/icons/Solid/png/buy-list.png',
-                        width: 24,
-                        height: 24,
-                        color: AppColors.white,
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 4 -
+                          20 +
+                          4, // 기본 너비 + 4
+                      child: FeatureIconButton(
+                        icon: Image.asset(
+                          'assets/icons/Solid/png/buy-list.png',
+                          width: 24,
+                          height: 24,
+                          color: AppColors.white,
+                        ),
+                        label: '구매 상품',
+                        count: 4,
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (_) =>
+                            const PurchasedPackagesModalWrapper(),
+                          );
+                        },
+                        backgroundColor: AppColors.indigo40,
                       ),
-                      label: '구매 상품',
-                      count: 4,
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                          builder: (_) => const PurchasedPackagesModalWrapper(),
-                        );
-                      },
-                      backgroundColor: AppColors.indigo40,
                     ),
-                    FeatureIconButton(
-                      icon: Image.asset(
-                        'assets/icons/Solid/png/heart-1.png',
-                        width: 24,
-                        height: 24,
-                        color: AppColors.white,
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 4 -
+                          20 +
+                          4, // 기본 너비 + 4
+                      child: FeatureIconButton(
+                        icon: Image.asset(
+                          'assets/icons/Solid/png/heart-1.png',
+                          width: 24,
+                          height: 24,
+                          color: AppColors.white,
+                        ),
+                        label: '찜한 목록',
+                        count: 4,
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (context) => const WishlistModalWrapper(),
+                          );
+                        },
+                        backgroundColor: AppColors.indigo60,
                       ),
-                      label: '찜한 목록',
-                      count: 4,
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                          builder: (context) => const WishlistModalWrapper(),
-                        );
-                      },
-                      backgroundColor: AppColors.indigo60,
                     ),
-                    FeatureIconButton(
-                      icon: Image.asset(
-                        'assets/icons/Solid/png/Post.png',
-                        width: 24,
-                        height: 24,
-                        color: AppColors.white,
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 4 -
+                          20 +
+                          4, // 기본 너비 + 4
+                      child: FeatureIconButton(
+                        icon: Image.asset(
+                          'assets/icons/Solid/png/Post.png',
+                          width: 24,
+                          height: 24,
+                          color: AppColors.white,
+                        ),
+                        label: '게시글',
+                        count: 2,
+                        backgroundColor: AppColors.indigo40,
                       ),
-                      label: '게시글',
-                      count: 2,
-                      backgroundColor: AppColors.indigo40,
                     ),
-                    FeatureIconButton(
-                      icon: Image.asset(
-                        'assets/icons/Solid/png/Route.png',
-                        width: 24,
-                        height: 24,
-                        color: AppColors.white,
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 4 -
+                          20 +
+                          4, // 기본 너비 + 4
+                      child: FeatureIconButton(
+                        icon: Image.asset(
+                          'assets/icons/Solid/png/Route.png',
+                          width: 24,
+                          height: 24,
+                          color: AppColors.white,
+                        ),
+                        label: '여행 도시',
+                        count: 2,
+                        backgroundColor: AppColors.indigo60,
                       ),
-                      label: '여행 도시',
-                      count: 2,
-                      backgroundColor: AppColors.indigo60,
                     ),
                   ],
                 ),
               ),
-
               const SizedBox(height: 20),
-
               SettingsListItem(
                 leadingIcon: Image.asset(
                   'assets/icons/Solid/png/account_circle.png',
@@ -135,7 +150,6 @@ class LoggedInMyPageScreen extends StatelessWidget {
                 onTap: () {},
               ),
               const CustomDivider(),
-
               SettingsListItem(
                 leadingIcon: Image.asset(
                   'assets/icons/Outline/png/shopping-bag.png',
@@ -147,7 +161,6 @@ class LoggedInMyPageScreen extends StatelessWidget {
                 onTap: () {},
               ),
               const CustomDivider(),
-
               SettingsListItem(
                 leadingIcon: Image.asset(
                   'assets/icons/Outline/png/clipboard-check.png',
@@ -166,7 +179,6 @@ class LoggedInMyPageScreen extends StatelessWidget {
                 },
               ),
               const CustomDivider(),
-
               SettingsListItem(
                 leadingIcon: Image.asset(
                   'assets/icons/Outline/png/alert-circle.png',
@@ -185,9 +197,7 @@ class LoggedInMyPageScreen extends StatelessWidget {
                 },
               ),
               const CustomDivider(),
-
               const SizedBox(height: 12),
-
               SettingsListItem(
                 leadingIcon: Image.asset(
                   'assets/icons/Outline/png/logout2.png',
@@ -200,7 +210,8 @@ class LoggedInMyPageScreen extends StatelessWidget {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => const MainScreen(initialIndex: 2, isLoggedIn: false),
+                      builder: (_) =>
+                      const MainScreen(initialIndex: 2, isLoggedIn: false),
                     ),
                   );
                 },
