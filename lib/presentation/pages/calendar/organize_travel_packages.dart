@@ -57,7 +57,7 @@ class _OrganizeTravelPackagesScreenState
             FlightDataSource.getJejuFlights());
         packages = flights
             .map((flight) => AddTravelModel.fromFlight(
-                  packageId: 'flight_${flight.hashCode}',
+                  packageId: DateTime.now().millisecondsSinceEpoch.toString(),
                   tripId: 'temp_trip_id',
                   flight: flight,
                   date: DateTime.now(),
@@ -76,7 +76,7 @@ class _OrganizeTravelPackagesScreenState
             AttractionDataSource.getJejuAttractions());
         packages = attractions
             .map((attraction) => AddTravelModel.fromAttraction(
-                  packageId: 'attraction_${attraction.hashCode}',
+                  packageId: DateTime.now().millisecondsSinceEpoch.toString(),
                   tripId: 'temp_trip_id',
                   attraction: attraction,
                   date: DateTime.now(),
@@ -92,7 +92,7 @@ class _OrganizeTravelPackagesScreenState
             RestaurantDataSource.getJejuRestaurants());
         packages = restaurants
             .map((restaurant) => AddTravelModel.fromRestaurant(
-                  packageId: 'restaurant_${restaurant.hashCode}',
+                  packageId: DateTime.now().millisecondsSinceEpoch.toString(),
                   tripId: 'temp_trip_id',
                   restaurant: restaurant,
                   date: DateTime.now(),
@@ -108,7 +108,7 @@ class _OrganizeTravelPackagesScreenState
             AccommodationDataSource.getJejuAccommodations());
         packages = accommodations
             .map((accommodation) => AddTravelModel.fromAccommodation(
-                  packageId: 'accommodation_${accommodation.hashCode}',
+                  packageId: DateTime.now().millisecondsSinceEpoch.toString(),
                   tripId: 'temp_trip_id',
                   accommodation: accommodation,
                   date: DateTime.now(),
@@ -141,7 +141,45 @@ class _OrganizeTravelPackagesScreenState
     } else if (_isContinentOrCountry(cityKey)) {
       return _getDataByRegion<T>(cityKey, dataMap);
     } else {
-      return dataMap[cityKey] ?? fallbackData;
+      final flightsMap = FlightDataSource.getAllFlightsMap();
+      return flightsMap[cityKey] ?? FlightDataSource.getJejuFlights();
+    }
+  }
+
+  List<Attraction> _getAttractions(String cityKey) {
+    if (cityKey == '자유' || cityKey == '자유 여행') {
+      return AttractionDataSource.getAllAttractions();
+    } else if (_isContinentOrCountry(cityKey)) {
+      return _getAttractionsByRegion(cityKey);
+    } else {
+      final attractionsMap = AttractionDataSource.getAllAttractionsMap();
+      return attractionsMap[cityKey] ??
+          AttractionDataSource.getJejuAttractions();
+    }
+  }
+
+  List<Restaurant> _getRestaurants(String cityKey) {
+    if (cityKey == '자유' || cityKey == '자유 여행') {
+      return RestaurantDataSource.getAllRestaurants();
+    } else if (_isContinentOrCountry(cityKey)) {
+      return _getRestaurantsByRegion(cityKey);
+    } else {
+      final restaurantsMap = RestaurantDataSource.getAllRestaurantsMap();
+      return restaurantsMap[cityKey] ??
+          RestaurantDataSource.getJejuRestaurants();
+    }
+  }
+
+  List<AccommodationModel> _getAccommodations(String cityKey) {
+    if (cityKey == '자유' || cityKey == '자유 여행') {
+      return AccommodationDataSource.getAllAccommodations();
+    } else if (_isContinentOrCountry(cityKey)) {
+      return _getAccommodationsByRegion(cityKey);
+    } else {
+      final accommodationsMap =
+          AccommodationDataSource.getAllAccommodationsMap();
+      return accommodationsMap[cityKey] ??
+          AccommodationDataSource.getJejuAccommodations();
     }
   }
 
@@ -167,11 +205,62 @@ class _OrganizeTravelPackagesScreenState
     } else {
       final cities = TravelData.countryCities[region] ?? [];
       for (String city in cities) {
-        data.addAll(dataMap[city] ?? []);
+        final attractionsMap = AttractionDataSource.getAllAttractionsMap();
+        attractions.addAll(attractionsMap[city] ?? []);
       }
     }
 
-    return data;
+    return attractions;
+  }
+
+  // 지역별 레스토랑 데이터 가져오기 - 모델 사용으로 수정
+  List<Restaurant> _getRestaurantsByRegion(String region) {
+    List<Restaurant> restaurants = [];
+
+    if (TravelData.continents.contains(region)) {
+      final countries = TravelData.continentCountries[region] ?? [];
+      for (String country in countries) {
+        final cities = TravelData.countryCities[country] ?? [];
+        for (String city in cities) {
+          final restaurantsMap = RestaurantDataSource.getAllRestaurantsMap();
+          restaurants.addAll(restaurantsMap[city] ?? []);
+        }
+      }
+    } else {
+      final cities = TravelData.countryCities[region] ?? [];
+      for (String city in cities) {
+        final restaurantsMap = RestaurantDataSource.getAllRestaurantsMap();
+        restaurants.addAll(restaurantsMap[city] ?? []);
+      }
+    }
+
+    return restaurants;
+  }
+
+  // 지역별 숙박 데이터 가져오기 - 모델 사용으로 수정
+  List<AccommodationModel> _getAccommodationsByRegion(String region) {
+    List<AccommodationModel> accommodations = [];
+
+    if (TravelData.continents.contains(region)) {
+      final countries = TravelData.continentCountries[region] ?? [];
+      for (String country in countries) {
+        final cities = TravelData.countryCities[country] ?? [];
+        for (String city in cities) {
+          final accommodationsMap =
+              AccommodationDataSource.getAllAccommodationsMap();
+          accommodations.addAll(accommodationsMap[city] ?? []);
+        }
+      }
+    } else {
+      final cities = TravelData.countryCities[region] ?? [];
+      for (String city in cities) {
+        final accommodationsMap =
+            AccommodationDataSource.getAllAccommodationsMap();
+        accommodations.addAll(accommodationsMap[city] ?? []);
+      }
+    }
+
+    return accommodations;
   }
 
   @override

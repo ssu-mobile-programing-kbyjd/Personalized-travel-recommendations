@@ -65,7 +65,7 @@ class TravelPackagesDataSource {
       'price': '₩899,000',
       'category': '일본',
       'tags': ['#벚꽃', '#봄추천', '#자연'],
-      'image': 'https://cdn.pixabay.com/photo/2020/03/11/11/53/street-4921940_1280.jpg', //임시
+      'image': 'https://media.istockphoto.com/id/1195370326/ko/%EC%82%AC%EC%A7%84/%EB%B4%84%EC%97%90%EB%8A%94-%EC%9D%BC%EB%B3%B8-%EC%A0%84%ED%86%B5-%EA%B8%B0%EB%AA%A8%EB%85%B8%EC%99%80-%EB%B2%9A%EA%BD%83%EC%9D%84-%EC%9E%85%EC%9D%80-%EC%95%84%EC%8B%9C%EC%95%84-%EC%97%AC%EC%84%B1.jpg?s=612x612&w=0&k=20&c=HJTlTUjdhRGLnB1rtT8Inje3U60qedOTzn4bxIzifUM=', //임시
       'isLiked': true,
     },
     {
@@ -119,7 +119,7 @@ class TravelPackagesDataSource {
       'price': '₩599,000',
       'category': '동남아시아',
       'tags': ['#휴양지', '#해변', '#마사지'],
-      'image': 'https://media.istockphoto.com/id/2153347966/ko/%EC%82%AC%EC%A7%84/eiffel-tower-in-paris-france-on-a-sunny-day.jpg?s=2048x2048&w=is&k=20&c=TtOuyu2Lgt_m2QMLROK36W-IMvEwKJ2mG-elf58YTnc=', //임시
+      'image': 'https://cdn.pixabay.com/photo/2015/03/09/18/34/beach-666122_1280.jpg', //임시
       'isLiked': true,
     },
     {
