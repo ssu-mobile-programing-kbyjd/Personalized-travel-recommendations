@@ -1,91 +1,344 @@
 import 'package:flutter/material.dart';
-import '../../../domain/usecases/trending_destinations_usecase.dart';
-import '../../../presentation/widgets/common/app_header.dart';
-import '../../../presentation/widgets/common/search_bar_widget.dart';
-import '../../../presentation/widgets/common/category_filter_widget.dart';
-import '../../../presentation/utils/category_filter_helper.dart';
-import '../../../presentation/widgets/trending_destinations/trending_destination_card.dart';
-import '../../../data/models/trending_destination_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TrendingDestinationsScreen extends StatefulWidget {
-  const TrendingDestinationsScreen({super.key});
+  final String country;
+  final List<String> cityList;
+  final int selectedCityIndex;
+  const TrendingDestinationsScreen({
+    super.key,
+    required this.country,
+    required this.cityList,
+    required this.selectedCityIndex,
+  });
 
   @override
   State<TrendingDestinationsScreen> createState() => _TrendingDestinationsScreenState();
 }
 
 class _TrendingDestinationsScreenState extends State<TrendingDestinationsScreen> {
-  final TrendingDestinationsUseCase _useCase = TrendingDestinationsUseCase();
-  int _selectedCategoryIndex = 0;
-  String _searchQuery = '';
+  late int _selectedCategoryIndex;
+  late List<String> _cityList;
+  final TextEditingController _searchController = TextEditingController();
+  String _searchText = '';
 
-
+  @override
+  void initState() {
+    super.initState();
+    _selectedCategoryIndex = widget.selectedCityIndex;
+    _cityList = widget.cityList;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final categories = CategoryFilterHelper.createCategoryFilters(_useCase.getCategories());
-    final destinations = _useCase
-        .getDestinationsByCategoryIndex(_selectedCategoryIndex)
-        .where((destination) => destination.name.contains(_searchQuery) || destination.location.contains(_searchQuery))
-        .toList();
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: [
-            const AppHeader(showBackButton: true),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: SearchBarWidget(
-                hintText: '검색어를 입력하세요',
-                onChanged: (value) {
-                  setState(() {
-                    _searchQuery = value;
-                  });
-                },
-              ),
-            ),
-            CategoryFilterWidget(
-              categories: categories,
-              selectedIndex: _selectedCategoryIndex,
-              onCategorySelected: (index) {
-                setState(() {
-                  _selectedCategoryIndex = index;
-                });
-              },
-            ),
+            // 헤더
+            _buildHeader(),
+            
+            // 검색바
+            _buildSearchBar(),
+            
+            // 카테고리 필터
+            _buildCategoryFilter(),
+            
+            // 여행지 리스트
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      '요즘 뜨는 여행지',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF0F1A2A),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Expanded(
-                      child: destinations.isEmpty
-                          ? const Center(child: Text('해당 카테고리에 여행지가 없습니다.'))
-                          : ListView.builder(
-                              itemCount: destinations.length,
-                              itemBuilder: (context, index) => TrendingDestinationCard(destination: destinations[index]),
-                            ),
-                    ),
-                  ],
-                ),
-              ),
+              child: _buildDestinationList(),
             ),
           ],
         ),
       ),
       bottomNavigationBar: _buildBottomNavigation(),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Color(0x0D12121D),
+            width: 2,
+          ),
+        ),
+      ),
+      child: Row(
+        children: [
+          // 뒤로가기 버튼
+          GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Container(
+              width: 28,
+              height: 28,
+              decoration: BoxDecoration(
+                color: const Color(0xFFF1F4F9),
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: const Icon(
+                Icons.arrow_back,
+                size: 20,
+                color: Color(0xFF0F1A2A),
+              ),
+            ),
+          ),
+          
+          const Spacer(),
+          
+          // 로고 영역 (플레이스홀더)
+          Image.asset(
+            'assets/logos/wordmark.png',
+            height: 22,
+          ),
+          
+          const Spacer(),
+          
+          // 여백 (뒤로가기 버튼과 같은 크기)
+          const SizedBox(width: 28),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSearchBar() {
+    return Container(
+      margin: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0x0D202030),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: TextField(
+        controller: _searchController,
+        onChanged: (value) {
+          setState(() {
+            _searchText = value;
+          });
+        },
+        decoration: const InputDecoration(
+          hintText: '검색어를 입력하세요',
+          hintStyle: TextStyle(
+            color: Color(0x4D12121D),
+            fontSize: 14,
+          ),
+          prefixIcon: Padding(
+            padding: EdgeInsets.only(left: 16, right: 8),
+            child: Icon(
+              Icons.search,
+              color: Color(0xFF64748B),
+            ),
+          ),
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(vertical: 12),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCategoryFilter() {
+    final categories = _cityList;
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      height: 37,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: categories.length,
+        itemBuilder: (context, index) {
+          final city = categories[index];
+          final isSelected = index == _selectedCategoryIndex;
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                _selectedCategoryIndex = index;
+              });
+            },
+            child: Container(
+              margin: EdgeInsets.only(right: index < categories.length - 1 ? 16 : 0),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: isSelected ? const Color(0xFF4032DC) : const Color(0xFFF1F4F9),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.location_city,
+                    size: 20,
+                    color: isSelected ? Colors.white : const Color(0xFF64748B),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    city,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: isSelected ? Colors.white : const Color(0xFF64748B),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildDestinationList() {
+    final categories = _cityList;
+    final selectedCategory = categories.isNotEmpty && _selectedCategoryIndex < categories.length
+        ? categories[_selectedCategoryIndex]
+        : null;
+    return Container(
+      margin: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            '요즘 뜨는 여행지',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF0F1A2A),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Expanded(
+            child: (selectedCategory == null)
+                ? const Center(child: Text('도시를 선택하세요'))
+                : StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('destinations')
+                        .where('category', isEqualTo: selectedCategory)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      final docs = snapshot.data!.docs;
+                      final filteredDocs = docs.where((doc) {
+                        final data = doc.data() as Map<String, dynamic>;
+                        return _searchText.isEmpty || (data['name']?.toString().toLowerCase().contains(_searchText.toLowerCase()) ?? false);
+                      }).toList();
+                      if (filteredDocs.isEmpty) {
+                        return const Center(child: Text('No data found'));
+                      }
+                      return ListView.builder(
+                        itemCount: filteredDocs.length,
+                        itemBuilder: (context, index) {
+                          final data = filteredDocs[index].data() as Map<String, dynamic>;
+                          return _buildDestinationCardFromFirestore(data);
+                        },
+                      );
+                    },
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDestinationCardFromFirestore(Map<String, dynamic> data) {
+    return Container(
+      width: 342,
+      margin: const EdgeInsets.only(bottom: 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 6,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 134,
+                  width: double.infinity,
+            child: (data['image'] != null && data['image'].toString().isNotEmpty)
+                ? ClipRRect(
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                    child: Image.network(
+                      data['image'],
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(color: Colors.grey[200]),
+                    ),
+                  )
+                : Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                    ),
+                  ),
+                ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            data['name'] ?? '',
+                            style: const TextStyle(
+                              fontSize: 18.6,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFF0F1A2A),
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        if (data['rating'] != null) ...[
+                          Row(
+                            children: [
+                              Image.asset('assets/icons/Solid/png/star.png', width: 18, height: 18, color: const Color(0xFFFFC107)),
+                              SizedBox(width: 4),
+                              Text('${data['rating']}', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Color(0xFF0F1A2A))),
+                            ],
+                          ),
+                        ],
+                      ],
+                    ),
+                const SizedBox(height: 8),
+                Text(
+                  data['location'] ?? '',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Color(0xFF64748B),
+                  ),
+                ),
+                if (data['hits'] != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: Text(
+                      '${data['hits']}명이 확인 중',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF4032DC),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
