@@ -52,7 +52,6 @@ class _TrendingDestinationsScreenState extends State<TrendingDestinationsScreen>
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNavigation(),
     );
   }
 
@@ -338,75 +337,6 @@ class _TrendingDestinationsScreenState extends State<TrendingDestinationsScreen>
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildBottomNavigation() {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.white,
-            Colors.white.withOpacity(0.9),
-          ],
-        ),
-      ),
-      child: Container(
-        margin: const EdgeInsets.all(24),
-        height: 32,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            // Home
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF6F8FC),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: const [
-                  Icon(
-                    Icons.home_outlined,
-                    size: 24,
-                    color: Color(0xFF4032DC),
-                  ),
-                  SizedBox(width: 8),
-                  Text(
-                    'Home',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF4032DC),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // Calendar
-            const Icon(
-              Icons.calendar_month_outlined,
-              size: 24,
-              color: Color(0xFF64748B),
-            ),
-            // Globe
-            const Icon(
-              Icons.language_outlined,
-              size: 24,
-              color: Color(0xFF64748B),
-            ),
-            // Profile
-            const Icon(
-              Icons.person_outline,
-              size: 24,
-              color: Color(0xFF64748B),
-            ),
-          ],
-        ),
       ),
     );
   }
