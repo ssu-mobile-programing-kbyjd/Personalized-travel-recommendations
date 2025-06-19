@@ -38,18 +38,26 @@ class ProfileHeader extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  nickname,
-                  style: AppTypography.subtitle16SemiBold.copyWith(
-                    color: AppColors.white,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '맛상추와 함께한지 $daysTogether일째\n그동안 총 $travelCount번의 여행을 떠났어요 :)',
-                  style: AppTypography.caption12Regular.copyWith(
-                    color: AppColors.white,
-                    height: 1.4,
+                Text.rich(
+                  TextSpan(
+                    style: AppTypography.caption12Regular.copyWith(
+                      color: AppColors.white,
+                      height: 1.4,
+                    ),
+                    children: [
+                      const TextSpan(text: '맛상추와 함께한지 '),
+                      TextSpan(
+                        text: '$daysTogether일',
+                        style: AppTypography.button14.copyWith(color: AppColors.white),
+                      ),
+                      const TextSpan(text: ' 째'),
+                      const TextSpan(text: '\n그동안 총 '),
+                      TextSpan(
+                        text: '$travelCount번',
+                        style: AppTypography.button14.copyWith(color: AppColors.white),
+                      ),
+                      const TextSpan(text: '의 여행을 떠났어요 :)'),
+                    ],
                   ),
                 ),
               ],
