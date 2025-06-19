@@ -427,7 +427,7 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                           onMapCreated: _onMapCreated,
                           initialCameraPosition: CameraPosition(
                             target: _latlng,
-                            zoom: 11.0,
+                            zoom: 16.0,
                           ),
                           myLocationEnabled: true,
                           zoomControlsEnabled: true,
