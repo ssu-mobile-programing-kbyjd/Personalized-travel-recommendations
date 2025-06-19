@@ -9,6 +9,7 @@ import 'package:personalized_travel_recommendations/presentation/widgets/custom_
 import 'package:personalized_travel_recommendations/presentation/pages/main_screen.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/mypage/my_page_notice_screen.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/mypage/my_page_wishlist_modal_wrapper.dart';
+import 'package:personalized_travel_recommendations/presentation/pages/mypage/my_page_purchased_packages_modal_wrapper.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/mypage/my_page_support_center_screen.dart';
 import 'package:personalized_travel_recommendations/data/datasources/sample_data.dart';
 
@@ -66,6 +67,14 @@ class LoggedInMyPageScreen extends StatelessWidget {
                       ),
                       label: '구매 상품',
                       count: 4,
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (_) => const PurchasedPackagesModalWrapper(),
+                        );
+                      },
                       backgroundColor: AppColors.indigo40,
                     ),
                     FeatureIconButton(
