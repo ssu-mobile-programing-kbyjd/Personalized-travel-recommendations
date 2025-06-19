@@ -6,12 +6,11 @@ import 'package:personalized_travel_recommendations/presentation/widgets/tab_bar
 import 'package:personalized_travel_recommendations/presentation/widgets/custom_navbar.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/main_screen.dart';
 import 'package:personalized_travel_recommendations/data/datasources/travel_packages_data_source.dart';
-import 'package:personalized_travel_recommendations/data/datasources/location_data_source.dart';
 import 'package:personalized_travel_recommendations/data/datasources/destinations_dummy_data.dart';
+import 'package:personalized_travel_recommendations/data/datasources/travel_content_data_source.dart';
 
 class WishlistScreen extends StatefulWidget {
   final ScrollController? scrollController;
-
   const WishlistScreen({super.key, this.scrollController});
 
   @override
@@ -23,33 +22,47 @@ class _WishlistScreenState extends State<WishlistScreen>
   late TabController _tabController;
   final List<String> _tabs = ['여행지', '패키지', '컨텐츠'];
 
+  late List<Map<String, dynamic>> destinationMaster;
+  late List<Map<String, dynamic>> packageMaster;
+  late List<Map<String, dynamic>> contentMaster;
+
   late List<Map<String, dynamic>> destinationState;
   late List<Map<String, dynamic>> packageState;
+  late List<Map<String, dynamic>> contentState;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: _tabs.length, vsync: this);
 
+    destinationMaster = destinationsDummyData
+        .map((e) => Map<String, dynamic>.from(e))
+        .toList();
+    packageMaster = TravelPackagesDataSource.getAllPackages()
+        .map((e) => Map<String, dynamic>.from(e))
+        .toList();
+    contentMaster = TravelContentDataSource.getAllContents()
+        .map((e) => Map<String, dynamic>.from(e))
+        .toList();
+
+    _updateFilteredStates();
+
     _tabController.addListener(() {
-      if (_tabController.indexIsChanging == false) {
-        setState(() {}); // 상단 탭 상태 갱신
+      if (!_tabController.indexIsChanging) {
+        _updateFilteredStates();
       }
     });
-
-    destinationState = destinationsDummyData
-        .map((item) => Map<String, dynamic>.from(item))
-        .toList();
-
-    packageState = TravelPackagesDataSource.getAllPackages()
-        .map((item) => Map<String, dynamic>.from(item))
-        .toList();
   }
 
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
+  void _updateFilteredStates() {
+    setState(() {
+      destinationState =
+          destinationMaster.where((e) => e['isLiked'] == true).toList();
+      packageState =
+          packageMaster.where((e) => e['isLiked'] == true).toList();
+      contentState =
+          contentMaster.where((e) => e['isLiked'] == true).toList();
+    });
   }
 
   void _onNavTap(int index) {
@@ -57,6 +70,12 @@ class _WishlistScreenState extends State<WishlistScreen>
       context,
       MaterialPageRoute(builder: (_) => MainScreen(initialIndex: index)),
     );
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -89,16 +108,8 @@ class _WishlistScreenState extends State<WishlistScreen>
                 tabs: _tabs,
                 selectedIndex: _tabController.index,
                 onTap: (index) {
-                  setState(() {
-                    _tabController.index = index;
-
-                    // 필터링: 찜이 아닌 항목 제거
-                    if (_tabs[index] == '여행지') {
-                      destinationState = destinationState.where((item) => item['isLiked'] == true).toList();
-                    } else if (_tabs[index] == '패키지') {
-                      packageState = packageState.where((item) => item['isLiked'] == true).toList();
-                    }
-                  });
+                  _tabController.index = index;
+                  _updateFilteredStates();
                 },
               ),
             ),
@@ -124,101 +135,61 @@ class _WishlistScreenState extends State<WishlistScreen>
 
   Widget _buildListView(String type) {
     if (type == '여행지') {
-      return ListView.separated(
-        controller: widget.scrollController,
-        padding: const EdgeInsets.all(16),
-        itemCount: destinationState.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 12),
-        itemBuilder: (context, index) {
-          final destination = destinationState[index];
-          //if (destination['isLiked'] != true) return const SizedBox.shrink();
-          return FavoriteCard(
-            imageUrl: destination['image'],
-            title: destination['name'],
-            subtitle: destination['location'],
-            rating: destination['rating'] ?? 0.0,
-            tags: const [],
-            isAssetImage: false,
-            isPackage: false,
-            isContent: false,
-            onHeartTap: () {
-              setState(() {
-                destination['isLiked'] = false;
-              });
-            },
-            isLiked: destination['isLiked'] ?? true,
-          );
-        },
-      );
+      if (destinationState.isEmpty) {
+        return const Center(child: Text('찜한 여행지가 없습니다.'));
+      }
+      return _buildList(destinationState, isPackage: false, isContent: false);
     } else if (type == '패키지') {
-      return ListView.separated(
-        controller: widget.scrollController,
-        padding: const EdgeInsets.all(16),
-        itemCount: packageState.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 12),
-        itemBuilder: (context, index) {
-          final item = packageState[index];
-          //if (item['isLiked'] != true) return const SizedBox.shrink();
-          return FavoriteCard(
-            imageUrl: 'assets/images/TokyoRestaurants.png',
-            title: item['name'],
-            subtitle: '${item['location']}\n${item['duration']}',
-            rating: double.tryParse(item['rating']) ?? 0.0,
-            tags: List<String>.from(item['tags'] ?? []),
-            isAssetImage: true,
-            isPackage: true,
-            isContent: false,
-            isLiked: item['isLiked'] ?? false,
-            onHeartTap: () {
-              setState(() {
-                item['isLiked'] = false;
-              });
-            },
-          );
-        },
-      );
+      if (packageState.isEmpty) {
+        return const Center(child: Text('찜한 패키지가 없습니다.'));
+      }
+      return _buildList(packageState, isPackage: true, isContent: false);
     } else {
-      final allCountries = LocationDataSource.locationData.values
-          .expand((countryMap) => countryMap.keys)
-          .toSet()
-          .toList();
-
-      final items = allCountries.map((country) =>
-      {
-        'imageUrl': 'assets/images/SagradaFamilia.png',
-        'title': '$country 여행 가이드',
-        'subtitle': '$country 여행 가이드',
-        'rating': 0.0,
-        'tags': <String>[]
-      }).toList();
-
-      return ListView.separated(
-        controller: widget.scrollController,
-        padding: const EdgeInsets.all(16),
-        itemCount: items.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 12),
-        itemBuilder: (context, index) {
-          final item = items[index];
-          final bool isLiked = item['isLiked'] == true;
-
-          return FavoriteCard(
-            imageUrl: item['imageUrl']?.toString() ?? '',
-            title: item['title']?.toString() ?? '',
-            subtitle: item['subtitle']?.toString() ?? '',
-            rating: double.tryParse(item['rating']?.toString() ?? '0.0') ?? 0.0,
-            tags: (item['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
-            isAssetImage: true,
-            isPackage: type == '패키지',
-            isContent: type == '컨텐츠',
-            isLiked: isLiked,
-            onHeartTap: () {
-              setState(() {
-                item['isLiked'] = !isLiked;
-              });
-            },
-          );
-        },
-      );
+      if (contentState.isEmpty) {
+        return const Center(child: Text('찜한 컨텐츠가 없습니다.'));
+      }
+      return _buildList(contentState, isPackage: false, isContent: true);
     }
+  }
+
+  Widget _buildList(List<Map<String, dynamic>> sourceList,
+      {required bool isPackage, required bool isContent}) {
+    return ListView.separated(
+      controller: widget.scrollController,
+      padding: const EdgeInsets.all(16),
+      itemCount: sourceList.length,
+      separatorBuilder: (_, __) => const SizedBox(height: 12),
+      itemBuilder: (context, index) {
+        final item = sourceList[index];
+        //if (isPackage && item['isLiked'] != true) return const SizedBox.shrink();
+
+        return FavoriteCard(
+          imageUrl: isPackage
+              ? 'assets/images/TokyoRestaurants.png'
+              : item['image'] ?? '',
+          title: isPackage ? item['name'] : item['title'] ?? item['name'],
+          subtitle: isPackage
+              ? '${item['location']}\n${item['duration']}'
+              : '${item['location']} 여행 정보',
+          rating: isPackage
+              ? double.tryParse(item['rating']) ?? 0.0
+              : item['rating'] ?? 0.0,
+          tags: List<String>.from(item['tags'] ?? []),
+          isAssetImage: isPackage,
+          isPackage: isPackage,
+          isContent: isContent,
+          isLiked: item['isLiked'] ?? false,
+          onHeartTap: () {
+            setState(() {
+              item['isLiked'] = !(item['isLiked'] ?? false);
+              final indexInMaster = packageMaster.indexWhere((e) => e['id'] == item['id']);
+              if (indexInMaster != -1) {
+                packageMaster[indexInMaster]['isLiked'] = item['isLiked'];
+              }
+            });
+          },
+        );
+      },
+    );
   }
 }
