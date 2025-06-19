@@ -27,9 +27,9 @@ class _WishlistScreenState extends State<WishlistScreen>
   late List<Map<String, dynamic>> packageMaster;
   late List<Map<String, dynamic>> contentMaster;
 
-  late List<Map<String, dynamic>> destinationState;
-  late List<Map<String, dynamic>> packageState;
-  late List<Map<String, dynamic>> contentState;
+  List<Map<String, dynamic>> destinationState = [];
+  List<Map<String, dynamic>> packageState = [];
+  List<Map<String, dynamic>> contentState = [];
 
   @override
   void initState() {
@@ -66,6 +66,29 @@ class _WishlistScreenState extends State<WishlistScreen>
     });
   }
 
+  void _toggleLike(
+      Map<String, dynamic> item, {
+        required bool isPackage,
+        required bool isContent,
+      }) {
+    setState(() {
+      item['isLiked'] = !(item['isLiked'] ?? false);
+
+      final id = item['id'];
+      if (isPackage) {
+        final idx = packageMaster.indexWhere((e) => e['id'] == id);
+        if (idx != -1) packageMaster[idx]['isLiked'] = item['isLiked'];
+      } else if (isContent) {
+        final idx = contentMaster.indexWhere((e) => e['id'] == id);
+        if (idx != -1) contentMaster[idx]['isLiked'] = item['isLiked'];
+      } else {
+        final idx = destinationMaster.indexWhere((e) => e['id'] == id);
+        if (idx != -1) destinationMaster[idx]['isLiked'] = item['isLiked'];
+      }
+    });
+    // ❗필터링은 탭 이동할 때만 하므로 여기서는 리스트 업데이트 안함
+  }
+
   void _onNavTap(int index) {
     Navigator.pushReplacement(
       context,
@@ -81,7 +104,6 @@ class _WishlistScreenState extends State<WishlistScreen>
       debugPrint('🔴 Could not launch $url');
     }
   }
-
 
   @override
   void dispose() {
@@ -175,7 +197,6 @@ class _WishlistScreenState extends State<WishlistScreen>
         final imageUrl = item['image'] ?? '';
         final isAssetImage = !(imageUrl.toString().startsWith('http'));
 
-
         return FavoriteCard(
           imageUrl: imageUrl,
           isAssetImage: isAssetImage,
@@ -190,16 +211,11 @@ class _WishlistScreenState extends State<WishlistScreen>
           isPackage: isPackage,
           isContent: isContent,
           isLiked: item['isLiked'] ?? false,
-          onHeartTap: () {
-            setState(() {
-              item['isLiked'] = !(item['isLiked'] ?? false);
-              final indexInMaster =
-              packageMaster.indexWhere((e) => e['id'] == item['id']);
-              if (indexInMaster != -1) {
-                packageMaster[indexInMaster]['isLiked'] = item['isLiked'];
-              }
-            });
-          },
+          onHeartTap: () => _toggleLike(
+            item,
+            isPackage: isPackage,
+            isContent: isContent,
+          ),
           onTap: isContent && item['url'] != null
               ? () => _launchExternalUrl(item['url'])
               : null,
