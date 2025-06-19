@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:personalized_travel_recommendations/data/datasources/destinations_dummy_data.dart';
+import 'package:personalized_travel_recommendations/data/datasources/influencers_dummy_data.dart';
 import '../../data/datasources/user_data.dart';
 import '../../data/datasources/trips_data.dart';
 import '../../data/datasources/restaurants_data.dart';
@@ -26,6 +27,8 @@ class _DevPageState extends State<DevPage> {
     'attractions': jejuAttractions,
     'flights': jejuFlights,
     'accommodations': jejuAccommodations,
+    'influencers': influencersDummyData,
+    'destinations': destinationsDummyData
   };
 
   void _insertCollection(String collection) async {
@@ -221,6 +224,7 @@ class _DevPageState extends State<DevPage> {
       'users',
       'trips',
       'packages',
+      'influencers',
       'recommendations',
       'likes',
       'posts',
@@ -230,7 +234,7 @@ class _DevPageState extends State<DevPage> {
       'flights',
       'restaurants',
       'travel_packages',
-      'add_travels',
+      'destinations',
     ];
     return Scaffold(
       appBar: AppBar(
