@@ -167,7 +167,7 @@ class _OrganizeTravelPackagesScreenState
     }
   }
 
-  List<AccommodationModel> _getAccommodations(String cityKey) {
+  List<Accommodation> _getAccommodations(String cityKey) {
     if (cityKey == '자유' || cityKey == '자유 여행') {
       return AccommodationDataSource.getAllAccommodations();
     } else if (_isContinentOrCountry(cityKey)) {
@@ -262,8 +262,8 @@ class _OrganizeTravelPackagesScreenState
   }
 
   // 지역별 숙박 데이터 가져오기 - 모델 사용으로 수정
-  List<AccommodationModel> _getAccommodationsByRegion(String region) {
-    List<AccommodationModel> accommodations = [];
+  List<Accommodation> _getAccommodationsByRegion(String region) {
+    List<Accommodation> accommodations = [];
 
     if (TravelData.continents.contains(region)) {
       final countries = TravelData.continentCountries[region] ?? [];
@@ -359,8 +359,8 @@ class _OrganizeTravelPackagesScreenState
                         'address': package.address,
                         'price': package.price,
                         'time': package.time,
-                        'latitude': package.locationLatitude,
-                        'longitude': package.locationLongitude,
+                        'latitude': package.latitude,
+                        'longitude': package.longitude,
                         'travelPackage': package, // 전체 패키지 데이터 포함
                       };
 
