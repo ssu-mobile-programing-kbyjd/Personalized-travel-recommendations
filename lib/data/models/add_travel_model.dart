@@ -15,6 +15,8 @@ class AddTravelModel {
   final String
       category; // 'flight', 'attraction', 'restaurant', 'accommodation'
   final String city;
+  final double? latitude;
+  final double? longitude;
   final Flight? flight;
   final Attraction? attraction;
   final Restaurant? restaurant;
@@ -31,6 +33,8 @@ class AddTravelModel {
     required this.price,
     required this.category,
     required this.city,
+    this.latitude,
+    this.longitude,
     this.flight,
     this.attraction,
     this.restaurant,
@@ -45,6 +49,8 @@ class AddTravelModel {
     required DateTime date,
     required TimeOfDay time,
     required String city,
+    double? latitude,
+    double? longitude,
   }) {
     return AddTravelModel(
       packageId: packageId,
@@ -56,6 +62,8 @@ class AddTravelModel {
       price: 0,
       category: 'flight',
       city: city,
+      latitude: latitude,
+      longitude: longitude,
       flight: flight,
       createdAt: DateTime.now(),
     );
@@ -68,6 +76,8 @@ class AddTravelModel {
     required DateTime date,
     required TimeOfDay time,
     required String city,
+    double? latitude,
+    double? longitude,
   }) {
     return AddTravelModel(
       packageId: packageId,
@@ -79,6 +89,8 @@ class AddTravelModel {
       price: 0,
       category: 'attraction',
       city: city,
+      latitude: latitude,
+      longitude: longitude,
       attraction: attraction,
       createdAt: DateTime.now(),
     );
@@ -91,6 +103,8 @@ class AddTravelModel {
     required DateTime date,
     required TimeOfDay time,
     required String city,
+    double? latitude,
+    double? longitude,
   }) {
     return AddTravelModel(
       packageId: packageId,
@@ -102,6 +116,8 @@ class AddTravelModel {
       price: 25000,
       category: 'restaurant',
       city: city,
+      latitude: latitude,
+      longitude: longitude,
       restaurant: restaurant,
       createdAt: DateTime.now(),
     );
@@ -114,6 +130,8 @@ class AddTravelModel {
     required DateTime date,
     required TimeOfDay time,
     required String city,
+    double? latitude,
+    double? longitude,
   }) {
     return AddTravelModel(
       packageId: packageId,
@@ -125,6 +143,8 @@ class AddTravelModel {
       price: 120000,
       category: 'accommodation',
       city: city,
+      latitude: latitude,
+      longitude: longitude,
       accommodation: accommodation,
       createdAt: DateTime.now(),
     );
@@ -146,6 +166,8 @@ class AddTravelModel {
       price: json['price'],
       category: json['category'],
       city: json['city'],
+      latitude: json['latitude']?.toDouble(),
+      longitude: json['longitude']?.toDouble(),
       flight: json['flight'] != null ? Flight.fromJson(json['flight']) : null,
       attraction: json['attraction'] != null
           ? Attraction.fromJson(json['attraction'])
@@ -170,6 +192,8 @@ class AddTravelModel {
         'price': price,
         'category': category,
         'city': city,
+        'latitude': latitude,
+        'longitude': longitude,
         'flight': flight?.toJson(),
         'attraction': attraction?.toJson(),
         'restaurant': restaurant?.toJson(),
@@ -215,6 +239,8 @@ class AddTravelModel {
     int? price,
     String? category,
     String? city,
+    double? latitude,
+    double? longitude,
     Flight? flight,
     Attraction? attraction,
     Restaurant? restaurant,
@@ -231,6 +257,8 @@ class AddTravelModel {
       price: price ?? this.price,
       category: category ?? this.category,
       city: city ?? this.city,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
       flight: flight ?? this.flight,
       attraction: attraction ?? this.attraction,
       restaurant: restaurant ?? this.restaurant,
