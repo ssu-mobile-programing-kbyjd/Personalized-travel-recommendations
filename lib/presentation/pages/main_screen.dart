@@ -36,7 +36,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final List<Widget> screens = [
       MainHomeScreen(isLoggedIn: isLoggedIn),
-      const TravelCalendarScreen(),
+      TravelCalendarScreen(isLoggedIn: isLoggedIn),
       isLoggedIn ? const LoggedInMyPageScreen() : const GuestMyPageScreen(),
     ];
 
