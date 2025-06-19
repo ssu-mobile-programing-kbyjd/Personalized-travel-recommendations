@@ -4,6 +4,7 @@ import 'trending_destinations_screen.dart';
 import 'travel_packages_screen.dart';
 import '/presentation/pages/home/influencers_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../create_dummy_data.dart';
 import 'package:personalized_travel_recommendations/data/datasources/travel_data.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
