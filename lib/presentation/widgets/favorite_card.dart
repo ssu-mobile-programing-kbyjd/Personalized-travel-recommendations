@@ -175,7 +175,7 @@ class FavoriteCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: AppColors.neutral100.withAlpha((0.1 * 255).toInt()),
+                color: AppColors.neutral100.withAlpha((0.4 * 255).toInt()),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
