@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_text_styles.dart';
 import 'package:personalized_travel_recommendations/presentation/widgets/favorite_card.dart';
@@ -71,6 +72,16 @@ class _WishlistScreenState extends State<WishlistScreen>
       MaterialPageRoute(builder: (_) => MainScreen(initialIndex: index)),
     );
   }
+
+  void _launchExternalUrl(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      debugPrint('🔴 Could not launch $url');
+    }
+  }
+
 
   @override
   void dispose() {
@@ -182,12 +193,18 @@ class _WishlistScreenState extends State<WishlistScreen>
           onHeartTap: () {
             setState(() {
               item['isLiked'] = !(item['isLiked'] ?? false);
-              final indexInMaster = packageMaster.indexWhere((e) => e['id'] == item['id']);
+              final indexInMaster =
+              packageMaster.indexWhere((e) => e['id'] == item['id']);
               if (indexInMaster != -1) {
                 packageMaster[indexInMaster]['isLiked'] = item['isLiked'];
               }
             });
           },
+          onTap: isContent && item['url'] != null
+              ? () => _launchExternalUrl(item['url'])
+              : null,
+
+
         );
       },
     );
