@@ -359,8 +359,8 @@ class _OrganizeTravelPackagesScreenState
                         'address': package.address,
                         'price': package.price,
                         'time': package.time,
-                        'latitude': package.locationLatitude,
-                        'longitude': package.locationLongitude,
+                        'lat': package.locationLatitude,
+                        'log': package.locationLongitude,
                         'travelPackage': package, // 전체 패키지 데이터 포함
                       };
 
