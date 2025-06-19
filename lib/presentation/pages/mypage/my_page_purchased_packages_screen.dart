@@ -5,6 +5,7 @@ import 'package:personalized_travel_recommendations/presentation/widgets/purchas
 import 'package:personalized_travel_recommendations/presentation/widgets/tab_bar_selector.dart';
 import 'package:personalized_travel_recommendations/presentation/widgets/custom_navbar.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/main_screen.dart';
+import 'package:personalized_travel_recommendations/presentation/pages/mypage/purchased_package_screen_detail.dart';
 import 'package:personalized_travel_recommendations/data/datasources/travel_packages_data_source.dart';
 
 class PurchasedTripsScreen extends StatefulWidget {
@@ -128,9 +129,14 @@ class _PurchasedTripsScreenState extends State<PurchasedTripsScreen>
             title: item['name'],
             subtitle: item['location'],
             departureDate: '2025.03.01 ~ 2025.03.10',
-            tags: const ['벚꽃', '봄추천', '자연'],
+            tags: const ['#친구와', '#1개 도시', '#맛집 투어'],
             isAssetImage: false,
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const TravelPackageScreen()),
+              );
+            },
           ),
         );
       },
