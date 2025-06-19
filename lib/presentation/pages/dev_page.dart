@@ -241,9 +241,9 @@ class _DevPageState extends State<DevPage> {
       'accommodations',
       'attractions',
       'flights',
-      'restaurants',
       'travel_packages',
       'destinations',
+      'restaurants',
     ];
     return Scaffold(
       appBar: AppBar(
