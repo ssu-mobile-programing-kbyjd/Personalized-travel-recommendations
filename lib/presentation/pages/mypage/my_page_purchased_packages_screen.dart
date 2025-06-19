@@ -6,7 +6,6 @@ import 'package:personalized_travel_recommendations/presentation/widgets/tab_bar
 import 'package:personalized_travel_recommendations/presentation/widgets/custom_navbar.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/main_screen.dart';
 import 'package:personalized_travel_recommendations/data/datasources/travel_packages_data_source.dart';
-import 'package:personalized_travel_recommendations/presentation/pages/home/travel_packages_screen.dart';
 
 class PurchasedTripsScreen extends StatefulWidget {
   final ScrollController? scrollController;
@@ -39,7 +38,9 @@ class _PurchasedTripsScreenState extends State<PurchasedTripsScreen>
         .map((e) => Map<String, dynamic>.from(e))
         .toList();
 
-    upcomingTrips = allTrips.where((e) => e['name'] == '일본 벚꽃 투어').toList();
+    upcomingTrips = allTrips
+        .where((e) => e['name'] == '일본 벚꽃 투어')
+        .toList();
     pastTrips = [];
     canceledTrips = [];
   }
@@ -130,16 +131,7 @@ class _PurchasedTripsScreenState extends State<PurchasedTripsScreen>
             tags: const ['#친구와', '#1개 도시', '#맛집 투어'],
             isAssetImage: false,
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => TravelPackagesScreen(
-                    country: item['location'] ?? '',
-                    cityList: [item['location'] ?? ''],
-                    selectedCityIndex: 0,
-                  ),
-                ),
-              );
+
             },
           ),
         );

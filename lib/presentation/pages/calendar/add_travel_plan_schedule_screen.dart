@@ -41,7 +41,8 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
   };
 
   late GoogleMapController mapController;
-  late LatLng _latlng = LatLng(TravelData.cityLatLng[widget.city]![0], TravelData.cityLatLng[widget.city]![1]);
+  LatLng _latlng = const LatLng(37.5666791, 126.9782914);
+  double _zoom = 9.0;
   Set<Marker> _markers = {};
 
   final List<Map> _rcmndPkgList = [
@@ -207,11 +208,15 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
   }
 
   void _moveCamera() {
+    setState(() {
+      _zoom = 14.0;
+    });
+
     mapController.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
           target: _latlng,
-          zoom: 14.0,
+          zoom: _zoom,
         )
       )
     );
@@ -246,6 +251,8 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
 
         // 시간 순서대로 정렬
         _sortSchedulesByTime(travelIndex);
+
+        _setMarkers();
       });
     }
   }
@@ -281,7 +288,17 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
   void initState() {
     super.initState();
     _titleController = TextEditingController(text: travelInfo['title']);
-    _setMarkers();
+
+    if (TravelData.continentLatLng.containsKey(widget.city)) {
+      _latlng = LatLng(TravelData.continentLatLng[widget.city]![0], TravelData.continentLatLng[widget.city]![1]);
+      _zoom = 3.0;
+    } else if (widget.country == widget.city) {
+      _latlng = LatLng(TravelData.countryLatLng[widget.city]![0], TravelData.countryLatLng[widget.city]![1]);
+      _zoom = 5.0;
+    } else {
+      _latlng = LatLng(TravelData.cityLatLng[widget.city]![0], TravelData.cityLatLng[widget.city]![1]);
+      _zoom = 9.0;
+    }
   }
 
   @override
@@ -444,7 +461,7 @@ class _AddTravelPlanScheduleScreen extends State<AddTravelPlanScheduleScreen> {
                           onMapCreated: _onMapCreated,
                           initialCameraPosition: CameraPosition(
                             target: _latlng,
-                            zoom: 14.0,
+                            zoom: _zoom,
                           ),
                           myLocationEnabled: true,
                           zoomControlsEnabled: true,
