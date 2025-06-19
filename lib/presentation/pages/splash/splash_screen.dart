@@ -109,7 +109,7 @@ class _SplashScreenState extends State<SplashScreen>
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.indigo40.withOpacity(0.3),
+                              color: AppColors.indigo40.withValues(alpha: 0.3),
                               blurRadius: 50,
                               offset: const Offset(0, 10),
                             ),
@@ -128,7 +128,7 @@ class _SplashScreenState extends State<SplashScreen>
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.indigo40.withOpacity(0.3),
+                              color: AppColors.indigo40.withValues(alpha: 0.3),
                               blurRadius: 50,
                               offset: const Offset(0, 10),
                             ),
@@ -149,7 +149,8 @@ class _SplashScreenState extends State<SplashScreen>
                               shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
-                                  color: AppColors.indigo60.withOpacity(0.3),
+                                  color:
+                                      AppColors.indigo60.withValues(alpha: 0.3),
                                   blurRadius: 50,
                                   offset: const Offset(0, 10),
                                 ),
@@ -162,10 +163,6 @@ class _SplashScreenState extends State<SplashScreen>
                                 height: 212,
                                 fit: BoxFit.contain,
                                 errorBuilder: (context, error, stackTrace) {
-                                  // 디버그 정보 출력
-                                  print('Image load error: $error');
-                                  print('Stack trace: $stackTrace');
-
                                   // 이미지 로드 실패 시 기본 아이콘 표시
                                   return Container(
                                     width: 137,
@@ -199,10 +196,10 @@ class _SplashScreenState extends State<SplashScreen>
                               ),
                             ),
                           ),
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 4),
                           // 슬로건
                           Container(
-                            margin: const EdgeInsets.only(left: 30),
+                            margin: const EdgeInsets.only(left: 60),
                             child: Text(
                               ':: 여행을 조립하다',
                               style: AppTypography.button12.copyWith(

@@ -12,6 +12,8 @@ class FavoriteCard extends StatelessWidget {
   final bool isAssetImage;
   final bool isPackage;
   final bool isContent;
+  final bool isLiked;
+  final VoidCallback? onHeartTap;
 
   const FavoriteCard({
     super.key,
@@ -24,11 +26,13 @@ class FavoriteCard extends StatelessWidget {
     this.isAssetImage = true,
     this.isPackage = false,
     this.isContent = false,
+    this.isLiked = false,
+    this.onHeartTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    // 🔹 패키지 카드
+    // 📦 패키지 카드
     if (isPackage) {
       return Container(
         margin: const EdgeInsets.only(bottom: 16),
@@ -38,7 +42,7 @@ class FavoriteCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: AppColors.neutral40.withAlpha((0.4*255).toInt()),
+              color: AppColors.neutral40.withAlpha((0.4 * 255).toInt()),
               blurRadius: 8,
               offset: const Offset(0, 4),
             ),
@@ -52,7 +56,6 @@ class FavoriteCard extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // 썸네일
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: isAssetImage
@@ -60,8 +63,6 @@ class FavoriteCard extends StatelessWidget {
                           : Image.network(imageUrl, width: 80, height: 80, fit: BoxFit.cover),
                     ),
                     const SizedBox(width: 12),
-
-                    // 텍스트 정보 및 하트
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,15 +96,19 @@ class FavoriteCard extends StatelessWidget {
                                   ),
                                 ),
                               ),
-
                               Padding(
-                                padding: const EdgeInsets.only(right: 15), // ← 왼쪽으로 이동
-                                child: Image.asset(
-                                  'assets/icons/Solid/png/heart.png',
-                                  width: 26,
-                                  height: 26,
-                                  fit: BoxFit.cover,
-                                  color: AppColors.error60,
+                                padding: const EdgeInsets.only(right: 15),
+                                child: GestureDetector(
+                                  onTap: onHeartTap,
+                                  child: Image.asset(
+                                    isLiked
+                                        ? 'assets/icons/Solid/png/heart.png'
+                                        : 'assets/icons/Outline/png/heart.png',
+                                    width: 26,
+                                    height: 26,
+                                    fit: BoxFit.cover,
+                                    color: AppColors.error60,
+                                  ),
                                 ),
                               ),
                             ],
@@ -113,9 +118,7 @@ class FavoriteCard extends StatelessWidget {
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 12),
-
                 Center(
                   child: Wrap(
                     spacing: 6,
@@ -125,8 +128,6 @@ class FavoriteCard extends StatelessWidget {
                 ),
               ],
             ),
-
-            // 🔼 chevron-right를 카드 우측 상단에 고정
             Positioned(
               top: 0,
               right: 0,
@@ -142,9 +143,7 @@ class FavoriteCard extends StatelessWidget {
       );
     }
 
-
-
-    // 🔹 컨텐츠 카드
+    // 📘 컨텐츠 카드
     if (isContent) {
       return Container(
         margin: const EdgeInsets.only(bottom: 16),
@@ -153,7 +152,7 @@ class FavoriteCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: AppColors.neutral100.withAlpha((0.1*255).toInt()),
+              color: AppColors.neutral100.withAlpha((0.1 * 255).toInt()),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -163,7 +162,6 @@ class FavoriteCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           child: Stack(
             children: [
-              // ✅ 배경 이미지
               SizedBox(
                 width: double.infinity,
                 height: 125,
@@ -171,21 +169,22 @@ class FavoriteCard extends StatelessWidget {
                     ? Image.asset(imageUrl, fit: BoxFit.cover)
                     : Image.network(imageUrl, fit: BoxFit.cover),
               ),
-
-              // ✅ 상단 하트 아이콘
               Positioned(
                 top: 8,
                 right: 12,
-                child: Image.asset(
-                  'assets/icons/Solid/png/heart.png',
-                  width: 26,
-                  height: 26,
-                  fit: BoxFit.cover,
-                  color: AppColors.error60,
+                child: GestureDetector(
+                  onTap: onHeartTap,
+                  child: Image.asset(
+                    isLiked
+                        ? 'assets/icons/Solid/png/heart.png'
+                        : 'assets/icons/Outline/png/heart.png',
+                    width: 26,
+                    height: 26,
+                    fit: BoxFit.cover,
+                    color: AppColors.error60,
+                  ),
                 ),
               ),
-
-              // ✅ 텍스트 및 > 아이콘
               Positioned.fill(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(28, 31, 28, 28),
@@ -193,9 +192,9 @@ class FavoriteCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        '여행 정보',
-                        style: TextStyle(
+                      Text(
+                        '$subtitle 여행 정보',
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -205,10 +204,10 @@ class FavoriteCard extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Expanded(
+                          Expanded(
                             child: Text(
-                              '도시 및 국가별 여행 가이드',
-                              style: TextStyle(
+                              title,
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 22,
                                 fontWeight: FontWeight.bold,
@@ -243,9 +242,7 @@ class FavoriteCard extends StatelessWidget {
       );
     }
 
-
-
-    // 🔹 여행지 카드
+    // 🏝 일반 여행지 카드
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
@@ -253,7 +250,7 @@ class FavoriteCard extends StatelessWidget {
         color: AppColors.white,
         boxShadow: [
           BoxShadow(
-            color: AppColors.neutral40.withAlpha((0.4*255).toInt()),
+            color: AppColors.neutral40.withAlpha((0.4 * 255).toInt()),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -273,12 +270,17 @@ class FavoriteCard extends StatelessWidget {
               Positioned(
                 top: 8,
                 right: 8,
-                child: Image.asset(
-                  'assets/icons/Solid/png/heart.png',
-                  width: 26,
-                  height: 26,
-                  fit: BoxFit.cover,
-                  color: AppColors.error60,
+                child: GestureDetector(
+                  onTap: onHeartTap,
+                  child: Image.asset(
+                    isLiked
+                        ? 'assets/icons/Solid/png/heart.png'
+                        : 'assets/icons/Outline/png/heart.png',
+                    width: 26,
+                    height: 26,
+                    fit: BoxFit.cover,
+                    color: AppColors.error60,
+                  ),
                 ),
               ),
             ],
@@ -335,7 +337,7 @@ class FavoriteCard extends StatelessWidget {
             ),
           ),
         ],
-      )
+      ),
     );
   }
 }

@@ -722,15 +722,6 @@ class AppOutlinePngIcons {
   static Widget zoomOut({double size = 24, Color? color}) =>
       icon('zoom-out', size: size, color: color);
 
-  static Widget buylist({double size = 24, Color? color}) =>
-      icon('buylist', size: size, color: color);
-
-  static Widget heart1({double size = 24, Color? color}) =>
-      icon('heart1', size: size, color: color);
-
-  static Widget post({double size = 24, Color? color}) =>
-      icon('post', size: size, color: color);
-
-  static Widget route({double size = 24, Color? color}) =>
-      icon('route', size: size, color: color);
+  static Widget heartx({double size = 24, Color? color}) =>
+      icon('heartx', size: size, color: color);
 }
