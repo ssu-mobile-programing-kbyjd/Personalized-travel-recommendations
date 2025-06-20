@@ -11,6 +11,7 @@ import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
 import 'package:personalized_travel_recommendations/presentation/utils/webview_screen.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/mypage/guest_my_page_screen.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/main_screen.dart';
+import 'package:personalized_travel_recommendations/core/theme/app_text_styles.dart';
 
 class MainHomeScreen extends StatefulWidget {
   final bool isLoggedIn;
@@ -95,11 +96,10 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   '당신은 지금,',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Color(0xFF64748B),
+                  style: AppTypography.caption12Regular.copyWith(
+                    color: AppColors.neutral60,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -120,24 +120,22 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
           const Icon(
             Icons.location_on,
             size: 20,
-            color: Color(0xFF0F1A2A),
+            color: AppColors.neutral100,
           ),
           const SizedBox(width: 4),
           Text(
             _selectedCountry != null ? _selectedCountry! : '위치를 선택해주세요',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
+            style: AppTypography.body14SemiBold.copyWith(
               color: _selectedCountry != null
-                  ? Color(0xFF0F1A2A)
-                  : Color(0xFF94A3B8),
+                  ? AppColors.neutral100
+                  : AppColors.neutral50,
             ),
           ),
           const SizedBox(width: 4),
           const Icon(
             Icons.keyboard_arrow_down,
             size: 16,
-            color: Color(0xFF64748B),
+            color: AppColors.neutral60,
           ),
         ],
       ),
@@ -148,70 +146,208 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      backgroundColor: AppColors.white,
       builder: (context) {
         String? tempContinent = _selectedContinent;
         String? tempCountry = _selectedCountry;
         return StatefulBuilder(
           builder: (context, setModalState) {
-            return Padding(
-              padding: EdgeInsets.only(
-                left: 16,
-                right: 16,
-                top: 24,
-                bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-              ),
+            return Container(
+              padding: const EdgeInsets.all(24),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 대륙 선택
-                  DropdownButton<String>(
-                    value: tempContinent,
-                    hint: const Text('대륙 선택'),
-                    isExpanded: true,
-                    items: _locationData.keys.map((continent) {
-                      return DropdownMenuItem(
-                        value: continent,
-                        child: Text(continent),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setModalState(() {
-                        tempContinent = value;
-                        tempCountry = null;
-                      });
-                    },
+                  // 핸들바
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: AppColors.neutral30,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
                   ),
-                  const SizedBox(height: 16),
-                  // 국가 선택
-                  if (tempContinent != null)
-                    DropdownButton<String>(
-                      value: tempCountry,
-                      hint: const Text('국가 선택'),
+                  const SizedBox(height: 20),
+                  // 제목
+                  Text(
+                    '위치 선택',
+                    style: AppTypography.subtitle20Bold.copyWith(
+                      color: AppColors.neutral100,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  // 대륙 선택
+                  Text(
+                    '대륙',
+                    style: AppTypography.body14SemiBold.copyWith(
+                      color: AppColors.neutral100,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    width: double.infinity,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: AppColors.neutral30),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: DropdownButton<String>(
+                      value: tempContinent,
+                      hint: Text(
+                        '대륙을 선택해주세요',
+                        style: AppTypography.body14Regular.copyWith(
+                          color: AppColors.neutral60,
+                        ),
+                      ),
                       isExpanded: true,
-                      items: _locationData[tempContinent!]!.map((country) {
+                      underline: const SizedBox(),
+                      icon: const Icon(Icons.keyboard_arrow_down,
+                          color: AppColors.neutral60),
+                      items: _locationData.keys.map((continent) {
                         return DropdownMenuItem(
-                          value: country,
-                          child: Text(country),
+                          value: continent,
+                          child: Text(
+                            continent,
+                            style: AppTypography.body14Regular.copyWith(
+                              color: AppColors.neutral100,
+                            ),
+                          ),
                         );
                       }).toList(),
                       onChanged: (value) {
                         setModalState(() {
-                          tempCountry = value;
+                          tempContinent = value;
+                          tempCountry = null;
                         });
                       },
                     ),
-                  const SizedBox(height: 24),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        _selectedContinent = tempContinent;
-                        _selectedCountry = tempCountry;
-                        _selectedCategoryIndex = 0;
-                      });
-                      Navigator.pop(context);
-                    },
-                    child: const Text('선택 완료'),
                   ),
+                  const SizedBox(height: 20),
+                  // 국가 선택
+                  Text(
+                    '국가',
+                    style: AppTypography.body14SemiBold.copyWith(
+                      color: AppColors.neutral100,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    width: double.infinity,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: tempContinent == null
+                            ? AppColors.neutral20
+                            : AppColors.neutral30,
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                      color: tempContinent == null
+                          ? AppColors.neutral10
+                          : AppColors.white,
+                    ),
+                    child: DropdownButton<String>(
+                      value: tempCountry,
+                      hint: Text(
+                        tempContinent == null ? '먼저 대륙을 선택해주세요' : '국가를 선택해주세요',
+                        style: AppTypography.body14Regular.copyWith(
+                          color: AppColors.neutral60,
+                        ),
+                      ),
+                      isExpanded: true,
+                      underline: const SizedBox(),
+                      icon: Icon(
+                        Icons.keyboard_arrow_down,
+                        color: tempContinent == null
+                            ? AppColors.neutral40
+                            : AppColors.neutral60,
+                      ),
+                      items: tempContinent != null
+                          ? _locationData[tempContinent!]!.map((country) {
+                              return DropdownMenuItem(
+                                value: country,
+                                child: Text(
+                                  country,
+                                  style: AppTypography.body14Regular.copyWith(
+                                    color: AppColors.neutral100,
+                                  ),
+                                ),
+                              );
+                            }).toList()
+                          : null,
+                      onChanged: tempContinent != null
+                          ? (value) {
+                              setModalState(() {
+                                tempCountry = value;
+                              });
+                            }
+                          : null,
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  // 버튼 영역
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () => Navigator.pop(context),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: AppColors.neutral60,
+                            side: const BorderSide(color: AppColors.neutral30),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                          ),
+                          child: Text(
+                            '취소',
+                            style: AppTypography.body14Medium.copyWith(
+                              color: AppColors.neutral60,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: tempCountry != null
+                              ? () {
+                                  setState(() {
+                                    _selectedContinent = tempContinent;
+                                    _selectedCountry = tempCountry;
+                                    _selectedCategoryIndex = 0;
+                                  });
+                                  Navigator.pop(context);
+                                }
+                              : null,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: tempCountry != null
+                                ? AppColors.indigo60
+                                : AppColors.neutral30,
+                            foregroundColor: AppColors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            elevation: 0,
+                          ),
+                          child: Text(
+                            '선택 완료',
+                            style: AppTypography.body14Medium.copyWith(
+                              color: AppColors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
                 ],
               ),
             );
@@ -224,8 +360,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
   Widget _buildCategorySection() {
     final cities = countryCities[_selectedCountry] ?? [];
     return Container(
-      margin: const EdgeInsets.all(16),
-      height: 37,
+      margin: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
+      height: 46, // 패딩 증가로 높이 조정
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: cities.length,
@@ -239,16 +375,16 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
               });
             },
             child: Container(
-              margin:
-                  EdgeInsets.only(right: index < cities.length - 1 ? 16 : 0),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              margin: EdgeInsets.only(
+                  right:
+                      index < cities.length - 1 ? 12 : 0), // 16에서 12로 변경 (4 줄임)
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 16, vertical: 12), // 8에서 12로 변경 (4 늘림)
               decoration: BoxDecoration(
-                color: isSelected ? const Color(0xFF4032DC) : Colors.white,
+                color: isSelected ? AppColors.indigo60 : AppColors.white,
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
-                  color: isSelected
-                      ? const Color(0xFF4032DC)
-                      : const Color(0xFFE2E8F0),
+                  color: isSelected ? AppColors.indigo60 : AppColors.neutral30,
                 ),
               ),
               child: Row(
@@ -257,16 +393,13 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                   Icon(
                     Icons.location_city,
                     size: 20,
-                    color: isSelected ? Colors.white : const Color(0xFF64748B),
+                    color: isSelected ? AppColors.white : AppColors.neutral60,
                   ),
                   const SizedBox(width: 8),
                   Text(
                     city,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color:
-                          isSelected ? Colors.white : const Color(0xFF64748B),
+                    style: AppTypography.body14Medium.copyWith(
+                      color: isSelected ? AppColors.white : AppColors.neutral60,
                     ),
                   ),
                 ],
@@ -285,18 +418,16 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
             ? cities[_selectedCategoryIndex]
             : null;
     return Container(
-      margin: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(top: 16, left: 16, right: 16),
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 '요즘 뜨는 여행지',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF0F1A2A),
+                style: AppTypography.subtitle16SemiBold.copyWith(
+                  color: AppColors.neutral100,
                 ),
               ),
               GestureDetector(
@@ -312,12 +443,10 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                     ),
                   );
                 },
-                child: const Text(
+                child: Text(
                   '전체 보기',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF4C4DDC),
+                  style: AppTypography.body14Medium.copyWith(
+                    color: AppColors.indigo60,
                   ),
                 ),
               ),
@@ -368,7 +497,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
           width: 257,
           margin: const EdgeInsets.only(bottom: 30, right: 16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
@@ -390,11 +519,26 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                     ? ClipRRect(
                         borderRadius: const BorderRadius.vertical(
                             top: Radius.circular(12)),
-                        child: Image.network(
-                          data['image'],
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              Container(color: Colors.grey[200]),
+                        child: Stack(
+                          children: [
+                            Image.network(
+                              data['image'],
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: 182,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Container(color: Colors.grey[200]),
+                            ),
+                            Container(
+                              width: double.infinity,
+                              height: 182,
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.3),
+                                borderRadius: const BorderRadius.vertical(
+                                    top: Radius.circular(12)),
+                              ),
+                            ),
+                          ],
                         ),
                       )
                     : Container(
@@ -417,10 +561,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                         Expanded(
                           child: Text(
                             data['name'] ?? '',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xFF0F1A2A),
+                            style: AppTypography.body14Medium.copyWith(
+                              color: AppColors.neutral100,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -432,13 +574,11 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                               Image.asset('assets/icons/Solid/png/star.png',
                                   width: 18,
                                   height: 18,
-                                  color: const Color(0xFFFFC107)),
-                              SizedBox(width: 4),
+                                  color: AppColors.warning40),
+                              const SizedBox(width: 4),
                               Text('${data['rating']}',
-                                  style: const TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600,
-                                      color: Color(0xFF0F1A2A))),
+                                  style: AppTypography.body14SemiBold
+                                      .copyWith(color: AppColors.neutral100)),
                             ],
                           ),
                         ],
@@ -447,9 +587,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                     const SizedBox(height: 4),
                     Text(
                       data['location'] ?? '',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Color(0xFF64748B),
+                      style: AppTypography.caption12Regular.copyWith(
+                        color: AppColors.neutral60,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -459,10 +598,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                         padding: const EdgeInsets.only(top: 2),
                         child: Text(
                           '${data['hits']}명이 확인 중',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF4032DC),
+                          style: AppTypography.subtitle16SemiBold.copyWith(
+                            color: AppColors.indigo60,
                           ),
                         ),
                       ),
@@ -484,7 +621,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                     context,
                     MaterialPageRoute(
                       builder: (_) =>
-                          MainScreen(initialIndex: 2, isLoggedIn: false),
+                          const MainScreen(initialIndex: 2, isLoggedIn: false),
                     ),
                   );
                 }
@@ -524,18 +661,16 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
             ? cities[_selectedCategoryIndex]
             : null;
     return Container(
-      margin: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(top: 16, left: 16, right: 16),
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 '최근 업데이트 된 여행 패키지',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF0F1A2A),
+                style: AppTypography.subtitle16SemiBold.copyWith(
+                  color: AppColors.neutral100,
                 ),
               ),
               GestureDetector(
@@ -551,12 +686,10 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                     ),
                   );
                 },
-                child: const Text(
+                child: Text(
                   '전체 보기',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF4C4DDC),
+                  style: AppTypography.body14Medium.copyWith(
+                    color: AppColors.indigo60,
                   ),
                 ),
               ),
@@ -606,7 +739,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
           width: 257,
           margin: const EdgeInsets.only(bottom: 30, right: 16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
@@ -628,11 +761,26 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                     ? ClipRRect(
                         borderRadius: const BorderRadius.vertical(
                             top: Radius.circular(12)),
-                        child: Image.network(
-                          data['image'],
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              Container(color: Colors.grey[200]),
+                        child: Stack(
+                          children: [
+                            Image.network(
+                              data['image'],
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: 182,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Container(color: Colors.grey[200]),
+                            ),
+                            Container(
+                              width: double.infinity,
+                              height: 182,
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.3),
+                                borderRadius: const BorderRadius.vertical(
+                                    top: Radius.circular(12)),
+                              ),
+                            ),
+                          ],
                         ),
                       )
                     : Container(
@@ -655,10 +803,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                         Expanded(
                           child: Text(
                             data['name'] ?? '',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xFF0F1A2A),
+                            style: AppTypography.body14Medium.copyWith(
+                              color: AppColors.neutral100,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -670,13 +816,11 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                               Image.asset('assets/icons/Solid/png/star.png',
                                   width: 18,
                                   height: 18,
-                                  color: const Color(0xFFFFC107)),
-                              SizedBox(width: 4),
+                                  color: AppColors.warning40),
+                              const SizedBox(width: 4),
                               Text('${data['rating']}',
-                                  style: const TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600,
-                                      color: Color(0xFF0F1A2A))),
+                                  style: AppTypography.body14SemiBold
+                                      .copyWith(color: AppColors.neutral100)),
                             ],
                           ),
                         ],
@@ -685,9 +829,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                     const SizedBox(height: 4),
                     Text(
                       data['location'] ?? '',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Color(0xFF64748B),
+                      style: AppTypography.caption12Regular.copyWith(
+                        color: AppColors.neutral60,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -697,10 +840,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                         padding: const EdgeInsets.only(top: 2),
                         child: Text(
                           '${data['hits']}명이 확인 중',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF4032DC),
+                          style: AppTypography.subtitle16SemiBold.copyWith(
+                            color: AppColors.indigo60,
                           ),
                         ),
                       ),
@@ -722,7 +863,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                     context,
                     MaterialPageRoute(
                       builder: (_) =>
-                          MainScreen(initialIndex: 2, isLoggedIn: false),
+                          const MainScreen(initialIndex: 2, isLoggedIn: false),
                     ),
                   );
                 }
@@ -768,12 +909,10 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 '맞춤 트립인플루언서',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF0F1A2A),
+                style: AppTypography.subtitle16SemiBold.copyWith(
+                  color: AppColors.neutral100,
                 ),
               ),
               GestureDetector(
@@ -789,12 +928,10 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                     ),
                   );
                 },
-                child: const Text(
+                child: Text(
                   '전체 보기',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF4C4DDC),
+                  style: AppTypography.body14Medium.copyWith(
+                    color: AppColors.indigo60,
                   ),
                 ),
               ),
@@ -845,7 +982,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
           width: 257,
           margin: const EdgeInsets.only(bottom: 30, right: 16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
@@ -867,11 +1004,26 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                     ? ClipRRect(
                         borderRadius: const BorderRadius.vertical(
                             top: Radius.circular(12)),
-                        child: Image.network(
-                          data['image'],
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              Container(color: Colors.grey[200]),
+                        child: Stack(
+                          children: [
+                            Image.network(
+                              data['image'],
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: 182,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Container(color: Colors.grey[200]),
+                            ),
+                            Container(
+                              width: double.infinity,
+                              height: 182,
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.3),
+                                borderRadius: const BorderRadius.vertical(
+                                    top: Radius.circular(12)),
+                              ),
+                            ),
+                          ],
                         ),
                       )
                     : Container(
@@ -894,10 +1046,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                         Expanded(
                           child: Text(
                             data['name'] ?? '',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xFF0F1A2A),
+                            style: AppTypography.body14Medium.copyWith(
+                              color: AppColors.neutral100,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -909,13 +1059,11 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                               Image.asset('assets/icons/Solid/png/star.png',
                                   width: 18,
                                   height: 18,
-                                  color: const Color(0xFFFFC107)),
-                              SizedBox(width: 4),
+                                  color: AppColors.warning40),
+                              const SizedBox(width: 4),
                               Text('${data['rating']}',
-                                  style: const TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600,
-                                      color: Color(0xFF0F1A2A))),
+                                  style: AppTypography.body14SemiBold
+                                      .copyWith(color: AppColors.neutral100)),
                             ],
                           ),
                         ],
@@ -924,9 +1072,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                     const SizedBox(height: 4),
                     Text(
                       data['location'] ?? '',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Color(0xFF64748B),
+                      style: AppTypography.caption12Regular.copyWith(
+                        color: AppColors.neutral60,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -936,10 +1083,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                         padding: const EdgeInsets.only(top: 2),
                         child: Text(
                           '${data['hits']}명이 확인 중',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF4032DC),
+                          style: AppTypography.subtitle16SemiBold.copyWith(
+                            color: AppColors.indigo60,
                           ),
                         ),
                       ),
@@ -961,7 +1106,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                     context,
                     MaterialPageRoute(
                       builder: (_) =>
-                          MainScreen(initialIndex: 2, isLoggedIn: false),
+                          const MainScreen(initialIndex: 2, isLoggedIn: false),
                     ),
                   );
                 }
@@ -1011,7 +1156,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
             'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=600&q=80',
       },
       {
-        'title': ' 🌍 여행지 와이파이·유심 추천 가이드',
+        'title': ' 여행지 와이파이·유심 추천 가이드',
         'description': '해외에서 데이터 걱정 끝! ',
         'url': 'https://blog.naver.com/tripblock/223904834339',
         'image': 'https://img.hankyung.com/photo/202009/99.14567735.1.jpg',
@@ -1058,34 +1203,57 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                   margin: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    image: DecorationImage(
-                        image: NetworkImage(banner['image']!),
-                        fit: BoxFit.cover),
                   ),
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Stack(
                     children: [
-                      Text(
-                        banner['title']!,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: Image.network(
+                          banner['image']!,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: 200,
                         ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        banner['description']!,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black.withOpacity(0.7),
+                            ],
+                          ),
                         ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Positioned(
+                        bottom: 16,
+                        left: 16,
+                        right: 16,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              banner['title']!,
+                              style: AppTypography.subtitle20Bold.copyWith(
+                                color: AppColors.white,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              banner['description']!,
+                              style: AppTypography.body14Regular.copyWith(
+                                color: AppColors.white,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -1106,8 +1274,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: _currentBannerPage == index
-                    ? const Color(0xFF4032DC)
-                    : const Color(0xFFE2E8F0),
+                    ? AppColors.indigo60
+                    : AppColors.neutral30,
               ),
             ),
           ),
@@ -1138,29 +1306,26 @@ class LoginRequiredDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              decoration: BoxDecoration(
-                color: const Color(0xFFE0E7FF),
+              decoration: const BoxDecoration(
+                color: AppColors.indigo10,
                 shape: BoxShape.circle,
               ),
               padding: const EdgeInsets.all(16),
               child: const Icon(Icons.lock_outline,
-                  size: 40, color: Color(0xFF4032DC)),
+                  size: 40, color: AppColors.indigo60),
             ),
             const SizedBox(height: 20),
-            const Text(
+            Text(
               '로그인이 필요합니다',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF1E293B),
+              style: AppTypography.subtitle20Bold.copyWith(
+                color: AppColors.neutral100,
               ),
             ),
             const SizedBox(height: 12),
-            const Text(
+            Text(
               '찜 기능은 로그인 후 이용하실 수 있습니다.',
-              style: TextStyle(
-                fontSize: 15,
-                color: Color(0xFF64748B),
+              style: AppTypography.body14Regular.copyWith(
+                color: AppColors.neutral60,
               ),
               textAlign: TextAlign.center,
             ),
@@ -1171,13 +1336,13 @@ class LoginRequiredDialog extends StatelessWidget {
                   child: OutlinedButton(
                     onPressed: () => Navigator.of(context).pop(false),
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: const Color(0xFF64748B),
-                      side: const BorderSide(color: Color(0xFFCBD5E1)),
+                      foregroundColor: AppColors.neutral60,
+                      side: const BorderSide(color: AppColors.neutral30),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
                       padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
-                    child: const Text('취소'),
+                    child: const Text('취소', style: AppTypography.body14Medium),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -1185,14 +1350,15 @@ class LoginRequiredDialog extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () => Navigator.of(context).pop(true),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF4032DC),
-                      foregroundColor: Colors.white,
+                      backgroundColor: AppColors.indigo60,
+                      foregroundColor: AppColors.white,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       elevation: 0,
                     ),
-                    child: const Text('로그인하러 가기'),
+                    child: const Text('로그인하러 가기',
+                        style: AppTypography.body14Medium),
                   ),
                 ),
               ],

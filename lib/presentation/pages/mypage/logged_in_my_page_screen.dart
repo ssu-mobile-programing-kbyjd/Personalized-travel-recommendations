@@ -54,86 +54,65 @@ class LoggedInMyPageScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 4 -
-                          20 +
-                          4, // 기본 너비 + 4
-                      child: FeatureIconButton(
-                        icon: Image.asset(
-                          'assets/icons/Solid/png/buy-list.png',
-                          width: 24,
-                          height: 24,
-                          color: AppColors.white,
-                        ),
-                        label: '구매 상품',
-                        count: 4,
-                        onTap: () {
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            backgroundColor: Colors.transparent,
-                            builder: (_) =>
-                            const PurchasedPackagesModalWrapper(),
-                          );
-                        },
-                        backgroundColor: AppColors.indigo40,
+                    FeatureIconButton(
+                      icon: Image.asset(
+                        'assets/icons/Solid/png/buy-list.png',
+                        width: 24,
+                        height: 24,
+                        color: AppColors.white,
                       ),
+                      label: '구매 상품',
+                      count: 4,
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (_) => const PurchasedPackagesModalWrapper(),
+                        );
+                      },
+                      backgroundColor: AppColors.indigo40,
                     ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 4 -
-                          20 +
-                          4, // 기본 너비 + 4
-                      child: FeatureIconButton(
-                        icon: Image.asset(
-                          'assets/icons/Solid/png/heart-1.png',
-                          width: 24,
-                          height: 24,
-                          color: AppColors.white,
-                        ),
-                        label: '찜한 목록',
-                        count: 4,
-                        onTap: () {
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            backgroundColor: Colors.transparent,
-                            builder: (context) => const WishlistModalWrapper(),
-                          );
-                        },
-                        backgroundColor: AppColors.indigo60,
+                    FeatureIconButton(
+                      icon: Image.asset(
+                        'assets/icons/Solid/png/heart-1.png',
+                        width: 24,
+                        height: 24,
+                        color: AppColors.white,
                       ),
+                      label: '찜한 목록',
+                      count: 4,
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (context) => const WishlistModalWrapper(),
+                        );
+                      },
+                      backgroundColor: AppColors.indigo60,
                     ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 4 -
-                          20 +
-                          4, // 기본 너비 + 4
-                      child: FeatureIconButton(
-                        icon: Image.asset(
-                          'assets/icons/Solid/png/Post.png',
-                          width: 24,
-                          height: 24,
-                          color: AppColors.white,
-                        ),
-                        label: '게시글',
-                        count: 2,
-                        backgroundColor: AppColors.indigo40,
+                    FeatureIconButton(
+                      icon: Image.asset(
+                        'assets/icons/Solid/png/Post.png',
+                        width: 24,
+                        height: 24,
+                        color: AppColors.white,
                       ),
+                      label: '게시글',
+                      count: 2,
+                      backgroundColor: AppColors.indigo40,
                     ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 4 -
-                          20 +
-                          4, // 기본 너비 + 4
-                      child: FeatureIconButton(
-                        icon: Image.asset(
-                          'assets/icons/Solid/png/Route.png',
-                          width: 24,
-                          height: 24,
-                          color: AppColors.white,
-                        ),
-                        label: '여행 도시',
-                        count: 2,
-                        backgroundColor: AppColors.indigo60,
+                    FeatureIconButton(
+                      icon: Image.asset(
+                        'assets/icons/Solid/png/Route.png',
+                        width: 24,
+                        height: 24,
+                        color: AppColors.white,
                       ),
+                      label: '여행 도시',
+                      count: 2,
+                      backgroundColor: AppColors.indigo60,
                     ),
                   ],
                 ),
@@ -211,7 +190,7 @@ class LoggedInMyPageScreen extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (_) =>
-                      const MainScreen(initialIndex: 2, isLoggedIn: false),
+                          const MainScreen(initialIndex: 2, isLoggedIn: false),
                     ),
                   );
                 },
