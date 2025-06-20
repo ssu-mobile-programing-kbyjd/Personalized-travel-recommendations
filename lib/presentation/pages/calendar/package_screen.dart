@@ -16,8 +16,7 @@ class TravelPackage extends StatefulWidget {
   const TravelPackage({super.key, required this.travelInfo});
 
   @override
-  State<TravelPackage> createState() =>
-      _TravelPackage();
+  State<TravelPackage> createState() => _TravelPackage();
 }
 
 class _TravelPackage extends State<TravelPackage> {
@@ -55,8 +54,8 @@ class _TravelPackage extends State<TravelPackage> {
         'place':'신주쿠 공원',
         'address':'1-1 Maihama, Maihama, Urayasu 279-0031 Chiba Prefecture',
         'time':TimeOfDay(hour: 15, minute: 25),
-        "lat": 0,
-        "lng": 0,
+        "lat": 35.6842,
+        "lng": 139.7098,
       },
     ]
   ];
@@ -79,7 +78,7 @@ class _TravelPackage extends State<TravelPackage> {
       if (travelSchedule[0][scheduleIdx]['lat'] != 0 && travelSchedule[0][scheduleIdx]['lng'] != 0) {
         newMarkers.add(
           Marker(
-            markerId: MarkerId(scheduleIdx.toString()),
+            markerId: MarkerId('0_${scheduleIdx}'),
             position: LatLng(travelSchedule[0][scheduleIdx]['lat'], travelSchedule[0][scheduleIdx]['lng']),
             infoWindow: InfoWindow(title: travelSchedule[0][scheduleIdx]['place']),
             icon: await MapMarker(text: (scheduleIdx+1).toString(), color: travelDailyColors[scheduleIdx%3],).toBitmapDescriptor(logicalSize: const Size(150, 150), imageSize: const Size(150, 150)),
@@ -322,46 +321,75 @@ class _TravelPackage extends State<TravelPackage> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Padding(
-                                          padding: const EdgeInsets.only(right: 20),
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: [
-                                              Container(
-                                                width: 30,
-                                                height: 30,
-                                                decoration: ShapeDecoration(
-                                                  shape: const CircleBorder(),
-                                                  color: travelDailyColors[scheduleIndex%3],
-                                                ),
-                                                child: Center(child: Text('${scheduleIndex+1}', style: AppTypography.body16Medium.copyWith(color: AppColors.white),),),
+                                        padding: const EdgeInsets.only(right: 20),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              width: 30,
+                                              height: 30,
+                                              decoration: ShapeDecoration(
+                                                shape: const CircleBorder(),
+                                                color: travelDailyColors[scheduleIndex%3],
                                               ),
-                                              const Padding(padding: EdgeInsets.only(top: 8),),
-                                              Text('${travelSchedule[0][scheduleIndex]['time'].hour}:${travelSchedule[0][scheduleIndex]['time'].minute}', style: AppTypography.body14Medium.copyWith(color: AppColors.neutral100,),),
-                                            ],
-                                          )
+                                              child: Center(child: Text('${scheduleIndex+1}', style: AppTypography.body16Medium.copyWith(color: AppColors.white),),),
+                                            ),
+                                            const Padding(padding: EdgeInsets.only(top: 8),),
+                                            Text('${travelSchedule[0][scheduleIndex]['time'].hour}:${travelSchedule[0][scheduleIndex]['time'].minute}', style: AppTypography.body14Medium.copyWith(color: AppColors.neutral100,),),
+                                          ],
+                                        ),
                                       ),
                                       Expanded(
-                                        child: Container(
-                                          padding: const EdgeInsets.fromLTRB(32, 16, 12, 16),
-                                          decoration: const BoxDecoration(
-                                            borderRadius: BorderRadius.all(Radius.circular(12)),
-                                            color: AppColors.neutral20,
+                                        child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            padding: EdgeInsets.zero,
+                                            shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(Radius.circular(12)),
+                                            ),
+                                            backgroundColor: AppColors.neutral20,
+                                            shadowColor: Colors.transparent,
                                           ),
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children:[
-                                              Text(travelSchedule[0][scheduleIndex]['place'], style: AppTypography.body14Medium.copyWith(color: AppColors.neutral100),),
-                                              Row(
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                children: [
-                                                  AppOutlinePngIcons.locationMarker(size: 16, color: AppColors.neutral60,),
-                                                  const Padding(padding: EdgeInsets.only(left: 6),),
-                                                  Flexible(child: Text(travelSchedule[0][scheduleIndex]['address'], style: AppTypography.caption12Regular.copyWith(color: AppColors.neutral60),),),
-                                                ],
-                                              ),
-                                            ],
+                                          onPressed: () => {
+                                            setState(() {
+                                              if (travelSchedule[0][scheduleIndex]['lat'] != 0 && travelSchedule[0][scheduleIndex]['lng'] != 0) {
+                                                _latlng = LatLng(travelSchedule[0][scheduleIndex]['lat'],travelSchedule[0][scheduleIndex]['lng']);
+                                              }
+                                            }),
+                                            _moveCamera()
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
+                                            decoration: const BoxDecoration(
+                                              borderRadius: BorderRadius.all(Radius.circular(12)),
+                                              color: AppColors.neutral20,
+                                            ),
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  travelSchedule[0][scheduleIndex]['place'],
+                                                  style: AppTypography.body14Medium.copyWith(color: AppColors.neutral100),
+                                                ),
+                                                Row(
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                  children: [
+                                                    AppOutlinePngIcons.locationMarker(
+                                                      size: 16,
+                                                      color: AppColors.neutral60,
+                                                    ),
+                                                    const Padding(padding: EdgeInsets.only(left:4),),
+                                                    Flexible(
+                                                      child: Text(
+                                                        travelSchedule[0][scheduleIndex]['address'],
+                                                        style: AppTypography.caption12Regular.copyWith(color:AppColors.neutral60),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),
