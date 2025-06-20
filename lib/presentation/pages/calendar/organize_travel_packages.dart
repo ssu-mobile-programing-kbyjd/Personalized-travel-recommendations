@@ -11,16 +11,12 @@ class OrganizeTravelPackagesScreen extends StatefulWidget {
   final int dayIndex;
   final List<List<Map>> travelSchedule;
   final String? selectedCity;
-  final String? selectedCountry;
-  final String? selectedContinent;
 
   const OrganizeTravelPackagesScreen({
     super.key,
     required this.dayIndex,
     required this.travelSchedule,
     this.selectedCity,
-    this.selectedCountry,
-    this.selectedContinent,
   });
 
   @override
@@ -50,141 +46,30 @@ class _OrganizeTravelPackagesScreenState
   Future<List<Map<String, dynamic>>> fetchFlights(String cityKey) async {
     final snapshot =
         await FirebaseFirestore.instance.collection('flights').get();
-    final allDocs =
-        snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+    return snapshot.docs
+        .map((doc) => doc.data() as Map<String, dynamic>)
+        .toList();
+  }
 
-    if (cityKey.isEmpty || cityKey == '전체' || cityKey == '자유 여행') {
-      return allDocs;
-    }
-
-    // 공항명을 도시명으로 변환하는 헬퍼 함수
-    String getActualCityName(String airportName) {
-      for (final mapping in TravelData.airportCityMapping.entries) {
-        if (airportName.contains(mapping.key)) {
-          return mapping.value;
-        }
-      }
-      return airportName;
-    }
-
-    // 대륙별 필터링
-    if (TravelData.continentCountries.containsKey(cityKey)) {
-      final countriesInContinent = TravelData.continentCountries[cityKey]!;
-      // 대륙의 국가들과 해당 국가의 도시들 모두 가져오기
-      List<String> searchTerms = [];
-      for (String country in countriesInContinent) {
-        searchTerms.add(country);
-        // 해당 국가의 도시들도 추가
-        if (TravelData.countryCities.containsKey(country)) {
-          searchTerms.addAll(TravelData.countryCities[country]!);
-        }
-      }
-
-      return allDocs.where((doc) {
-        final departure = (doc['departure'] ?? '').toString();
-        final arrival = (doc['arrival'] ?? '').toString();
-
-        // 공항명을 도시명으로 변환
-        final departureCity = getActualCityName(departure);
-        final arrivalCity = getActualCityName(arrival);
-
-        return searchTerms.any((term) =>
-            departure.toLowerCase().contains(term.toLowerCase()) ||
-            arrival.toLowerCase().contains(term.toLowerCase()) ||
-            departureCity.toLowerCase().contains(term.toLowerCase()) ||
-            arrivalCity.toLowerCase().contains(term.toLowerCase()));
-      }).toList();
-    }
-
-    // 국가 또는 도시별 필터링
-    final searchKey = cityKey.toLowerCase();
-    List<String> searchTerms = [searchKey];
-
-    // 만약 검색 키가 국가명이라면 해당 국가의 도시들도 추가
-    if (TravelData.countryCities.containsKey(cityKey)) {
-      searchTerms.addAll(
-          TravelData.countryCities[cityKey]!.map((c) => c.toLowerCase()));
-    }
-
-    return allDocs.where((doc) {
-      final departure = (doc['departure'] ?? '').toString().toLowerCase();
-      final arrival = (doc['arrival'] ?? '').toString().toLowerCase();
-
-      // 공항명을 도시명으로 변환
-      final departureCity = getActualCityName(departure).toLowerCase();
-      final arrivalCity = getActualCityName(arrival).toLowerCase();
-
-      return searchTerms.any((term) =>
-          departure.contains(term) ||
-          arrival.contains(term) ||
-          departureCity.contains(term) ||
-          arrivalCity.contains(term));
-    }).toList();
-  } // 관광명소 데이터 가져오기
-
+  // 관광명소 데이터 가져오기
   Future<List<Map<String, dynamic>>> fetchAttractions(String cityKey) async {
     CollectionReference ref =
         FirebaseFirestore.instance.collection('attractions');
     final snapshot = await ref.get();
     final allDocs =
         snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
-
-    if (cityKey.isEmpty || cityKey == '전체' || cityKey == '자유 여행') {
+    if (cityKey.isEmpty || cityKey == '전체') {
       return allDocs;
     }
-
-    // 대륙별 필터링
-    if (TravelData.continentCountries.containsKey(cityKey)) {
-      final countriesInContinent = TravelData.continentCountries[cityKey]!;
-      // 대륙의 국가들과 해당 국가의 도시들 모두 가져오기
-      List<String> searchTerms = [];
-      for (String country in countriesInContinent) {
-        searchTerms.add(country);
-        // 해당 국가의 도시들도 추가
-        if (TravelData.countryCities.containsKey(country)) {
-          searchTerms.addAll(TravelData.countryCities[country]!);
-        }
-      }
-
-      return allDocs.where((doc) {
-        final country = (doc['country'] ?? '').toString();
-        final city = (doc['city'] ?? '').toString();
-        final title = (doc['title'] ?? '').toString();
-        final description = (doc['description'] ?? '').toString();
-        final address = (doc['address'] ?? '').toString();
-
-        return searchTerms.any((term) =>
-            country.toLowerCase().contains(term.toLowerCase()) ||
-            city.toLowerCase().contains(term.toLowerCase()) ||
-            title.toLowerCase().contains(term.toLowerCase()) ||
-            description.toLowerCase().contains(term.toLowerCase()) ||
-            address.toLowerCase().contains(term.toLowerCase()));
-      }).toList();
-    }
-
-    // 국가 또는 도시별 필터링
-    final searchKey = cityKey.toLowerCase();
-    List<String> searchTerms = [searchKey];
-
-    // 만약 검색 키가 국가명이라면 해당 국가의 도시들도 추가
-    if (TravelData.countryCities.containsKey(cityKey)) {
-      searchTerms.addAll(
-          TravelData.countryCities[cityKey]!.map((c) => c.toLowerCase()));
-    }
-
     return allDocs.where((doc) {
-      final city = (doc['city'] ?? '').toString().toLowerCase();
-      final country = (doc['country'] ?? '').toString().toLowerCase();
-      final title = (doc['title'] ?? '').toString().toLowerCase();
-      final description = (doc['description'] ?? '').toString().toLowerCase();
-      final address = (doc['address'] ?? '').toString().toLowerCase();
-
-      return searchTerms.any((term) =>
-          city.contains(term) ||
-          country.contains(term) ||
-          title.contains(term) ||
-          description.contains(term) ||
-          address.contains(term));
+      final city = (doc['city'] ?? '').toString();
+      final title = (doc['title'] ?? '').toString();
+      final description = (doc['description'] ?? '').toString();
+      final address = (doc['address'] ?? '').toString();
+      return city.contains(cityKey) ||
+          title.contains(cityKey) ||
+          description.contains(cityKey) ||
+          address.contains(cityKey);
     }).toList();
   }
 
@@ -195,63 +80,18 @@ class _OrganizeTravelPackagesScreenState
     final snapshot = await ref.get();
     final allDocs =
         snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
-
-    if (cityKey.isEmpty || cityKey == '전체' || cityKey == '자유 여행') {
+    if (cityKey.isEmpty || cityKey == '전체') {
       return allDocs;
     }
-
-    // 대륙별 필터링
-    if (TravelData.continentCountries.containsKey(cityKey)) {
-      final countriesInContinent = TravelData.continentCountries[cityKey]!;
-      // 대륙의 국가들과 해당 국가의 도시들 모두 가져오기
-      List<String> searchTerms = [];
-      for (String country in countriesInContinent) {
-        searchTerms.add(country);
-        // 해당 국가의 도시들도 추가
-        if (TravelData.countryCities.containsKey(country)) {
-          searchTerms.addAll(TravelData.countryCities[country]!);
-        }
-      }
-
-      return allDocs.where((doc) {
-        final country = (doc['country'] ?? '').toString();
-        final city = (doc['city'] ?? '').toString();
-        final title = (doc['title'] ?? '').toString();
-        final description = (doc['description'] ?? '').toString();
-        final address = (doc['address'] ?? '').toString();
-
-        return searchTerms.any((term) =>
-            country.toLowerCase().contains(term.toLowerCase()) ||
-            city.toLowerCase().contains(term.toLowerCase()) ||
-            title.toLowerCase().contains(term.toLowerCase()) ||
-            description.toLowerCase().contains(term.toLowerCase()) ||
-            address.toLowerCase().contains(term.toLowerCase()));
-      }).toList();
-    }
-
-    // 국가 또는 도시별 필터링
-    final searchKey = cityKey.toLowerCase();
-    List<String> searchTerms = [searchKey];
-
-    // 만약 검색 키가 국가명이라면 해당 국가의 도시들도 추가
-    if (TravelData.countryCities.containsKey(cityKey)) {
-      searchTerms.addAll(
-          TravelData.countryCities[cityKey]!.map((c) => c.toLowerCase()));
-    }
-
     return allDocs.where((doc) {
-      final city = (doc['city'] ?? '').toString().toLowerCase();
-      final country = (doc['country'] ?? '').toString().toLowerCase();
-      final title = (doc['title'] ?? '').toString().toLowerCase();
-      final description = (doc['description'] ?? '').toString().toLowerCase();
-      final address = (doc['address'] ?? '').toString().toLowerCase();
-
-      return searchTerms.any((term) =>
-          city.contains(term) ||
-          country.contains(term) ||
-          title.contains(term) ||
-          description.contains(term) ||
-          address.contains(term));
+      final city = (doc['city'] ?? '').toString();
+      final title = (doc['title'] ?? '').toString();
+      final description = (doc['description'] ?? '').toString();
+      final address = (doc['address'] ?? '').toString();
+      return city.contains(cityKey) ||
+          title.contains(cityKey) ||
+          description.contains(cityKey) ||
+          address.contains(cityKey);
     }).toList();
   }
 
@@ -262,63 +102,18 @@ class _OrganizeTravelPackagesScreenState
     final snapshot = await ref.get();
     final allDocs =
         snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
-
-    if (cityKey.isEmpty || cityKey == '전체' || cityKey == '자유 여행') {
+    if (cityKey.isEmpty || cityKey == '전체') {
       return allDocs;
     }
-
-    // 대륙별 필터링
-    if (TravelData.continentCountries.containsKey(cityKey)) {
-      final countriesInContinent = TravelData.continentCountries[cityKey]!;
-      // 대륙의 국가들과 해당 국가의 도시들 모두 가져오기
-      List<String> searchTerms = [];
-      for (String country in countriesInContinent) {
-        searchTerms.add(country);
-        // 해당 국가의 도시들도 추가
-        if (TravelData.countryCities.containsKey(country)) {
-          searchTerms.addAll(TravelData.countryCities[country]!);
-        }
-      }
-
-      return allDocs.where((doc) {
-        final country = (doc['country'] ?? '').toString();
-        final city = (doc['city'] ?? '').toString();
-        final title = (doc['title'] ?? '').toString();
-        final description = (doc['description'] ?? '').toString();
-        final address = (doc['address'] ?? '').toString();
-
-        return searchTerms.any((term) =>
-            country.toLowerCase().contains(term.toLowerCase()) ||
-            city.toLowerCase().contains(term.toLowerCase()) ||
-            title.toLowerCase().contains(term.toLowerCase()) ||
-            description.toLowerCase().contains(term.toLowerCase()) ||
-            address.toLowerCase().contains(term.toLowerCase()));
-      }).toList();
-    }
-
-    // 국가 또는 도시별 필터링
-    final searchKey = cityKey.toLowerCase();
-    List<String> searchTerms = [searchKey];
-
-    // 만약 검색 키가 국가명이라면 해당 국가의 도시들도 추가
-    if (TravelData.countryCities.containsKey(cityKey)) {
-      searchTerms.addAll(
-          TravelData.countryCities[cityKey]!.map((c) => c.toLowerCase()));
-    }
-
     return allDocs.where((doc) {
-      final city = (doc['city'] ?? '').toString().toLowerCase();
-      final country = (doc['country'] ?? '').toString().toLowerCase();
-      final title = (doc['title'] ?? '').toString().toLowerCase();
-      final description = (doc['description'] ?? '').toString().toLowerCase();
-      final address = (doc['address'] ?? '').toString().toLowerCase();
-
-      return searchTerms.any((term) =>
-          city.contains(term) ||
-          country.contains(term) ||
-          title.contains(term) ||
-          description.contains(term) ||
-          address.contains(term));
+      final city = (doc['city'] ?? '').toString();
+      final title = (doc['title'] ?? '').toString();
+      final description = (doc['description'] ?? '').toString();
+      final address = (doc['address'] ?? '').toString();
+      return city.contains(cityKey) ||
+          title.contains(cityKey) ||
+          description.contains(cityKey) ||
+          address.contains(cityKey);
     }).toList();
   }
 
@@ -728,32 +523,18 @@ class _OrganizeTravelPackagesScreenState
 
   // 카테고리에 따라 Firestore에서 데이터 가져오기
   Future<List<Map<String, dynamic>>> _fetchDataByCategory() {
-    // 선택된 지역 정보를 우선순위에 따라 결정
-    String searchKey = '';
-
-    if (widget.selectedCity != null && widget.selectedCity!.isNotEmpty) {
-      searchKey = widget.selectedCity!;
-    } else if (widget.selectedCountry != null &&
-        widget.selectedCountry!.isNotEmpty) {
-      searchKey = widget.selectedCountry!;
-    } else if (widget.selectedContinent != null &&
-        widget.selectedContinent!.isNotEmpty) {
-      searchKey = widget.selectedContinent!;
-    } else {
-      searchKey = '제주'; // 기본값
-    }
-
+    final cityKey = widget.selectedCity ?? '제주';
     switch (selectedCategory) {
       case 0:
-        return fetchFlights(searchKey);
+        return fetchFlights(cityKey);
       case 1:
-        return fetchAttractions(searchKey);
+        return fetchAttractions(cityKey);
       case 2:
-        return fetchRestaurants(searchKey);
+        return fetchRestaurants(cityKey);
       case 3:
-        return fetchAccommodations(searchKey);
+        return fetchAccommodations(cityKey);
       default:
-        return fetchFlights(searchKey);
+        return fetchFlights(cityKey);
     }
   }
 }
