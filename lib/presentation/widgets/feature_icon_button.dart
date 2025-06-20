@@ -25,7 +25,7 @@ class FeatureIconButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 72, //height 넣으니까 오류 나서 피그마 디자인과 다르게 진행
+        width: 88, //height 넣으니까 오류 나서 피그마 디자인과 다르게 진행
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
           color: backgroundColor,
