@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_outline_png_icons.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_text_styles.dart';
@@ -25,7 +24,7 @@ class _TravelCalendarScreenState extends State<TravelCalendarScreen> {
 
   List<Map> travelList = [];
 
-  Future<void> _getTrips() async {
+  Future<void> _getTrvels() async {
     CollectionReference ref = FirebaseFirestore.instance.collection('trips');
     final snapshot = await ref.where('userId', isEqualTo: userId).get();
     final allDocs = snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
@@ -59,6 +58,11 @@ class _TravelCalendarScreenState extends State<TravelCalendarScreen> {
   DateTime selectedDay = DateTime.now();
   late List<DateTimeRange> _ranges = [];
 
+  bool _isOneDay(DateTime day) {
+    return _ranges.any((range) => day.isAtSameMomentAs(range.start))
+        && _ranges.any((range) => day.isAtSameMomentAs(range.end));
+  }
+
   bool _isStart(DateTime day) {
     return _ranges.any((range) => day.isAtSameMomentAs(range.start));
   }
@@ -68,16 +72,15 @@ class _TravelCalendarScreenState extends State<TravelCalendarScreen> {
   }
 
   bool _isInAnyRange(DateTime day) {
-    return _ranges.any((range) =>
-        day.isAtSameMomentAs(range.start) ||
-        day.isAtSameMomentAs(range.end) ||
-        (day.isAfter(range.start) && day.isBefore(range.end)));
+    return _ranges.any((range) => day.isAtSameMomentAs(range.start)
+        || day.isAtSameMomentAs(range.end)
+        || (day.isAfter(range.start) && day.isBefore(range.end)));
   }
 
   bool _isInRange(DateTime day, DateTime startDay, DateTime endDay) {
-    return day.isAtSameMomentAs(startDay) ||
-        day.isAtSameMomentAs(endDay) ||
-        (day.isAfter(startDay) && day.isBefore(endDay));
+    return day.isAtSameMomentAs(startDay)
+        || day.isAtSameMomentAs(endDay)
+        || (day.isAfter(startDay) && day.isBefore(endDay));
   }
 
   @override
@@ -86,7 +89,7 @@ class _TravelCalendarScreenState extends State<TravelCalendarScreen> {
 
     isLoggedIn = widget.isLoggedIn;
 
-    if (isLoggedIn) _getTrips();
+    if (isLoggedIn) _getTrvels();
   }
 
   @override
@@ -174,7 +177,42 @@ class _TravelCalendarScreenState extends State<TravelCalendarScreen> {
                 ),
                 calendarBuilders: CalendarBuilders(
                   todayBuilder: (context, day, focusedDay) {
-                    if (_isStart(day)) {
+                    if (_isOneDay(day)) {
+                      return Center(
+                        child: Stack(
+                          children: [
+                            Center(
+                              child: Container(
+                                height: 36,
+                                margin: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                                decoration: const BoxDecoration(
+                                  color: AppColors.indigo60,
+                                  shape: BoxShape.rectangle,
+                                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                                ),
+                                alignment: Alignment.center,
+                              ),
+                            ),
+                            Center(
+                              child: Container(
+                                width: 32,
+                                height: 32,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColors.neutral40,
+                                ),
+                              ),
+                            ),
+                            Center(
+                              child: Text(
+                                '${day.day}',
+                                style: AppTypography.caption12Medium.copyWith(color: AppColors.white),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else if (_isStart(day)) {
                       return Center(
                         child: Stack(
                           children: [
@@ -303,7 +341,42 @@ class _TravelCalendarScreenState extends State<TravelCalendarScreen> {
                     );
                   },
                   selectedBuilder: (context, day, focusedDay) {
-                    if (_isStart(day)) {
+                    if (_isOneDay(day)) {
+                      return Center(
+                        child: Stack(
+                          children: [
+                            Center(
+                              child: Container(
+                                height: 36,
+                                margin: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                                decoration: const BoxDecoration(
+                                  color: AppColors.indigo60,
+                                  shape: BoxShape.rectangle,
+                                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                                ),
+                                alignment: Alignment.center,
+                              ),
+                            ),
+                            Center(
+                              child: Container(
+                                width: 32,
+                                height: 32,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColors.indigo20,
+                                ),
+                              ),
+                            ),
+                            Center(
+                              child: Text(
+                                '${day.day}',
+                                style: AppTypography.caption12Medium.copyWith(color: AppColors.white),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else if (_isStart(day)) {
                       return Center(
                         child: Stack(
                           children: [
@@ -432,7 +505,32 @@ class _TravelCalendarScreenState extends State<TravelCalendarScreen> {
                     );
                   },
                   defaultBuilder: (context, day, focusedDay) {
-                    if (_isStart(day)) {
+                    if (_isOneDay(day)) {
+                      return Center(
+                        child: Stack(
+                          children: [
+                            Center(
+                              child: Container(
+                                height: 36,
+                                margin: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                                decoration: const BoxDecoration(
+                                  color: AppColors.indigo60,
+                                  shape: BoxShape.rectangle,
+                                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                                ),
+                                alignment: Alignment.center,
+                              ),
+                            ),
+                            Center(
+                              child: Text(
+                                '${day.day}',
+                                style: AppTypography.caption12Medium.copyWith(color: AppColors.white),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else if (_isStart(day)) {
                       return Center(
                         child: Container(
                           height: 36,
