@@ -8,7 +8,12 @@ import 'package:personalized_travel_recommendations/presentation/pages/calendar/
 
 class AddTravelPlanCityScreen extends StatefulWidget {
   final String country;
-  const AddTravelPlanCityScreen({super.key, required this.country});
+  final String? continent;
+  const AddTravelPlanCityScreen({
+    super.key,
+    required this.country,
+    this.continent,
+  });
 
   @override
   State<AddTravelPlanCityScreen> createState() =>
@@ -134,8 +139,9 @@ class _AddTravelPlanCityScreenState extends State<AddTravelPlanCityScreen> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => AddTravelPlanScheduleScreen(
-                      country: country,
-                      city: country,
+                      country: widget.country, // 국가 이름을 country로 전달
+                      city: widget.country, // 국가 이름을 city로도 전달 (국가 전체 데이터)
+                      continent: widget.continent, // 대륙 정보 전달
                     ),
                   ),
                 );
@@ -162,6 +168,7 @@ class _AddTravelPlanCityScreenState extends State<AddTravelPlanCityScreen> {
                               builder: (context) => AddTravelPlanScheduleScreen(
                                 country: country,
                                 city: cities[selectedIndex!],
+                                continent: widget.continent, // 대륙 정보 전달
                               ),
                             ));
                       }
