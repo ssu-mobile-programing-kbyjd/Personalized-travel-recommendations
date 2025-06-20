@@ -12,6 +12,7 @@ import 'package:personalized_travel_recommendations/presentation/utils/webview_s
 import 'package:personalized_travel_recommendations/presentation/pages/mypage/guest_my_page_screen.dart';
 import 'package:personalized_travel_recommendations/presentation/pages/main_screen.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_text_styles.dart';
+import 'package:personalized_travel_recommendations/presentation/pages/home/destination_detail_screen.dart';
 
 class MainHomeScreen extends StatefulWidget {
   final bool isLoggedIn;
@@ -476,8 +477,32 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                         itemBuilder: (context, index) {
                           final doc = docs[index];
                           final data = doc.data() as Map<String, dynamic>;
-                          return _buildDestinationCardFromFirestore(
-                              data, doc.id);
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => DestinationDetailScreen(
+                                    name: data['name'] ?? '',
+                                    location: data['location'] ?? '',
+                                    rating: (data['rating'] is num)
+                                        ? (data['rating'] as num).toDouble()
+                                        : 0.0,
+                                    hits: (data['hits'] is int)
+                                        ? data['hits']
+                                        : int.tryParse(
+                                                data['hits']?.toString() ??
+                                                    '') ??
+                                            0,
+                                    description: data['description'] ?? '',
+                                    imageUrl: data['image'] ?? '',
+                                  ),
+                                ),
+                              );
+                            },
+                            child: _buildDestinationCardFromFirestore(
+                                data, doc.id),
+                          );
                         },
                       );
                     },
