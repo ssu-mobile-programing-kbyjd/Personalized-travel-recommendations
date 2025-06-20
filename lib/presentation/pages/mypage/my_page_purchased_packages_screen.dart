@@ -116,7 +116,7 @@ class _PurchasedTripsScreenState extends State<PurchasedTripsScreen>
     }
     return ListView.separated(
       controller: widget.scrollController,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 30, 16, 16),
       itemCount: sourceList.length,
       separatorBuilder: (_, __) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
@@ -127,7 +127,7 @@ class _PurchasedTripsScreenState extends State<PurchasedTripsScreen>
             imageUrl: item['image'],
             title: item['name'],
             subtitle: item['location'],
-            departureDate: '2025.03.01 ~ 2025.03.10',
+            departureDate: '2025.07.01 ~ 2025.07.03',
             tags: const ['#친구와', '#1개 도시', '#맛집 투어'],
             isAssetImage: false,
             onTap: () {
