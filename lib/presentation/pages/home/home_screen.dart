@@ -500,9 +500,11 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
               height: 32,
               alignment: Alignment.center,
               child: Image.asset(
-                isLiked
-                    ? 'assets/icons/Solid/png/heart-1.png'
-                    : 'assets/icons/Outline/png/heartx.png',
+                !widget.isLoggedIn
+                    ? 'assets/icons/Outline/png/heartx.png'
+                    : (isLiked
+                        ? 'assets/icons/Solid/png/heart-1.png'
+                        : 'assets/icons/Outline/png/heartx.png'),
                 width: 26,
                 height: 26,
                 fit: BoxFit.contain,
@@ -736,9 +738,11 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
               height: 32,
               alignment: Alignment.center,
               child: Image.asset(
-                isLiked
-                    ? 'assets/icons/Solid/png/heart-1.png'
-                    : 'assets/icons/Outline/png/heartx.png',
+                !widget.isLoggedIn
+                    ? 'assets/icons/Outline/png/heartx.png'
+                    : (isLiked
+                        ? 'assets/icons/Solid/png/heart-1.png'
+                        : 'assets/icons/Outline/png/heartx.png'),
                 width: 26,
                 height: 26,
                 fit: BoxFit.contain,
@@ -973,9 +977,11 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
               height: 32,
               alignment: Alignment.center,
               child: Image.asset(
-                isLiked
-                    ? 'assets/icons/Solid/png/heart-1.png'
-                    : 'assets/icons/Outline/png/heartx.png',
+                !widget.isLoggedIn
+                    ? 'assets/icons/Outline/png/heartx.png'
+                    : (isLiked
+                        ? 'assets/icons/Solid/png/heart-1.png'
+                        : 'assets/icons/Outline/png/heartx.png'),
                 width: 26,
                 height: 26,
                 fit: BoxFit.contain,
