@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_colors.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_outline_png_icons.dart';
 import 'package:personalized_travel_recommendations/core/theme/app_text_styles.dart';
@@ -19,63 +21,43 @@ class TravelCalendarScreen extends StatefulWidget {
 
 class _TravelCalendarScreenState extends State<TravelCalendarScreen> {
   late bool isLoggedIn;
+  static const userId = 'user_123';
 
-  @override
-  void initState() {
-    super.initState();
-    isLoggedIn = widget.isLoggedIn;
+  List<Map> travelList = [];
+
+  Future<void> _getTrips() async {
+    CollectionReference ref = FirebaseFirestore.instance.collection('trips');
+    final snapshot = await ref.where('userId', isEqualTo: userId).get();
+    final allDocs = snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+
+    for (var doc in allDocs) {
+      DateTime startDt = doc['startDay'].toDate();
+      DateTime endDt = doc['endDay'].toDate();
+
+      travelList.add({
+        'tripId': doc['tripId'],
+        'title': doc['title'],
+        'startDay': DateTime.utc(startDt.year, startDt.month, startDt.day),
+        'endDay': DateTime.utc(endDt.year, endDt.month, endDt.day),
+        'country': doc['country'],
+        'city': doc['city'],
+        'period': doc['period'],
+        'hashtag': doc['hashtag'],
+        'price': doc['price'],
+      });
+    }
+
+    _ranges = List.generate(travelList.length, (index) {
+      return DateTimeRange(
+        start: travelList[index]['startDay'],
+        end: travelList[index]['endDay'],
+      );
+    });
   }
-
-  static List<Map> travelList = [
-    {
-      'title': '도쿄 10대 맛집 뿌수기',
-      'startDay': DateTime.utc(2025, 3, 18),
-      'endDay': DateTime.utc(2025, 3, 20),
-      'period': 3,
-      'country': '일본',
-      'city': '도쿄',
-      'hashtag': [
-        '친구와',
-        '1개 도시',
-        '맛집 투어',
-      ],
-    },
-    {
-      'title': '여수 밤바다',
-      'startDay': DateTime.utc(2025, 6, 1),
-      'endDay': DateTime.utc(2025, 6, 2),
-      'period': 2,
-      'country': '대한민국',
-      'city': '여수',
-      'hashtag': [
-        '친구와',
-        '1개 도시',
-        '맛집 투어',
-      ],
-    },
-    {
-      'title': '제주도의 푸른 밤',
-      'startDay': DateTime.utc(2025, 6, 6),
-      'endDay': DateTime.utc(2025, 6, 8),
-      'period': 3,
-      'country': '대한민국',
-      'city': '여수',
-      'hashtag': [
-        '친구와',
-        '1개 도시',
-        '맛집 투어',
-      ],
-    },
-  ];
 
   DateTime focusedDay = DateTime.now();
   DateTime selectedDay = DateTime.now();
-  final List<DateTimeRange> _ranges = List.generate(travelList.length, (index) {
-    return DateTimeRange(
-      start: travelList[index]['startDay'],
-      end: travelList[index]['endDay'],
-    );
-  });
+  late List<DateTimeRange> _ranges = [];
 
   bool _isStart(DateTime day) {
     return _ranges.any((range) => day.isAtSameMomentAs(range.start));
@@ -96,6 +78,15 @@ class _TravelCalendarScreenState extends State<TravelCalendarScreen> {
     return day.isAtSameMomentAs(startDay) ||
         day.isAtSameMomentAs(endDay) ||
         (day.isAfter(startDay) && day.isBefore(endDay));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    isLoggedIn = widget.isLoggedIn;
+
+    if (isLoggedIn) _getTrips();
   }
 
   @override
@@ -605,7 +596,7 @@ class _TravelCalendarScreenState extends State<TravelCalendarScreen> {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => EditTravelPlanScheduleScreen(country: travelList[travelIndex]['country'], city: travelList[travelIndex]['city']),
+                                              builder: (context) => EditTravelPlanScheduleScreen(travelInfo: travelList[travelIndex]),
                                             ),
                                           );
                                         },
